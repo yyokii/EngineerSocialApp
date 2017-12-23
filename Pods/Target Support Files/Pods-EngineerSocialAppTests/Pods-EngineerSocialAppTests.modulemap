@@ -1,0 +1,6 @@
+framework module Pods_EngineerSocialAppTests {
+  umbrella header "Pods-EngineerSocialAppTests-umbrella.h"
+
+  export *
+  module * { export * }
+}
