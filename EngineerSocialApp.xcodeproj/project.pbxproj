@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		174D623BBD6E085DE88693A7 /* Pods_EngineerSocialAppUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 504AA9BA6F7519833D635012 /* Pods_EngineerSocialAppUITests.framework */; };
 		94C4B730421C2E7F346BDDCE /* Pods_EngineerSocialAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EEC2985F702B283E404BE37D /* Pods_EngineerSocialAppTests.framework */; };
+		B64BB0571FEFE4C2002DB6AE /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B64BB0561FEFE4C2002DB6AE /* Profile.storyboard */; };
+		B64BB0591FEFF849002DB6AE /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B64BB0581FEFF849002DB6AE /* ProfileVC.swift */; };
 		B6F25CE21FEEA002007A4A6A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6F25CE11FEEA002007A4A6A /* AppDelegate.swift */; };
 		B6F25CE71FEEA002007A4A6A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B6F25CE51FEEA002007A4A6A /* Main.storyboard */; };
 		B6F25CE91FEEA002007A4A6A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B6F25CE81FEEA002007A4A6A /* Assets.xcassets */; };
@@ -57,6 +59,8 @@
 		6BAE52C88881F145721C22EE /* Pods-EngineerSocialApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EngineerSocialApp.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EngineerSocialApp/Pods-EngineerSocialApp.debug.xcconfig"; sourceTree = "<group>"; };
 		6D804D67BED748C0EB6F0068 /* Pods-EngineerSocialApp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EngineerSocialApp.release.xcconfig"; path = "Pods/Target Support Files/Pods-EngineerSocialApp/Pods-EngineerSocialApp.release.xcconfig"; sourceTree = "<group>"; };
 		806F4AC2AEC3242F8DA56A00 /* Pods-EngineerSocialAppUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EngineerSocialAppUITests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EngineerSocialAppUITests/Pods-EngineerSocialAppUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		B64BB0561FEFE4C2002DB6AE /* Profile.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Profile.storyboard; sourceTree = "<group>"; };
+		B64BB0581FEFF849002DB6AE /* ProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
 		B6F25CDE1FEEA002007A4A6A /* EngineerSocialApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EngineerSocialApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6F25CE11FEEA002007A4A6A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B6F25CE61FEEA002007A4A6A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -203,6 +207,7 @@
 				B6F25D531FEEA5DA007A4A6A /* SignInVC.swift */,
 				B6F25D521FEEA5DA007A4A6A /* FeedVC.swift */,
 				B6F25D591FEF575E007A4A6A /* PostVC.swift */,
+				B64BB0581FEFF849002DB6AE /* ProfileVC.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -218,6 +223,7 @@
 				B6F25D461FEEA5CF007A4A6A /* PostCell.swift */,
 				B6F25CE51FEEA002007A4A6A /* Main.storyboard */,
 				B6F25D571FEEE36F007A4A6A /* Post.storyboard */,
+				B64BB0561FEFE4C2002DB6AE /* Profile.storyboard */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -366,6 +372,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B64BB0571FEFE4C2002DB6AE /* Profile.storyboard in Resources */,
 				B6F25D101FEEA3E0007A4A6A /* GoogleService-Info.plist in Resources */,
 				B6F25CEC1FEEA002007A4A6A /* LaunchScreen.storyboard in Resources */,
 				B6F25CE91FEEA002007A4A6A /* Assets.xcassets in Resources */,
@@ -535,6 +542,7 @@
 			files = (
 				B6F25D5A1FEF575E007A4A6A /* PostVC.swift in Sources */,
 				B6F25D541FEEA5DA007A4A6A /* FeedVC.swift in Sources */,
+				B64BB0591FEFF849002DB6AE /* ProfileVC.swift in Sources */,
 				B6F25D501FEEA5D1007A4A6A /* FancyBtn.swift in Sources */,
 				B6F25D4F1FEEA5D1007A4A6A /* FancyField.swift in Sources */,
 				B6F25D411FEEA4E3007A4A6A /* DataService.swift in Sources */,
