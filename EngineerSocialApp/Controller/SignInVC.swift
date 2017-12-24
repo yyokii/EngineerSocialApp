@@ -16,7 +16,6 @@ class SignInVC: UIViewController {
     @IBOutlet weak var emailField: FancyField!
     @IBOutlet weak var pwdField: FancyField!
     
-
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -36,7 +35,7 @@ class SignInVC: UIViewController {
         facebookLogin.logIn(withReadPermissions: ["email"], from: self) { (result, error) in
             if error != nil {
                 
-                print("JESS: Unable to authenticate with Facebook - \(error)")
+                print("JESS: Unable to authenticate with Facebook - \(String(describing: error))")
             } else if result?.isCancelled == true {
                 
                 print("JESS: User cancelled Facebook authentication")
@@ -55,7 +54,7 @@ class SignInVC: UIViewController {
         FIRAuth.auth()?.signIn(with: credential, completion: { (user, error) in
             if error != nil {
                 
-                print("JESS: Unable to authenticate with Firebase - \(error)")
+                print("JESS: Unable to authenticate with Firebase - \(String(describing: error))")
             } else {
                 
                 print("JESS: Successfully authenticated with Firebase")
@@ -102,6 +101,5 @@ class SignInVC: UIViewController {
         print("JESS: Data saved to keychain \(keychainResult)")
         performSegue(withIdentifier: "goToFeed", sender: nil)
     }
-
 }
 

@@ -21,6 +21,8 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource,UIIma
     var imagePicker: UIImagePickerController!
     static var imageCache: NSCache<NSString, UIImage> = NSCache()
     
+    var userPostsRef: FIRDatabaseReference!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -107,6 +109,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource,UIIma
             return
         }
         
+        // FIXME: 画像の投稿は使わないのでここいらない
         guard let img = imageAdd.image, imageSelected == true else {
             print("JESS: An image must be selected")
             return
@@ -117,6 +120,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource,UIIma
             let matadata = FIRStorageMetadata()
             matadata.contentType = "image/jpeg"
             
+            // 画像がfirebaseストレージに追加できたらpost情報をデータベースに書き込む
             DataService.ds.REF_POST_IMAGES.child(imgUid).put(imgData, metadata: matadata) { (metadata, error) in
                 if error != nil {
                     print("JESS: Unable to upload image to Firebasee torage")
@@ -132,20 +136,36 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource,UIIma
         }
     }
     
+    
+    /// firebaseのデータストアに投稿情報を書き込む（postに追加）
+    ///
+    /// - Parameter imgUrl: 画像のurl
     func postToFirebase (imgUrl: String) {
         let post: Dictionary<String, AnyObject> = [
             "caption": captionField.text! as AnyObject,
             "imageUrl": imgUrl as AnyObject,
             "likes": 0 as AnyObject,
+            "uid": KeychainWrapper.standard.string(forKey: KEY_UID) as AnyObject // このuidで検索してユーザーのimageを出したい
             ]
         
         let firebasePost = DataService.ds.REF_POSTS.childByAutoId()
         firebasePost.setValue(post)
         
+        setUserPost(myPostKey: firebasePost.key)
+        
         captionField.text = ""
         imageSelected = false
         imageAdd.image = UIImage(named: "add-image")
         
+    }
+    
+    
+    /// プロフィール画面で自分の過去投稿を見られるように保存しておく
+    ///
+    /// - Parameter myPostKey: postのkey（autoIdで作成されたもの）
+    func setUserPost (myPostKey:String){
+        userPostsRef = DataService.ds.REF_USER_CURRENT.child("posts").child(myPostKey)
+        userPostsRef.setValue(true)
     }
 
     
