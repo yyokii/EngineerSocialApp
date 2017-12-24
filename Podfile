@@ -14,7 +14,6 @@ target 'EngineerSocialApp' do
   pod 'FBSDKLoginKit'
   pod 'SwiftKeychainWrapper'
 
-
   target 'EngineerSocialAppTests' do
     inherit! :search_paths
     # Pods for testing

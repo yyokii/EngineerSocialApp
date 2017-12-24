@@ -78,7 +78,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource,UIIma
                 cell.configureCell(post: post, img: img)
             }
             
-            //なければこっちの処理
+            //なければこっちの処理 FIXME: else にしなくてよいの？？
             cell.configureCell(post: post) //一回いらなくねと思い消す→データ読み込まれない→もとに戻す→できた 、解決済
             return cell
             
