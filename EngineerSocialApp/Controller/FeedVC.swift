@@ -157,6 +157,9 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource,UIIma
         performSegue(withIdentifier: "goToSignIn", sender: nil)
     }
 
+    @IBAction func postTapped(_ sender: Any) {
+        performSegue(withIdentifier: "toPost", sender: nil)
+    }
 }
     
     

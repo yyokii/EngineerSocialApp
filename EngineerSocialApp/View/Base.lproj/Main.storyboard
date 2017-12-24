@@ -159,30 +159,42 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="65"/>
                                 <subviews>
                                     <imageView contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="sign-out" translatesAutoresizingMaskIntoConstraints="NO" id="0RX-W8-waN">
-                                        <rect key="frame" x="16" y="16" width="45" height="45"/>
+                                        <rect key="frame" x="16" y="15" width="92" height="35"/>
                                         <gestureRecognizers/>
-                                        <constraints>
-                                            <constraint firstAttribute="height" constant="45" id="FHt-AB-lFf"/>
-                                            <constraint firstAttribute="width" constant="45" id="NrH-Mj-Ckg"/>
-                                        </constraints>
                                         <connections>
                                             <outletCollection property="gestureRecognizers" destination="wjb-Dj-hCn" appends="YES" id="VUg-Te-YTS"/>
                                         </connections>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Feed" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1hT-sG-pU8">
-                                        <rect key="frame" x="164" y="25.5" width="46" height="27.5"/>
+                                        <rect key="frame" x="164" y="19" width="46" height="27.5"/>
                                         <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="20"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="igV-qE-0Vs">
+                                        <rect key="frame" x="299" y="15" width="60" height="35"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="60" id="r1x-qP-Z6R"/>
+                                        </constraints>
+                                        <state key="normal" title="投稿">
+                                            <color key="titleColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="postTapped:" destination="bRk-BO-LLx" eventType="touchUpInside" id="J9b-21-oCT"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" red="0.0" green="0.73725490199999999" blue="0.83137254900000002" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="1hT-sG-pU8" firstAttribute="centerY" secondItem="0RX-W8-waN" secondAttribute="centerY" id="0EP-YJ-w1I"/>
-                                    <constraint firstItem="0RX-W8-waN" firstAttribute="top" secondItem="UCa-gl-aJN" secondAttribute="top" constant="16" id="KFb-lj-ymy"/>
+                                    <constraint firstItem="igV-qE-0Vs" firstAttribute="top" secondItem="UCa-gl-aJN" secondAttribute="top" constant="15" id="FuT-Tt-MaF"/>
                                     <constraint firstAttribute="height" constant="65" id="NCE-aJ-64o"/>
+                                    <constraint firstAttribute="bottom" secondItem="0RX-W8-waN" secondAttribute="bottom" constant="15" id="TkC-fa-ywX"/>
+                                    <constraint firstItem="0RX-W8-waN" firstAttribute="top" secondItem="UCa-gl-aJN" secondAttribute="top" constant="15" id="aRF-fH-rN4"/>
+                                    <constraint firstAttribute="bottom" secondItem="igV-qE-0Vs" secondAttribute="bottom" constant="15" id="cfq-MX-XzG"/>
                                     <constraint firstItem="0RX-W8-waN" firstAttribute="leading" secondItem="UCa-gl-aJN" secondAttribute="leading" constant="16" id="rsj-6Q-Kln"/>
                                     <constraint firstItem="1hT-sG-pU8" firstAttribute="centerX" secondItem="UCa-gl-aJN" secondAttribute="centerX" id="uaf-Dm-8zG"/>
+                                    <constraint firstAttribute="trailing" secondItem="igV-qE-0Vs" secondAttribute="trailing" constant="16" id="yza-wA-cQa"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZJC-Nh-YSt" customClass="FancyView" customModule="UdemySocialApp" customModuleProvider="target">
@@ -361,6 +373,7 @@
                         <segue destination="C0q-35-68Z" kind="show" identifier="goToSignIn" id="TOf-4q-AYb">
                             <nil key="action"/>
                         </segue>
+                        <segue destination="fTs-NM-ORp" kind="showDetail" identifier="toPost" id="Ytf-IW-IdX"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="w89-xl-GsX" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -375,7 +388,15 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="911.20000000000005" y="124.58770614692655"/>
+            <point key="canvasLocation" x="1250" y="125"/>
+        </scene>
+        <!--Post-->
+        <scene sceneID="hS9-JZ-tZu">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Post" id="fTs-NM-ORp" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="gHb-4w-38n" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1953" y="124"/>
         </scene>
     </scenes>
     <resources>
