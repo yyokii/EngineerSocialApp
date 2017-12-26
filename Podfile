@@ -12,6 +12,7 @@ target 'EngineerSocialApp' do
   pod 'Firebase/Database'
   pod 'Firebase/Storage'
   pod 'FBSDKLoginKit'
+  pod 'TwitterKit'
   pod 'SwiftKeychainWrapper'
 
   target 'EngineerSocialAppTests' do

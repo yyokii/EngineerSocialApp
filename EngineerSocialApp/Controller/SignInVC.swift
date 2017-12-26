@@ -9,6 +9,7 @@
 import UIKit
 import FBSDKCoreKit
 import FBSDKLoginKit
+import TwitterKit
 import Firebase
 import SwiftKeychainWrapper
 
@@ -26,6 +27,7 @@ class SignInVC: UIViewController {
         if let _ = KeychainWrapper.standard.string(forKey: KEY_UID) {
             performSegue(withIdentifier: "goToFeed", sender: nil)
         }
+        self.twitterLogin()
     }
 
     @IBAction func facebookBtnTapped(_ sender: Any) {
@@ -47,6 +49,23 @@ class SignInVC: UIViewController {
             }
         }
         
+    }
+    
+    // twitterログイン
+    func twitterLogin() {
+        let logInButton = TWTRLogInButton(logInCompletion: { session, error in
+            if (session != nil) {
+                let authToken = session?.authToken
+                let authTokenSecret = session?.authTokenSecret
+                let credential = FIRTwitterAuthProvider.credential(withToken: authToken!, secret: authTokenSecret!)
+                self.firebaseAuth(credential)
+            } else {
+                // ...
+            }
+        })
+        
+        logInButton.center = view.center
+        self.view.addSubview(logInButton)
     }
     
     func firebaseAuth (_ credential: FIRAuthCredential) {
