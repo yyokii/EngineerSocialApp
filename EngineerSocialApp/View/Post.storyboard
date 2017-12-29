@@ -83,14 +83,23 @@
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                             </textView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OWs-30-h4u">
+                                <rect key="frame" x="164" y="318.5" width="46" height="30"/>
+                                <state key="normal" title="Button"/>
+                                <connections>
+                                    <action selector="tapModalPresentationStyle:" destination="d2t-TI-fAO" eventType="touchUpInside" id="e9t-8d-H19"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="elx-da-5Of" firstAttribute="top" secondItem="8TL-mF-zGa" secondAttribute="bottom" constant="20" id="8Gj-MI-BVd"/>
+                            <constraint firstItem="OWs-30-h4u" firstAttribute="centerY" secondItem="cSk-r6-sZD" secondAttribute="centerY" id="GVj-NC-ioU"/>
                             <constraint firstItem="8TL-mF-zGa" firstAttribute="leading" secondItem="3dA-00-AjS" secondAttribute="leading" id="I6H-IE-3As"/>
                             <constraint firstItem="elx-da-5Of" firstAttribute="leading" secondItem="1bg-nI-TCn" secondAttribute="trailing" constant="40" id="InL-8I-rMc"/>
                             <constraint firstItem="8TL-mF-zGa" firstAttribute="top" secondItem="cSk-r6-sZD" secondAttribute="top" id="Q18-2G-GS6"/>
                             <constraint firstItem="8TL-mF-zGa" firstAttribute="trailing" secondItem="3dA-00-AjS" secondAttribute="trailing" id="RKg-MW-Zxh"/>
+                            <constraint firstItem="OWs-30-h4u" firstAttribute="centerX" secondItem="cSk-r6-sZD" secondAttribute="centerX" id="Svf-Ph-lR2"/>
                             <constraint firstItem="E80-jZ-eoC" firstAttribute="trailing" secondItem="3dA-00-AjS" secondAttribute="trailing" id="Svp-Wd-d7w"/>
                             <constraint firstItem="E80-jZ-eoC" firstAttribute="leading" secondItem="3dA-00-AjS" secondAttribute="leading" id="V7G-uh-bGn"/>
                             <constraint firstItem="E80-jZ-eoC" firstAttribute="top" secondItem="1bg-nI-TCn" secondAttribute="bottom" constant="50" id="gOX-S0-EXG"/>
