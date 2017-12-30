@@ -2,33 +2,37 @@
 //  ProfileVC.swift
 //  EngineerSocialApp
 //
-//  Created by Yoki on 2017/12/24.
+//  Created by Yoki on 2017/12/30.
 //
 
 import UIKit
 
-class ProfileVC: UIViewController {
-
+class ProfileVC: UIViewController, UIScrollViewDelegate{
+    
+    @IBOutlet weak var profileScrollView: UIScrollView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+        setProdileScrollView()
+        setPostDataView()
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    override func didReceiveMemoryWarning() {
+        super.didReceiveMemoryWarning()
     }
-    */
-
+    
+    func setProdileScrollView() {
+        profileScrollView.delegate = self
+        
+        self.profileScrollView.contentSize = CGSize(width: self.view.frame.width*2, height: self.profileScrollView.frame.height)
+        self.profileScrollView.isPagingEnabled = true
+        
+    }
+    
+    func setPostDataView() {
+        // 高さは固定ではなくて、コンテンツの大きさに依存する感じで。→縦のスクロールビュー入れてるから考えなくてもいいかも
+        let xibView = PostData(frame: CGRect(x: 0, y: 0, width: profileScrollView.frame.width, height: 200))
+        profileScrollView.addSubview(xibView)
+    }
+    
 }
