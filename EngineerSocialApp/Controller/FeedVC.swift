@@ -33,6 +33,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource,UIIma
         tableView.delegate = self
         tableView.dataSource = self
         
+        //post情報取得してPostオブジェクト生成
         //.value means  Any new posts or changes to a post
         DataService.ds.REF_POSTS.observe(.value, with: { (snapshot) in
             
@@ -79,7 +80,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource,UIIma
             }
             
             //なければこっちの処理 FIXME: else にしなくてよいの？？
-            cell.configureCell(post: post) //一回いらなくねと思い消す→データ読み込まれない→もとに戻す→できた 、解決済
+            cell.configureCell(post: post) //一回いらなくねと思い消す→データ読み込まれない→もとに戻す→できた 、解決済 → else で良い気がする（2017/12/31）
             return cell
             
         } else {
@@ -115,6 +116,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource,UIIma
             return
         }
         
+        // TODO:このメソッドを利用して、ログイン時にユーザーのアイコンイメージをストレージに保存する
         if let imgData = UIImageJPEGRepresentation(img, 0.2) {
             let imgUid = NSUUID().uuidString
             let matadata = FIRStorageMetadata()
@@ -136,7 +138,6 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource,UIIma
         }
     }
     
-    
     /// firebaseのデータストアに投稿情報を書き込む（postに追加）
     ///
     /// - Parameter imgUrl: 画像のurl
@@ -145,7 +146,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource,UIIma
             "caption": captionField.text! as AnyObject,
             "imageUrl": imgUrl as AnyObject,
             "likes": 0 as AnyObject,
-            "uid": KeychainWrapper.standard.string(forKey: KEY_UID) as AnyObject // このuidで検索してユーザーのimageを出したい
+            "uid": KeychainWrapper.standard.string(forKey: KEY_UID) as AnyObject
             ]
         
         let firebasePost = DataService.ds.REF_POSTS.childByAutoId()
@@ -160,8 +161,8 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource,UIIma
     }
     
     
-    /// プロフィール画面で自分の過去投稿を見られるように保存しておく
-    ///
+    /// プロフィール画面で自分の過去投稿を見られるようにユーザーのpostkeyをdbに保存しておく
+    /// TODO：削除機能つける時はpostkey消す（投稿情報関連は全て消す必要あり、ん〜面倒）
     /// - Parameter myPostKey: postのkey（autoIdで作成されたもの）
     func setUserPost (myPostKey:String){
         userPostsRef = DataService.ds.REF_USER_CURRENT.child("posts").child(myPostKey)

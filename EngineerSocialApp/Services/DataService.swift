@@ -17,13 +17,16 @@ class DataService {
     
     static let ds = DataService()
     
-    //DB referrence
+    //DB referrence ここら辺はパフォーマンス意識してなるべく全取得を避けたい
     private var _REF_BASE = DB_BASE
     private var _REF_POSTS = DB_BASE.child("posts")
     private var _REF_USERS = DB_BASE.child("users")
     
     //Storage reference
     private var _REF_POST_IMAGES = STORAGE_BASE.child("post-pics")
+    //アイコンupload用
+    private var _REF_USER_IMAGES = STORAGE_BASE.child("user-icon-pics")
+    
     
     var REF_BASE: FIRDatabaseReference {
         
@@ -51,11 +54,19 @@ class DataService {
         
         return _REF_POST_IMAGES
     }
-
+    
+    var REF_USER_IMAGES: FIRStorageReference {
+        
+        return _REF_USER_IMAGES
+    }
     
     func createFirebaseDBUser (uid: String, userData: Dictionary<String, String>) {
         
         REF_USERS.child(uid).updateChildValues(userData)
     }
     
+    func getPostUser(uid: String) -> FIRDatabaseReference{
+        //投稿に紐づくユーザー情報取得
+        return DB_BASE.child("users").child(uid)
+    }
 }

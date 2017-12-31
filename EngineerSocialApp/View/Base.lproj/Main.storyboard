@@ -486,23 +486,23 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iS0-ag-nY4">
-                                <rect key="frame" x="0.0" y="170" width="375" height="448"/>
+                                <rect key="frame" x="0.0" y="180" width="375" height="438"/>
                             </scrollView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="yyokii" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="73Q-e6-2TQ">
-                                <rect key="frame" x="30" y="20" width="315" height="20.5"/>
+                                <rect key="frame" x="30" y="30" width="315" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profile" translatesAutoresizingMaskIntoConstraints="NO" id="lZm-G1-IPR">
-                                <rect key="frame" x="157.5" y="46" width="60" height="60"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="profile" translatesAutoresizingMaskIntoConstraints="NO" id="lZm-G1-IPR" customClass="CircleView" customModule="EngineerSocialApp" customModuleProvider="target">
+                                <rect key="frame" x="157.5" y="56" width="60" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="60" id="46H-BS-zgl"/>
                                     <constraint firstAttribute="height" constant="60" id="HZd-cH-pRM"/>
                                 </constraints>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="BOR-cX-Cn9">
-                                <rect key="frame" x="30" y="136" width="315" height="24"/>
+                                <rect key="frame" x="30" y="146" width="315" height="24"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="POST" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cbI-Fs-9Tn">
                                         <rect key="frame" x="0.0" y="0.0" width="147.5" height="24"/>
@@ -525,7 +525,7 @@
                             <constraint firstItem="iS0-ag-nY4" firstAttribute="trailing" secondItem="isE-u6-rCh" secondAttribute="trailing" id="E1B-Ja-D0Y"/>
                             <constraint firstItem="73Q-e6-2TQ" firstAttribute="centerX" secondItem="Qwa-bM-tUY" secondAttribute="centerX" id="G1u-kT-BNv"/>
                             <constraint firstItem="iS0-ag-nY4" firstAttribute="top" secondItem="BOR-cX-Cn9" secondAttribute="bottom" constant="10" id="HuJ-9h-pOP"/>
-                            <constraint firstItem="73Q-e6-2TQ" firstAttribute="top" secondItem="isE-u6-rCh" secondAttribute="top" id="J27-c2-CmL"/>
+                            <constraint firstItem="73Q-e6-2TQ" firstAttribute="top" secondItem="isE-u6-rCh" secondAttribute="top" constant="10" id="J27-c2-CmL"/>
                             <constraint firstItem="isE-u6-rCh" firstAttribute="trailing" secondItem="BOR-cX-Cn9" secondAttribute="trailing" constant="30" id="LdI-rA-CPr"/>
                             <constraint firstItem="iS0-ag-nY4" firstAttribute="bottom" secondItem="isE-u6-rCh" secondAttribute="bottom" id="SDG-mx-72x"/>
                             <constraint firstItem="lZm-G1-IPR" firstAttribute="centerX" secondItem="Qwa-bM-tUY" secondAttribute="centerX" id="So7-Q7-Swr"/>
@@ -539,7 +539,9 @@
                     </view>
                     <tabBarItem key="tabBarItem" systemItem="bookmarks" id="ETH-RS-O87"/>
                     <connections>
+                        <outlet property="nameLabel" destination="73Q-e6-2TQ" id="Nlf-Tn-XYL"/>
                         <outlet property="profileScrollView" destination="iS0-ag-nY4" id="FKa-Jk-rsT"/>
+                        <outlet property="userImageView" destination="lZm-G1-IPR" id="9fy-D4-cCY"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D85-8k-L44" userLabel="First Responder" sceneMemberID="firstResponder"/>

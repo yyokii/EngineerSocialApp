@@ -29,7 +29,8 @@ class SignInVC: UIViewController {
         }
         self.twitterLogin()
     }
-
+    
+    // facebookログイン
     @IBAction func facebookBtnTapped(_ sender: Any) {
         
         let facebookLogin = FBSDKLoginManager()
@@ -79,12 +80,15 @@ class SignInVC: UIViewController {
                 print("JESS: Successfully authenticated with Firebase")
                 if let user = user {
                     let userData = ["provider": credential.provider ]
+                    
+                    self.uploadImage(user: user)
                     self.completeSignIn(id: user.uid, userData: userData)
                 }
             }
         })
     }
     
+    // メールログイン
     @IBAction func signInTapped(_ sender: Any) {
         
         if let email = emailField.text, let pwd = pwdField.text {
@@ -114,11 +118,68 @@ class SignInVC: UIViewController {
         }
     }
     
+    func uploadImage(user: FIRUser) {
+        var imageData: Data?
+        do {
+            imageData = try Data(contentsOf: user.photoURL!, options: Data.ReadingOptions.mappedIfSafe)
+        }catch {
+            imageData = nil
+            print("Errro: アイコン画像のData型生成に失敗")
+        }
+        
+        guard let _ = imageData else {
+            return
+        }
+        // ログイン時にユーザーのアイコンイメージをストレージに保存する
+        if let imgData = UIImageJPEGRepresentation(UIImage(data: imageData!)!, 0.2) {
+            let imgUid = user.uid
+            let matadata = FIRStorageMetadata()
+            matadata.contentType = "image/jpeg"
+            
+            // 画像をfirebaseストレージに追加する
+            DataService.ds.REF_USER_IMAGES.child(imgUid).put(imgData, metadata: matadata) { (metadata, error) in
+                if error != nil {
+                    print("Error: Firebasee storageへの画像アップロード失敗")
+                } else {
+                    print("OK:　Firebase storageへの画像アップロード成功")
+                }
+            }
+        }
+    }
+    
     func completeSignIn (id: String, userData: Dictionary<String,String>){
         DataService.ds.createFirebaseDBUser(uid: id, userData: userData)
         let keychainResult = KeychainWrapper.standard.set(id, forKey: KEY_UID)
         print("JESS: Data saved to keychain \(keychainResult)")
         performSegue(withIdentifier: "goToFeed", sender: nil)
+    }
+    
+    static func downloadImageWithDataTask(urlString: String, imageView: UIImageView){
+        
+        // FIXME: 5minの間違い？
+        let fiveSecondsCache: TimeInterval = 5 * 60
+        
+        //urlをエンコーディングして無効なURLが入ったら処理を抜ける
+        guard let encURL = URL(string:urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!) else {
+            print("Error：　urlをエンコード出来なかったよ!")
+            return
+        }
+        
+        let req = URLRequest(url: encURL, cachePolicy: .returnCacheDataElseLoad, timeoutInterval: fiveSecondsCache)
+        
+        let conf = URLSessionConfiguration.default
+        let session = URLSession(configuration: conf, delegate: nil, delegateQueue: OperationQueue.main)
+        
+        session.dataTask(with: req, completionHandler:
+            { (data, resp, err) in
+                if (err == nil){
+                    print("画像表示成功！")
+                    let image = UIImage(data: data!)
+                    imageView.image = image
+                } else {
+                    print("Error：　画像の取得に失敗しました")
+                }
+        }).resume()
     }
 }
 

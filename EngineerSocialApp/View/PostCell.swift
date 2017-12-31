@@ -33,13 +33,17 @@ class PostCell: UITableViewCell {
     
     func configureCell (post: Post, img: UIImage? = nil) {
         self.post = post
+        // ユーザーが投稿にいいねしているかどうかでハートの状態を変更するので、likeの参照を保持
         likesRef = DataService.ds.REF_USER_CURRENT.child("likes").child(post.postKey)
 
-        
         self.caption.text = post.caption
         self.likesLbl.text = "\(post.likes)"
         
+        //self.profieImg.image = UIImage(data: <#T##Data#>)
+        setUserImage(uid: post.postUserId)
+        
         //Cacheにある場合とない場合（storageからとってきてCaCheに入れる）
+        //TODO:Cache適宜消さないと容量まずいきがする
         if img != nil {
             self.postImag.image = img
         } else {
@@ -58,9 +62,7 @@ class PostCell: UITableViewCell {
                         }
                     }
                 }
-                
             })
-            
         }
         
         likesRef.observeSingleEvent(of: .value, with: { (snapshot) in
@@ -86,6 +88,27 @@ class PostCell: UITableViewCell {
         })
     }
     
+    
+    /// 投稿者のアイコン取得 FIXME:画像荒い
+    ///
+    /// - Parameter uid: 投稿者のid
+    func setUserImage(uid: String) {
+        let ref = FIRStorage.storage().reference().child("user-icon-pics").child(uid)
+        
+        ref.data(withMaxSize: 2 * 1024 * 1024, completion: { (data, error) in
+            if error != nil {
+                print("Error: Firebase storageからアイコン画像の取得失敗")
+            } else {
+                print("OK: Firebase storageからアイコン取得成功")
+                if let imgData = data {
+                    if let img = UIImage(data: imgData) {
+                        self.profieImg.image = img
+                        //FeedVC.imageCache.setObject(img, forKey: post.imageUrl as NSString)
+                    }
+                }
+            }
+        })
+    }
 }
 
 
