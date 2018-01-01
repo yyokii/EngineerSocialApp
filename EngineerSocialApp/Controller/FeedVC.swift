@@ -37,6 +37,8 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource,UIIma
         //.value means  Any new posts or changes to a post
         DataService.ds.REF_POSTS.observe(.value, with: { (snapshot) in
             
+            print("全ての投稿情報:\(snapshot)")
+            
             self.posts = []
             
             if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
@@ -70,7 +72,9 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource,UIIma
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        let  post = posts[indexPath.row]
+        let post = posts[indexPath.row]
+        
+        // FIXME: ここオプショナルチェイニングでなくていいかも
         if let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell") as? PostCell {
             
             

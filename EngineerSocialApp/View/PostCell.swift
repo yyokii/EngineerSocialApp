@@ -39,7 +39,7 @@ class PostCell: UITableViewCell {
         self.caption.text = post.caption
         self.likesLbl.text = "\(post.likes)"
         
-        //self.profieImg.image = UIImage(data: <#T##Data#>)
+        //self.profieImg.image = UIImage(data: )
         setUserImage(uid: post.postUserId)
         
         //Cacheにある場合とない場合（storageからとってきてCaCheに入れる）
