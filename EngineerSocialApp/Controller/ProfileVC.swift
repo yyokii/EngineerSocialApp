@@ -15,6 +15,7 @@ class ProfileVC: UIViewController, UIScrollViewDelegate{
     @IBOutlet weak var nameLabel: UILabel!
     
     var myPosts = [Post]()
+    var postTableView: PostTableView!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -24,6 +25,7 @@ class ProfileVC: UIViewController, UIScrollViewDelegate{
         getMyPosts()
         // スクロールビュー内のコンテンツ設定
         setPostDataView()
+        setMyPostTableView()
     }
     
     override func didReceiveMemoryWarning() {
@@ -48,7 +50,7 @@ class ProfileVC: UIViewController, UIScrollViewDelegate{
     // （自分の過去投稿を表示するテーブルビュー）下部の横スクロールビュー内のコンテンツ
     func setMyPostTableView(){
         let frame = CGRect(x: self.profileScrollView.frame.width, y: 0, width: self.profileScrollView.frame.width, height: self.profileScrollView.frame.height)
-        let postTableView = PostTableView(frame: frame,style: UITableViewStyle.plain)
+        self.postTableView = PostTableView(frame: frame,style: UITableViewStyle.plain)
         postTableView.posts = myPosts
         // セルの高さを可変にする
         postTableView.estimatedRowHeight = 200
@@ -99,9 +101,11 @@ class ProfileVC: UIViewController, UIScrollViewDelegate{
                                 
                                 if self.myPosts.count == myPostsKey.count {
                                     // 過去の投稿情報が全件取得完了 → テーブルビューに表示 FIXME: ここもっとクールに書きたい
-                                    self.setMyPostTableView()
+                                    //self.setMyPostTableView()
                                 }
                             }
+                            self.postTableView.posts = self.myPosts
+                            self.postTableView.reloadData()
                         }
                     }
                 } else {

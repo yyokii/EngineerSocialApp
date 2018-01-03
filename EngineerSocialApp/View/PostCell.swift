@@ -8,7 +8,7 @@
 
 import UIKit
 import Firebase
-
+// このクラスを消して　→　PostTableViewCellに置き換える
 class PostCell: UITableViewCell {
 
     @IBOutlet weak var profieImg: UIImageView!
@@ -47,6 +47,9 @@ class PostCell: UITableViewCell {
         if img != nil {
             self.postImag.image = img
         } else {
+            guard post.imageUrl != "" else {
+                return
+            }
             let ref = FIRStorage.storage().reference(forURL: post.imageUrl)
             
             ref.data(withMaxSize: 2 * 1024 * 1024, completion: { (data, error) in
@@ -110,5 +113,3 @@ class PostCell: UITableViewCell {
         })
     }
 }
-
-

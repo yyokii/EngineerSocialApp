@@ -40,6 +40,9 @@
                                         </constraints>
                                         <fontDescription key="fontDescription" type="system" pointSize="28"/>
                                         <state key="normal" title="post"/>
+                                        <connections>
+                                            <action selector="postTapped:" destination="d2t-TI-fAO" eventType="touchUpInside" id="TCa-mB-jqy"/>
+                                        </connections>
                                     </button>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="i9O-XR-ABt" customClass="CircleView" customModule="EngineerSocialApp" customModuleProvider="target">
                                         <rect key="frame" x="157" y="2" width="60" height="60"/>
@@ -108,6 +111,11 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="3dA-00-AjS"/>
                     </view>
+                    <connections>
+                        <outlet property="captionTextView" destination="E80-jZ-eoC" id="Zry-a5-XRg"/>
+                        <outlet property="doingLabel" destination="elx-da-5Of" id="rET-kz-1tT"/>
+                        <outlet property="languageLabel" destination="1bg-nI-TCn" id="zqe-rf-QgO"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="IqF-3u-L2g" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

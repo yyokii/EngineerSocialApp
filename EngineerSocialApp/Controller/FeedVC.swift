@@ -10,17 +10,19 @@ import UIKit
 import Firebase
 import SwiftKeychainWrapper
 
-class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource,UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class FeedVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
 
-    @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var imageAdd: CircleView!
     @IBOutlet weak var captionField: FancyField!
+    @IBOutlet weak var mainView: UIView!
     
     var posts = [Post]()
     var imageSelected = false
     var imagePicker: UIImagePickerController!
     static var imageCache: NSCache<NSString, UIImage> = NSCache()
+    var postTableView: PostTableView!
     
+    // FIXME: メンバ変数にしなくていいかも
     var userPostsRef: FIRDatabaseReference!
     
     override func viewDidLoad() {
@@ -30,9 +32,7 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource,UIIma
         imagePicker.delegate = self
         imagePicker.allowsEditing = true
         
-        tableView.delegate = self
-        tableView.dataSource = self
-        
+        setPostTableView()
         //post情報取得してPostオブジェクト生成
         //.value means  Any new posts or changes to a post
         DataService.ds.REF_POSTS.observe(.value, with: { (snapshot) in
@@ -54,42 +54,11 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource,UIIma
                         
                     }
                 }
+                self.postTableView.posts = self.posts
+                self.postTableView.reloadData()
             }
-            self.tableView.reloadData()
         })
 
-    }
-    
-    func numberOfSections(in tableView: UITableView) -> Int {
-        
-        return 1
-    }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
-        return posts.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
-        let post = posts[indexPath.row]
-        
-        // FIXME: ここオプショナルチェイニングでなくていいかも
-        if let cell = tableView.dequeueReusableCell(withIdentifier: "PostCell") as? PostCell {
-            
-            
-            //cacheがあればそこから画像とってくる
-            if let img = FeedVC.imageCache.object(forKey: post.imageUrl as NSString) {
-                cell.configureCell(post: post, img: img)
-            }
-            
-            //なければこっちの処理 FIXME: else にしなくてよいの？？
-            cell.configureCell(post: post) //一回いらなくねと思い消す→データ読み込まれない→もとに戻す→できた 、解決済 → else で良い気がする（2017/12/31）
-            return cell
-            
-        } else {
-            return PostCell()
-        }
     }
     
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
@@ -108,71 +77,17 @@ class FeedVC: UIViewController, UITableViewDelegate, UITableViewDataSource,UIIma
         
         present(imagePicker, animated: true, completion: nil)
     }
-    @IBAction func postBtnTapped(_ sender: Any) {
-        guard let caption = captionField.text, caption != "" else {
-            print("JESS: Caption must be entered")
-            return
-        }
-        
-        // FIXME: 画像の投稿は使わないのでここいらない
-        guard let img = imageAdd.image, imageSelected == true else {
-            print("JESS: An image must be selected")
-            return
-        }
-        
-        // TODO:このメソッドを利用して、ログイン時にユーザーのアイコンイメージをストレージに保存する
-        if let imgData = UIImageJPEGRepresentation(img, 0.2) {
-            let imgUid = NSUUID().uuidString
-            let matadata = FIRStorageMetadata()
-            matadata.contentType = "image/jpeg"
-            
-            // 画像がfirebaseストレージに追加できたらpost情報をデータベースに書き込む
-            DataService.ds.REF_POST_IMAGES.child(imgUid).put(imgData, metadata: matadata) { (metadata, error) in
-                if error != nil {
-                    print("JESS: Unable to upload image to Firebasee torage")
-                } else {
-                    print("JESS: Successfully uploaded image to Firebase storage")
-                    let downloadUrl = metadata?.downloadURL()?.absoluteString
-                    if let url = downloadUrl {
-                        self.postToFirebase(imgUrl: url)
-                    }
-                }
-            }
-            
-        }
-    }
     
-    /// firebaseのデータストアに投稿情報を書き込む（postに追加）
-    ///
-    /// - Parameter imgUrl: 画像のurl
-    func postToFirebase (imgUrl: String) {
-        let post: Dictionary<String, AnyObject> = [
-            "caption": captionField.text! as AnyObject,
-            "imageUrl": imgUrl as AnyObject,
-            "likes": 0 as AnyObject,
-            "uid": KeychainWrapper.standard.string(forKey: KEY_UID) as AnyObject
-            ]
-        
-        let firebasePost = DataService.ds.REF_POSTS.childByAutoId()
-        firebasePost.setValue(post)
-        
-        setUserPost(myPostKey: firebasePost.key)
-        
-        captionField.text = ""
-        imageSelected = false
-        imageAdd.image = UIImage(named: "add-image")
-        
+    // （自分の過去投稿を表示するテーブルビュー）下部の横スクロールビュー内のコンテンツ
+    func setPostTableView(){
+        let frame = CGRect(x: 0, y: 0, width: self.mainView.frame.width, height: self.mainView.frame.height)
+        self.postTableView = PostTableView(frame: frame,style: UITableViewStyle.plain)
+        postTableView.posts = self.posts
+        // セルの高さを可変にする
+        postTableView.estimatedRowHeight = 200
+        postTableView.rowHeight = UITableViewAutomaticDimension
+        self.mainView.addSubview(postTableView)
     }
-    
-    
-    /// プロフィール画面で自分の過去投稿を見られるようにユーザーのpostkeyをdbに保存しておく
-    /// TODO：削除機能つける時はpostkey消す（投稿情報関連は全て消す必要あり、ん〜面倒）
-    /// - Parameter myPostKey: postのkey（autoIdで作成されたもの）
-    func setUserPost (myPostKey:String){
-        userPostsRef = DataService.ds.REF_USER_CURRENT.child("posts").child(myPostKey)
-        userPostsRef.setValue(true)
-    }
-
     
     @IBAction func signOutTapped(_ sender: Any) {
         

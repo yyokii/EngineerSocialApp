@@ -12,7 +12,7 @@ import Firebase
 class Post {
     
     private var _caption: String!
-    private var _imageUrl: String!
+    private var _imageUrl: String! = "" // 投稿内容にimageを持たないけど、雛形ではimageをもっている。落ちないように空の文字列を入れとく
     private var _likes: Int!
     private var _postUserId: String!
     private var _postKey: String!
@@ -73,11 +73,9 @@ class Post {
         if addLike {
             _likes = _likes + 1   //////////////////
         } else {
-            _likes = likes - 1    //////////////////
+            _likes = _likes - 1    //////////////////
         }
-        
         _postRef.child("likes").setValue(_likes)
-        
     }
 
 }
