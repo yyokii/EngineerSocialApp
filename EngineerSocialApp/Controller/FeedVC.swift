@@ -89,7 +89,8 @@ class FeedVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCon
     
     /// 投稿表示用のテーブルビュー
     func setPostTableView(){
-        let frame = CGRect(x: 0, y: 0, width: self.mainView.frame.width, height: self.mainView.frame.height)
+        // ここ、サイズをmainViewで設定すると小さくなるのでviewで設定。なんで小さくなるかわわからん。
+        let frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
         self.postTableView = PostTableView(frame: frame,style: UITableViewStyle.plain)
         postTableView.posts = self.posts
         // セルの高さを可変にする

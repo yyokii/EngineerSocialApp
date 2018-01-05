@@ -43,13 +43,13 @@ class ProfileVC: UIViewController, UIScrollViewDelegate{
     // （個人投稿データ）下部の横スクロールビュー内のコンテンツ
     func setPostDataView() {
         // 高さは固定ではなくて、コンテンツの大きさに依存する感じで。→縦のスクロールビュー入れてるから考えなくてもいいかも
-        let xibView = PostData(frame: CGRect(x: 0, y: 0, width: profileScrollView.frame.width, height: 200))
+        let xibView = PostData(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
         profileScrollView.addSubview(xibView)
     }
     
     // （自分の過去投稿を表示するテーブルビュー）下部の横スクロールビュー内のコンテンツ
     func setMyPostTableView(){
-        let frame = CGRect(x: self.profileScrollView.frame.width, y: 0, width: self.profileScrollView.frame.width, height: self.profileScrollView.frame.height)
+        let frame = CGRect(x: self.view.frame.width, y: 0, width: self.view.frame.width, height: self.view.frame.height)
         self.postTableView = PostTableView(frame: frame,style: UITableViewStyle.plain)
         postTableView.posts = myPosts
         // セルの高さを可変にする
