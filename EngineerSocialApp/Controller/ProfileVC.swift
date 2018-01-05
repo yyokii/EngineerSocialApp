@@ -68,7 +68,7 @@ class ProfileVC: UIViewController, UIScrollViewDelegate{
     }
     
     func getMyPosts() {
-        DataService.ds.REF_USER_CURRENT.child("posts").observe(.value) { (snapshot) in
+        DataService.ds.REF_USER_CURRENT.child("posts").observeSingleEvent(of: .value) { (snapshot) in
             print("取得したデータ：\(snapshot)")
             
             var myPostsKey = [String]()
@@ -85,7 +85,7 @@ class ProfileVC: UIViewController, UIScrollViewDelegate{
                 // 投稿全てのkeyが取得できたらそのkeyに該当するpostを取得する
                 if !myPostsKey.isEmpty {
                     for key in myPostsKey {
-                        DataService.ds.REF_POSTS.child(key).observe(.value) { (snapshot) in
+                        DataService.ds.REF_POSTS.child(key).observeSingleEvent(of: .value) { (snapshot) in
                             
                             print("過去の投稿情報:\(snapshot)")
                             

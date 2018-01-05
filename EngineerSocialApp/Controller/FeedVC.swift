@@ -32,10 +32,37 @@ class FeedVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCon
         imagePicker.delegate = self
         imagePicker.allowsEditing = true
         
+        // FIXME:基本先にテーブルビュー生成されるからいいけど、もしデータ取得がはやかったら落ちると思われるので修正したい
+        getPostsFromFireBase()
         setPostTableView()
-        //post情報取得してPostオブジェクト生成
+        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        self.getPostsFromFireBase()
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
+        
+        if let image = info[UIImagePickerControllerEditedImage] as? UIImage {
+            imageAdd.image = image
+            imageSelected = true
+        } else {
+            print("JESS: A valid image wasn't salected")
+        }
+        
+        
+        imagePicker.dismiss(animated: true, completion: nil)
+    }
+    @IBAction func addImageTapped(_ sender: Any) {
+        
+        present(imagePicker, animated: true, completion: nil)
+    }
+    
+    /// データベースから投稿情報を取得
+    func getPostsFromFireBase() {
         //.value means  Any new posts or changes to a post
-        DataService.ds.REF_POSTS.observe(.value, with: { (snapshot) in
+        DataService.ds.REF_POSTS.observeSingleEvent(of: .value , with: { (snapshot) in
             
             print("全ての投稿情報:\(snapshot)")
             
@@ -58,27 +85,9 @@ class FeedVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCon
                 self.postTableView.reloadData()
             }
         })
-
     }
     
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        
-        if let image = info[UIImagePickerControllerEditedImage] as? UIImage {
-            imageAdd.image = image
-            imageSelected = true
-        } else {
-            print("JESS: A valid image wasn't salected")
-        }
-        
-        
-        imagePicker.dismiss(animated: true, completion: nil)
-    }
-    @IBAction func addImageTapped(_ sender: Any) {
-        
-        present(imagePicker, animated: true, completion: nil)
-    }
-    
-    // （自分の過去投稿を表示するテーブルビュー）下部の横スクロールビュー内のコンテンツ
+    /// 投稿表示用のテーブルビュー
     func setPostTableView(){
         let frame = CGRect(x: 0, y: 0, width: self.mainView.frame.width, height: self.mainView.frame.height)
         self.postTableView = PostTableView(frame: frame,style: UITableViewStyle.plain)
@@ -86,7 +95,36 @@ class FeedVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCon
         // セルの高さを可変にする
         postTableView.estimatedRowHeight = 200
         postTableView.rowHeight = UITableViewAutomaticDimension
+        // リフレッシュ機能をつける
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(self.refreshControlValueChanged(sender:)), for: .valueChanged)
+        postTableView.addSubview(refreshControl)
+        
         self.mainView.addSubview(postTableView)
+    }
+    
+    @objc func refreshControlValueChanged(sender: UIRefreshControl) {
+        // FIXME: getPost()メソッドの処理と最後以外同じなのでリファクタしたい
+        DataService.ds.REF_POSTS.observeSingleEvent(of: .value , with: { (snapshot) in
+            self.posts = []
+            if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+                for snap in snapshot {
+                    print("Snap: \(snap)")
+                    
+                    if let postDict = snap.value as? Dictionary<String, AnyObject> {
+                        
+                        let key = snap.key
+                        let post = Post(postKey: key, postData: postDict)
+                        //self.posts.append(post)
+                        self.posts.insert(post, at: 0)
+                        
+                    }
+                }
+                sender.endRefreshing()
+                self.postTableView.posts = self.posts
+                self.postTableView.reloadData()
+            }
+        })
     }
     
     @IBAction func signOutTapped(_ sender: Any) {

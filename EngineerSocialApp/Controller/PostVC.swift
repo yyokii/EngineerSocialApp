@@ -54,7 +54,7 @@ class PostVC: UIViewController, UIPopoverPresentationControllerDelegate, PopOver
     ///
     /// - Parameter imgUrl: 画像のurl
     func postToFirebase () {
-        let action: Dictionary<String, AnyObject> = ["smile": 0 as AnyObject, "heart": 0 as AnyObject, "cry": 0 as AnyObject, "clap": 0 as AnyObject, "ok": 0 as AnyObject]
+        let action: Dictionary<String, AnyObject> = ["smiles": 0 as AnyObject, "hearts": 0 as AnyObject, "cries": 0 as AnyObject, "claps": 0 as AnyObject, "oks": 0 as AnyObject]
         let post: Dictionary<String, AnyObject> = [
             "programmingLanguage": languageLabel.text! as AnyObject,
             "do": doingLabel.text! as AnyObject,

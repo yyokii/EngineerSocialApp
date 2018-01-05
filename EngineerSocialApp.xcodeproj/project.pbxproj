@@ -12,6 +12,7 @@
 		B614A2B31FF28D2F001E1F80 /* PopOverContentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B614A2B21FF28D2F001E1F80 /* PopOverContentViewController.swift */; };
 		B614A2B51FF28F1B001E1F80 /* PopOver.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B614A2B41FF28F1B001E1F80 /* PopOver.storyboard */; };
 		B683828B1FFB3AC300B37589 /* ProgrammingLanguageCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = B683828A1FFB3AC300B37589 /* ProgrammingLanguageCell.swift */; };
+		B683828D1FFCF99300B37589 /* BorderLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B683828C1FFCF99300B37589 /* BorderLabel.swift */; };
 		B6C613FC1FF7079F009FF96D /* PostData.xib in Resources */ = {isa = PBXBuildFile; fileRef = B6C613FB1FF7079F009FF96D /* PostData.xib */; };
 		B6C614001FF77E48009FF96D /* PostData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C613FF1FF77E48009FF96D /* PostData.swift */; };
 		B6C614021FF78032009FF96D /* ProfileVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6C614011FF78032009FF96D /* ProfileVC.swift */; };
@@ -69,6 +70,7 @@
 		B614A2B21FF28D2F001E1F80 /* PopOverContentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopOverContentViewController.swift; sourceTree = "<group>"; };
 		B614A2B41FF28F1B001E1F80 /* PopOver.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = PopOver.storyboard; sourceTree = "<group>"; };
 		B683828A1FFB3AC300B37589 /* ProgrammingLanguageCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgrammingLanguageCell.swift; sourceTree = "<group>"; };
+		B683828C1FFCF99300B37589 /* BorderLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BorderLabel.swift; sourceTree = "<group>"; };
 		B6C613FB1FF7079F009FF96D /* PostData.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PostData.xib; sourceTree = "<group>"; };
 		B6C613FF1FF77E48009FF96D /* PostData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PostData.swift; sourceTree = "<group>"; };
 		B6C614011FF78032009FF96D /* ProfileVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileVC.swift; sourceTree = "<group>"; };
@@ -230,6 +232,7 @@
 		B6F25D3C1FEEA4BB007A4A6A /* View */ = {
 			isa = PBXGroup;
 			children = (
+				B683828C1FFCF99300B37589 /* BorderLabel.swift */,
 				B6F25D481FEEA5D0007A4A6A /* FancyView.swift */,
 				B6F25D471FEEA5CF007A4A6A /* RoundBtn.swift */,
 				B6F25D491FEEA5D0007A4A6A /* FancyField.swift */,
@@ -577,6 +580,7 @@
 				B6C614061FF8A573009FF96D /* PostTableView.swift in Sources */,
 				B6F25D511FEEA5D1007A4A6A /* CircleView.swift in Sources */,
 				B6F25D431FEEA4F0007A4A6A /* Constants.swift in Sources */,
+				B683828D1FFCF99300B37589 /* BorderLabel.swift in Sources */,
 				B6F25D451FEEA5B5007A4A6A /* Post.swift in Sources */,
 				B6F25D4E1FEEA5D1007A4A6A /* FancyView.swift in Sources */,
 				B6F25D4C1FEEA5D1007A4A6A /* PostCell.swift in Sources */,

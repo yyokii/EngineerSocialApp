@@ -41,6 +41,7 @@ class PostTableView: UITableView ,UITableViewDelegate,UITableViewDataSource{
         let cell = tableView.dequeueReusableCell(withIdentifier: "PostTableViewCell", for: indexPath) as! PostTableViewCell
         let post = posts[indexPath.row]
         cell.configureCell(post: post)
+        cell.selectionStyle = .none
         
         return cell
     }
