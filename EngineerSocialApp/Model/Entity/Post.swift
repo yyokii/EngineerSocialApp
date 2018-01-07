@@ -126,7 +126,6 @@ class Post {
         _postRef.child("likes").setValue(_likes)
     }
     
-    // ここで投稿情報にアクション数のデータを追加すると同時に、投稿者のところの獲得アクション数を増やすべき
     // ユーザーのアクション数をdbに反映させる。postツリーの中の個々の投稿の中でアクション数を保持する。
     func ajustSmile (addSmile: Bool) {
         if addSmile {

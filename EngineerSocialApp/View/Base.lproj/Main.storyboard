@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Alignment constraints with different attributes" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
@@ -152,7 +153,7 @@
                         <viewControllerLayoutGuide type="bottom" id="3q3-4c-KBv"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="33U-I5-Zil">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="UCa-gl-aJN" customClass="FancyView" customModule="EngineerSocialApp" customModuleProvider="target">
@@ -247,7 +248,7 @@
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lqq-ta-XFN">
                                 <rect key="frame" x="0.0" y="174" width="375" height="444"/>
-                                <color key="backgroundColor" red="0.84557968380000004" green="0.87399262190000004" blue="0.89101588730000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.85148793458938599" green="0.87428200244903564" blue="0.89019972085952759" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" red="0.81176470590000005" green="0.84705882349999995" blue="0.86274509799999999" alpha="1" colorSpace="calibratedRGB"/>
@@ -255,13 +256,13 @@
                             <constraint firstItem="ZJC-Nh-YSt" firstAttribute="top" secondItem="UCa-gl-aJN" secondAttribute="bottom" constant="16" id="38N-tt-ISc"/>
                             <constraint firstItem="UCa-gl-aJN" firstAttribute="top" secondItem="kFR-FX-i4d" secondAttribute="top" id="45z-Ss-imr"/>
                             <constraint firstAttribute="trailing" secondItem="ZJC-Nh-YSt" secondAttribute="trailing" constant="16" id="BmK-nb-S0r"/>
-                            <constraint firstItem="Lqq-ta-XFN" firstAttribute="leading" secondItem="kFR-FX-i4d" secondAttribute="leading" id="Eat-U0-w4j"/>
-                            <constraint firstItem="3q3-4c-KBv" firstAttribute="top" secondItem="Lqq-ta-XFN" secondAttribute="bottom" id="ROh-hm-6Gv"/>
+                            <constraint firstItem="Lqq-ta-XFN" firstAttribute="leading" secondItem="kFR-FX-i4d" secondAttribute="leading" id="EKy-ju-97G"/>
+                            <constraint firstItem="Lqq-ta-XFN" firstAttribute="bottom" secondItem="3q3-4c-KBv" secondAttribute="top" id="Ems-gZ-oc3"/>
                             <constraint firstItem="ZJC-Nh-YSt" firstAttribute="leading" secondItem="33U-I5-Zil" secondAttribute="leading" constant="16" id="dAb-bp-GAB"/>
                             <constraint firstAttribute="trailing" secondItem="UCa-gl-aJN" secondAttribute="trailing" id="eX0-zA-n5z"/>
                             <constraint firstItem="UCa-gl-aJN" firstAttribute="leading" secondItem="33U-I5-Zil" secondAttribute="leading" id="j9x-lQ-n0w"/>
-                            <constraint firstItem="Lqq-ta-XFN" firstAttribute="trailing" secondItem="kFR-FX-i4d" secondAttribute="trailing" id="mgI-Ca-Vs3"/>
-                            <constraint firstItem="Lqq-ta-XFN" firstAttribute="top" secondItem="ZJC-Nh-YSt" secondAttribute="bottom" constant="8" id="wI0-L9-4cD"/>
+                            <constraint firstItem="Lqq-ta-XFN" firstAttribute="top" secondItem="ZJC-Nh-YSt" secondAttribute="bottom" constant="8" id="o1D-UO-8Rh"/>
+                            <constraint firstItem="kFR-FX-i4d" firstAttribute="trailing" secondItem="Lqq-ta-XFN" secondAttribute="trailing" id="rDv-6Y-wjD"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="kFR-FX-i4d"/>
                     </view>
@@ -302,8 +303,9 @@
         <scene sceneID="mDf-Xh-0cv">
             <objects>
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="Gnq-k5-Q0e" sceneMemberID="viewController">
+                    <extendedEdge key="edgesForExtendedLayout"/>
                     <toolbarItems/>
-                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="iaf-dJ-O2l">
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="iaf-dJ-O2l">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
@@ -322,7 +324,7 @@
             <objects>
                 <viewController id="bfc-oN-6TY" customClass="ProfileVC" customModule="EngineerSocialApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Qwa-bM-tUY">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iS0-ag-nY4">
@@ -362,12 +364,12 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="BOR-cX-Cn9" firstAttribute="leading" secondItem="isE-u6-rCh" secondAttribute="leading" constant="30" id="39u-OK-LNK"/>
+                            <constraint firstAttribute="bottom" secondItem="iS0-ag-nY4" secondAttribute="bottom" id="BII-Ye-bWW"/>
                             <constraint firstItem="iS0-ag-nY4" firstAttribute="trailing" secondItem="isE-u6-rCh" secondAttribute="trailing" id="E1B-Ja-D0Y"/>
                             <constraint firstItem="73Q-e6-2TQ" firstAttribute="centerX" secondItem="Qwa-bM-tUY" secondAttribute="centerX" id="G1u-kT-BNv"/>
                             <constraint firstItem="iS0-ag-nY4" firstAttribute="top" secondItem="BOR-cX-Cn9" secondAttribute="bottom" constant="10" id="HuJ-9h-pOP"/>
                             <constraint firstItem="73Q-e6-2TQ" firstAttribute="top" secondItem="isE-u6-rCh" secondAttribute="top" constant="10" id="J27-c2-CmL"/>
                             <constraint firstItem="isE-u6-rCh" firstAttribute="trailing" secondItem="BOR-cX-Cn9" secondAttribute="trailing" constant="30" id="LdI-rA-CPr"/>
-                            <constraint firstItem="iS0-ag-nY4" firstAttribute="bottom" secondItem="isE-u6-rCh" secondAttribute="bottom" id="SDG-mx-72x"/>
                             <constraint firstItem="lZm-G1-IPR" firstAttribute="centerX" secondItem="Qwa-bM-tUY" secondAttribute="centerX" id="So7-Q7-Swr"/>
                             <constraint firstItem="73Q-e6-2TQ" firstAttribute="leading" secondItem="Qwa-bM-tUY" secondAttribute="leading" constant="30" id="TX1-vi-PPa"/>
                             <constraint firstAttribute="trailing" secondItem="73Q-e6-2TQ" secondAttribute="trailing" constant="30" id="mRe-HK-awz"/>
@@ -386,7 +388,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="D85-8k-L44" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1958" y="934"/>
+            <point key="canvasLocation" x="1957.5999999999999" y="933.28335832083962"/>
         </scene>
     </scenes>
     <resources>

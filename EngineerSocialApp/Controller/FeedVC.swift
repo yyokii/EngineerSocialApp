@@ -32,13 +32,12 @@ class FeedVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCon
         imagePicker.delegate = self
         imagePicker.allowsEditing = true
         
-        // FIXME:基本先にテーブルビュー生成されるからいいけど、もしデータ取得がはやかったら落ちると思われるので修正したい
-        getPostsFromFireBase()
-        setPostTableView()
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        if self.postTableView == nil {
+            setPostTableView()
+        }
         self.getPostsFromFireBase()
     }
     
@@ -55,7 +54,6 @@ class FeedVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCon
         imagePicker.dismiss(animated: true, completion: nil)
     }
     @IBAction func addImageTapped(_ sender: Any) {
-        
         present(imagePicker, animated: true, completion: nil)
     }
     
@@ -89,12 +87,12 @@ class FeedVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCon
     
     /// 投稿表示用のテーブルビュー
     func setPostTableView(){
-        // ここ、サイズをmainViewで設定すると小さくなるのでviewで設定。なんで小さくなるかわわからん。
-        let frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
+        // ここ、サイズをmainViewで設定すると小さくなるのでviewで設定。なんで小さくなるかわわからん。→ 描画タイミングの問題。didloadでなく、willappearで使用すると想定通りに動く。
+        let frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.mainView.frame.size.height)
         self.postTableView = PostTableView(frame: frame,style: UITableViewStyle.plain)
         postTableView.posts = self.posts
         // セルの高さを可変にする
-        postTableView.estimatedRowHeight = 200
+        postTableView.estimatedRowHeight = 100
         postTableView.rowHeight = UITableViewAutomaticDimension
         // リフレッシュ機能をつける
         let refreshControl = UIRefreshControl()

@@ -34,8 +34,6 @@ class PostTableViewCell: UITableViewCell {
 //    @IBOutlet weak var likeImg: UIImageView!
     
     var post: Post!
-    // 削除
-    var likesRef: FIRDatabaseReference!
     
     // アクションの参照先
     var smileRef: FIRDatabaseReference!
@@ -43,12 +41,19 @@ class PostTableViewCell: UITableViewCell {
     var cryRef: FIRDatabaseReference!
     var clapRef: FIRDatabaseReference!
     var okRef: FIRDatabaseReference!
-
+    
+    enum ActionType {
+        case smile
+        case heart
+        case cry
+        case clap
+        case ok
+    }
     
     override func awakeFromNib() {
         super.awakeFromNib()
         
-        // いいね機能の参考になる
+        // FIXME: 後で消す。いいね機能の参考になる
         //let tap = UITapGestureRecognizer(target: self, action: #selector(likeTapped))
         //tap.numberOfTapsRequired = 1
         //likeImg.addGestureRecognizer(tap)
@@ -56,7 +61,6 @@ class PostTableViewCell: UITableViewCell {
         
         addTapGestureToLabel()
     }
-    
     
     /// ユーザーが投稿にアクションする用のラベルをタップできるように設定する
     func addTapGestureToLabel () {
@@ -78,9 +82,6 @@ class PostTableViewCell: UITableViewCell {
     
     func configureCell (post: Post, img: UIImage? = nil) {
         self.post = post
-        // ユーザーが投稿にいいねしているかどうかでハートの状態を変更するので、likeの参照を保持
-        likesRef = DataService.ds.REF_USER_CURRENT.child("likes").child(post.postKey)
-        
         // ユーザーの投稿へのアクション情報を見るための参照
         smileRef = DataService.ds.REF_USER_CURRENT.child("action").child("smile").child(post.postKey)
         heartRef = DataService.ds.REF_USER_CURRENT.child("action").child("heart").child(post.postKey)
@@ -161,23 +162,8 @@ class PostTableViewCell: UITableViewCell {
         })
     }
     
-    @objc func likeTapped (sender: UITapGestureRecognizer) {
-        likesRef.observeSingleEvent(of: .value, with: { (snapshot) in
-            if let _ = snapshot.value as? NSNull {
-                //self.likeImg.image = UIImage(named: "filled-heart")
-                self.post.ajustLike(addLike: true)
-                self.likesRef.setValue(true)
-            } else {
-                //self.likeImg.image = UIImage(named: "empty-heart")
-                self.post.ajustLike(addLike: false)
-                self.likesRef.removeValue()
-            }
-        })
-    }
-    
     // FIXME: ここともう一つしたのブロックで同じようなメソッドを5個ずつ作ってるのそれぞれ1つにまとめたいなあ
     ////////// ユーザーのアクション状況をビューに反映させる
-
     func setSmileLabel(ref: FIRDatabaseReference) {
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
             if let _ = snapshot.value as? NSNull {
@@ -240,10 +226,12 @@ class PostTableViewCell: UITableViewCell {
                 self.smileLabel.selectedLabel()
                 self.post.ajustSmile(addSmile: true)
                 self.smileRef.setValue(true)
+                self.addPostUserGetActinos(actionType: ActionType.smile, isAdd: true)
             } else {
                 self.smileLabel.notSelectedLabel()
                 self.post.ajustSmile(addSmile: false)
                 self.smileRef.removeValue()
+                self.addPostUserGetActinos(actionType: ActionType.smile, isAdd: false)
             }
             self.smileLabel.isEnabled = true
         })
@@ -256,10 +244,12 @@ class PostTableViewCell: UITableViewCell {
                 self.heartLabel.selectedLabel()
                 self.post.ajustHeart(addHeart: true)
                 self.heartRef.setValue(true)
+                self.addPostUserGetActinos(actionType: ActionType.heart, isAdd: true)
             } else {
                 self.heartLabel.notSelectedLabel()
                 self.post.ajustHeart(addHeart: false)
                 self.heartRef.removeValue()
+                self.addPostUserGetActinos(actionType: ActionType.heart, isAdd: false)
             }
             self.heartLabel.isEnabled = true
         })
@@ -272,10 +262,12 @@ class PostTableViewCell: UITableViewCell {
                 self.cryLabel.selectedLabel()
                 self.post.ajustCry(addCry: true)
                 self.cryRef.setValue(true)
+                self.addPostUserGetActinos(actionType: ActionType.cry, isAdd: true)
             } else {
                 self.cryLabel.notSelectedLabel()
                 self.post.ajustCry(addCry: false)
                 self.cryRef.removeValue()
+                self.addPostUserGetActinos(actionType: ActionType.cry, isAdd: false)
             }
             self.cryLabel.isEnabled = true
         })
@@ -288,10 +280,12 @@ class PostTableViewCell: UITableViewCell {
                 self.clapLabel.selectedLabel()
                 self.post.ajustClap(addClap: true)
                 self.clapRef.setValue(true)
+                self.addPostUserGetActinos(actionType: ActionType.clap, isAdd: true)
             } else {
                 self.clapLabel.notSelectedLabel()
                 self.post.ajustClap(addClap: false)
                 self.clapRef.removeValue()
+                self.addPostUserGetActinos(actionType: ActionType.smile, isAdd: false)
             }
             self.clapLabel.isEnabled = true
         })
@@ -304,14 +298,50 @@ class PostTableViewCell: UITableViewCell {
                 self.okLabel.selectedLabel()
                 self.post.ajustOk(addOk: true)
                 self.okRef.setValue(true)
+                self.addPostUserGetActinos(actionType: ActionType.ok, isAdd: true)
             } else {
                 self.okLabel.notSelectedLabel()
                 self.post.ajustOk(addOk: false)
                 self.okRef.removeValue()
+                self.addPostUserGetActinos(actionType: ActionType.ok, isAdd: false)
             }
             self.okLabel.isEnabled = true
         })
     }
     //////////
-    
+
+    /// 投稿者のデータとしてそれぞれの獲得アクション数を増減させる
+    ///
+    /// - Parameters:
+    ///   - actionType: どのアクションをタップしたか
+    ///   - isAdd: アクション追加か取消か
+    func addPostUserGetActinos(actionType: ActionType, isAdd: Bool) {
+        
+        var actionTypeString: String?
+        switch actionType {
+        case ActionType.smile:
+            actionTypeString = "smiles"
+        case ActionType.heart:
+            actionTypeString = "hearts"
+        case ActionType.cry:
+            actionTypeString = "cries"
+        case ActionType.clap:
+            actionTypeString = "claps"
+        case ActionType.ok:
+            actionTypeString = "oks"
+        }
+        
+        if let _ = actionTypeString {
+            let getSmileActionsTotalRef = DataService.ds.REF_USER_CURRENT.child("getActions").child(actionTypeString!)
+            getSmileActionsTotalRef.observeSingleEvent(of: .value, with: { (snapshot) in
+                if let getActions = snapshot.value as? Int {
+                    if isAdd {
+                        getSmileActionsTotalRef.setValue(getActions + 1)
+                    } else {
+                        getSmileActionsTotalRef.setValue(getActions - 1)
+                    }
+                }
+            })
+        }
+    }
 }

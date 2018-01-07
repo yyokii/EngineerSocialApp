@@ -31,6 +31,7 @@ class PostVC: UIViewController, UIPopoverPresentationControllerDelegate, PopOver
         self.dismiss(animated: true, completion: nil)
     }
     
+    // FIXME: 入力内容が不十分の場合は投稿ボタンにalphaをかけておく
     @IBAction func postTapped(_ sender: Any) {
         
         guard let language = languageLabel.text, language != "" else {
@@ -50,6 +51,9 @@ class PostVC: UIViewController, UIPopoverPresentationControllerDelegate, PopOver
         postToFirebase()
     }
     
+    // FIXME: ここでdbに書き込む際にユーザーのツリーの中にlanguageとdoing要素のカウントを増やす。
+    // 投稿内容の確認　→ ref → データがあるかないかで分岐　→ 書き込み　（サインインで各要素0で設定しておくと使用しないツリーが出てくるので、1以上のみを保存する。データがない時のui必要）
+    
     /// firebaseのデータストアに投稿情報を書き込む（postに追加）
     ///
     /// - Parameter imgUrl: 画像のurl
@@ -68,10 +72,37 @@ class PostVC: UIViewController, UIPopoverPresentationControllerDelegate, PopOver
         firebasePost.setValue(post)
         print("投稿完了！")
         
+        setUserDevelopData(devLanguage: languageLabel.text!, develop: doingLabel.text!)
         setUserPost(myPostKey: firebasePost.key)
         captionTextView.text = ""
         
         self.dismiss(animated: true, completion: nil)
+    }
+    
+    /// 投稿時にユーザーの使用言語とやることをユーザー情報としてdbに保存する
+    ///
+    /// - Parameters:
+    ///   - devLanguage: 使用言語
+    ///   - develop: やること
+    func setUserDevelopData(devLanguage: String, develop: String) {
+        let userDevLanguageDataRef = DataService.ds.REF_USER_CURRENT.child("devLanguage").child(devLanguage)
+        let userDevelopThingsDataRef = DataService.ds.REF_USER_CURRENT.child("do").child(develop)
+        
+        userDevLanguageDataRef.observeSingleEvent(of: .value) { (snapshot) in
+            if let counts = snapshot.value as? Int {
+                userDevLanguageDataRef.setValue(counts + 1)
+            } else {
+                userDevLanguageDataRef.setValue(1)
+            }
+        }
+        
+        userDevelopThingsDataRef.observeSingleEvent(of: .value) { (snapshot) in
+            if let counts = snapshot.value as? Int {
+                userDevelopThingsDataRef.setValue(counts + 1)
+            } else {
+                userDevelopThingsDataRef.setValue(1)
+            }
+        }
     }
     
     /// プロフィール画面で自分の過去投稿を見られるようにユーザーのpostkeyをdbに保存しておく

@@ -7,7 +7,6 @@
 
 import UIKit
 
-// FIXME: Feedのテーブルもこのviewで置き換えたい
 class PostTableView: UITableView ,UITableViewDelegate,UITableViewDataSource{
     
     // 投稿情報を渡して表示する

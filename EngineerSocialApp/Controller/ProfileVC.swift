@@ -16,23 +16,35 @@ class ProfileVC: UIViewController, UIScrollViewDelegate{
     
     var myPosts = [Post]()
     var postTableView: PostTableView!
+    var postDataView: PostData!
+    var devLanguagesArray = [DevelopData]()
+    var doArray = [DevelopData]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setProdileScrollView()
+        setProfileScrollView()
         setUserInfo()
         
-        getMyPosts()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
         // スクロールビュー内のコンテンツ設定
-        setPostDataView()
-        setMyPostTableView()
+        if self.postDataView == nil {
+            setPostDataView()
+        }
+        
+        if self.postTableView == nil {
+            setMyPostTableView()
+        }
+        getMyPosts()
+        getMyPostData()
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
-    func setProdileScrollView() {
+    func setProfileScrollView() {
         profileScrollView.delegate = self
         
         self.profileScrollView.contentSize = CGSize(width: self.view.frame.width*2, height: self.profileScrollView.frame.height)
@@ -49,7 +61,7 @@ class ProfileVC: UIViewController, UIScrollViewDelegate{
     
     // （自分の過去投稿を表示するテーブルビュー）下部の横スクロールビュー内のコンテンツ
     func setMyPostTableView(){
-        let frame = CGRect(x: self.view.frame.width, y: 0, width: self.view.frame.width, height: self.view.frame.height)
+        let frame = CGRect(x: self.view.frame.width, y: 0, width: self.view.frame.width, height: self.profileScrollView.frame.height)
         self.postTableView = PostTableView(frame: frame,style: UITableViewStyle.plain)
         postTableView.posts = myPosts
         // セルの高さを可変にする
@@ -58,6 +70,7 @@ class ProfileVC: UIViewController, UIScrollViewDelegate{
         self.profileScrollView.addSubview(postTableView)
     }
     
+    // FIXME: ここ、DataServiceクラスのカレントユーザー使わないと、キーチェーン利用してログインした時にcurrentUserが取得できない可能せいある気がする。
     func setUserInfo() {
         let loginUser = FIRAuth.auth()?.currentUser
         let name = loginUser?.displayName
@@ -110,6 +123,30 @@ class ProfileVC: UIViewController, UIScrollViewDelegate{
                     }
                 } else {
                     print("Error: 過去の投稿がないよー")
+                }
+            }
+        }
+    }
+    
+    
+    /// 開発言語と開発項目のデータを取得して配列に保存
+    func getMyPostData() {
+        // 開発言語のデータ取得
+        DataService.ds.REF_USER_CURRENT.child("devLanguage").queryOrderedByValue().observeSingleEvent(of: .value) { (snapshot) in
+            if let devLanguages = snapshot.children.allObjects as? [FIRDataSnapshot]{
+                for devLanguage in devLanguages{
+                    let devLanguageData = DevelopData(devLanguage: devLanguage.key, count: devLanguage.value as! Int)
+                    self.devLanguagesArray.insert(devLanguageData, at: 0)
+                }
+            }
+        }
+        
+        // 開発項目のデータ取得
+        DataService.ds.REF_USER_CURRENT.child("do").queryOrderedByValue().observeSingleEvent(of: .value) { (snapshot) in
+            if let toDos = snapshot.children.allObjects as? [FIRDataSnapshot]{
+                for todo in toDos{
+                    let toDoData = DevelopData(toDo: todo.key, count: todo.value as! Int)
+                    self.doArray.insert(toDoData, at: 0)
                 }
             }
         }
