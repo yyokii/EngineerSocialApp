@@ -11,27 +11,26 @@ import Foundation
 class DevelopData {
 
     // 開発言語
-    private var _devLanguage: String!
-    private var _languageCount: Int!
+    private var _devLanguage: String?
+    private var _languageCount: Int?
     
     // 開発内容、やること
-    private var _toDo: String!
-    private var _doCount: Int!
+    private var _toDo: String?
+    private var _doCount: Int?
     
-    
-    var devLanguage: String {
+    var devLanguage: String? {
         return _devLanguage
     }
     
-    var languageCount: Int {
+    var languageCount: Int? {
         return _languageCount
     }
     
-    var toDo: String {
+    var toDo: String? {
         return _toDo
     }
     
-    var doCount: Int {
+    var doCount: Int? {
         return _doCount
     }
     

@@ -331,7 +331,7 @@
                                 <rect key="frame" x="0.0" y="180" width="375" height="438"/>
                             </scrollView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="yyokii" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="73Q-e6-2TQ">
-                                <rect key="frame" x="30" y="30" width="315" height="20.5"/>
+                                <rect key="frame" x="166" y="30" width="43.5" height="20.5"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -371,8 +371,6 @@
                             <constraint firstItem="73Q-e6-2TQ" firstAttribute="top" secondItem="isE-u6-rCh" secondAttribute="top" constant="10" id="J27-c2-CmL"/>
                             <constraint firstItem="isE-u6-rCh" firstAttribute="trailing" secondItem="BOR-cX-Cn9" secondAttribute="trailing" constant="30" id="LdI-rA-CPr"/>
                             <constraint firstItem="lZm-G1-IPR" firstAttribute="centerX" secondItem="Qwa-bM-tUY" secondAttribute="centerX" id="So7-Q7-Swr"/>
-                            <constraint firstItem="73Q-e6-2TQ" firstAttribute="leading" secondItem="Qwa-bM-tUY" secondAttribute="leading" constant="30" id="TX1-vi-PPa"/>
-                            <constraint firstAttribute="trailing" secondItem="73Q-e6-2TQ" secondAttribute="trailing" constant="30" id="mRe-HK-awz"/>
                             <constraint firstItem="iS0-ag-nY4" firstAttribute="leading" secondItem="isE-u6-rCh" secondAttribute="leading" id="nlg-dw-Hl0"/>
                             <constraint firstItem="BOR-cX-Cn9" firstAttribute="top" secondItem="lZm-G1-IPR" secondAttribute="bottom" constant="30" id="oIi-TA-qqQ"/>
                             <constraint firstItem="lZm-G1-IPR" firstAttribute="top" secondItem="73Q-e6-2TQ" secondAttribute="bottom" constant="5" id="wEw-oE-meA"/>

@@ -14,30 +14,43 @@ class ProfileVC: UIViewController, UIScrollViewDelegate{
     @IBOutlet weak var userImageView: CircleView!
     @IBOutlet weak var nameLabel: UILabel!
     
-    var myPosts = [Post]()
-    var postTableView: PostTableView!
-    var postDataView: PostData!
+    // 投稿データを円グラフで表示するために使用
+    var developDataView: PostData!
     var devLanguagesArray = [DevelopData]()
-    var doArray = [DevelopData]()
+    var devThingsArray = [DevelopData]()
+    
+    var postTableView: PostTableView!
+    var myPosts = [Post]()
+
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setProfileScrollView()
         setUserInfo()
-        
     }
     
+    // FIXME: オートレイアウト使用時、viewWillAppearでもframe.sizeは決定していないので、ここでサイズ決めのメソッドとか使用してるとまずいよ　→ didlayoutに処理を移したよん
     override func viewWillAppear(_ animated: Bool) {
-        // スクロールビュー内のコンテンツ設定
-        if self.postDataView == nil {
-            setPostDataView()
+        if self.developDataView != nil {
+            self.getMyPostData()
         }
-        
+    }
+    
+    override func viewDidLayoutSubviews() {
         if self.postTableView == nil {
             setMyPostTableView()
+        } else {
+            // FIXME: ビューを生成せずにデータだけ更新する
         }
+        // データ取得した後にテーブル更新
         getMyPosts()
-        getMyPostData()
+        
+        // データ取得した後にチャートがすでにあれば、データ更新。なければ生成して表示。
+        if self.developDataView == nil {
+            // チャートビューの生成
+            self.setDevelopDataView()
+            self.getMyPostData()
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -46,31 +59,11 @@ class ProfileVC: UIViewController, UIScrollViewDelegate{
     
     func setProfileScrollView() {
         profileScrollView.delegate = self
-        
-        self.profileScrollView.contentSize = CGSize(width: self.view.frame.width*2, height: self.profileScrollView.frame.height)
+        self.profileScrollView.contentSize.width = self.view.frame.width*2
         self.profileScrollView.isPagingEnabled = true
-        
     }
     
-    // （個人投稿データ）下部の横スクロールビュー内のコンテンツ
-    func setPostDataView() {
-        // 高さは固定ではなくて、コンテンツの大きさに依存する感じで。→縦のスクロールビュー入れてるから考えなくてもいいかも
-        let xibView = PostData(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height))
-        profileScrollView.addSubview(xibView)
-    }
-    
-    // （自分の過去投稿を表示するテーブルビュー）下部の横スクロールビュー内のコンテンツ
-    func setMyPostTableView(){
-        let frame = CGRect(x: self.view.frame.width, y: 0, width: self.view.frame.width, height: self.profileScrollView.frame.height)
-        self.postTableView = PostTableView(frame: frame,style: UITableViewStyle.plain)
-        postTableView.posts = myPosts
-        // セルの高さを可変にする
-        postTableView.estimatedRowHeight = 200
-        postTableView.rowHeight = UITableViewAutomaticDimension
-        self.profileScrollView.addSubview(postTableView)
-    }
-    
-    // FIXME: ここ、DataServiceクラスのカレントユーザー使わないと、キーチェーン利用してログインした時にcurrentUserが取得できない可能せいある気がする。
+    // FIXME: ここ、DataServiceクラスのカレントユーザー使わないと、キーチェーン利用してログインした時にcurrentUserが取得できない可能せいある気がする。→ 言う通り
     func setUserInfo() {
         let loginUser = FIRAuth.auth()?.currentUser
         let name = loginUser?.displayName
@@ -78,6 +71,37 @@ class ProfileVC: UIViewController, UIScrollViewDelegate{
         
         self.nameLabel.text = name
         ProfileVC.downloadImageWithDataTask(urlString: imageUrl!, imageView: userImageView)
+    }
+    
+    /// 開発言語と開発項目のデータを取得して配列に保存
+    func getMyPostData() {
+        // 開発言語のデータ取得
+        DataService.ds.REF_USER_CURRENT.child("devLanguage").queryOrderedByValue().observeSingleEvent(of: .value) { (snapshot) in
+            if let devLanguages = snapshot.children.allObjects as? [FIRDataSnapshot]{
+                // 前回取得したデータが残らないように一度空にする
+                self.devLanguagesArray = []
+                for devLanguage in devLanguages{
+                    let devLanguageData = DevelopData(devLanguage: devLanguage.key, count: devLanguage.value as! Int)
+                    self.devLanguagesArray.insert(devLanguageData, at: 0)
+                }
+            }
+            // FIXME: 投稿がない時、引数の配列要素が0になって、サンプルのチャートが表示されているかの確認必要
+            self.developDataView.setupDevLangsPieChartView(developDataArray: self.devLanguagesArray)
+            self.developDataView.animationDevLangsChart()
+        }
+        
+        // 開発項目のデータ取得
+        DataService.ds.REF_USER_CURRENT.child("do").queryOrderedByValue().observeSingleEvent(of: .value) { (snapshot) in
+            if let toDos = snapshot.children.allObjects as? [FIRDataSnapshot]{
+                self.devThingsArray = []
+                for todo in toDos{
+                    let toDoData = DevelopData(toDo: todo.key, count: todo.value as! Int)
+                    self.devThingsArray.insert(toDoData, at: 0)
+                }
+            }
+            self.developDataView.setupDevThingsPieChartView(developDataArray: self.devThingsArray)
+            self.developDataView.animationDevThingsChart()
+        }
     }
     
     func getMyPosts() {
@@ -97,11 +121,10 @@ class ProfileVC: UIViewController, UIScrollViewDelegate{
                 
                 // 投稿全てのkeyが取得できたらそのkeyに該当するpostを取得する
                 if !myPostsKey.isEmpty {
+                    self.myPosts = []
                     for key in myPostsKey {
                         DataService.ds.REF_POSTS.child(key).observeSingleEvent(of: .value) { (snapshot) in
-                            
                             print("過去の投稿情報:\(snapshot)")
-                            
                             // 投稿情報を取得
                             if let postDict = snapshot.value as? Dictionary<String, AnyObject> {
                                 
@@ -128,28 +151,21 @@ class ProfileVC: UIViewController, UIScrollViewDelegate{
         }
     }
     
+    /// （個人投稿データ（開発言語））下部の横スクロールビュー内のコンテンツを設置
+    func setDevelopDataView() {
+            self.developDataView = PostData(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.profileScrollView.frame.height))
+            profileScrollView.addSubview(developDataView)
+    }
     
-    /// 開発言語と開発項目のデータを取得して配列に保存
-    func getMyPostData() {
-        // 開発言語のデータ取得
-        DataService.ds.REF_USER_CURRENT.child("devLanguage").queryOrderedByValue().observeSingleEvent(of: .value) { (snapshot) in
-            if let devLanguages = snapshot.children.allObjects as? [FIRDataSnapshot]{
-                for devLanguage in devLanguages{
-                    let devLanguageData = DevelopData(devLanguage: devLanguage.key, count: devLanguage.value as! Int)
-                    self.devLanguagesArray.insert(devLanguageData, at: 0)
-                }
-            }
-        }
-        
-        // 開発項目のデータ取得
-        DataService.ds.REF_USER_CURRENT.child("do").queryOrderedByValue().observeSingleEvent(of: .value) { (snapshot) in
-            if let toDos = snapshot.children.allObjects as? [FIRDataSnapshot]{
-                for todo in toDos{
-                    let toDoData = DevelopData(toDo: todo.key, count: todo.value as! Int)
-                    self.doArray.insert(toDoData, at: 0)
-                }
-            }
-        }
+    /// （自分の過去投稿を表示するテーブルビュー）下部の横スクロールビュー内のコンテンツを設置
+    func setMyPostTableView(){
+        let frame = CGRect(x: self.view.frame.width, y: 0, width: self.view.frame.width, height: self.profileScrollView.frame.height)
+        self.postTableView = PostTableView(frame: frame,style: UITableViewStyle.plain)
+        postTableView.posts = myPosts
+        // セルの高さを可変にする
+        postTableView.estimatedRowHeight = 200
+        postTableView.rowHeight = UITableViewAutomaticDimension
+        self.profileScrollView.addSubview(postTableView)
     }
     
     static func downloadImageWithDataTask(urlString: String, imageView: UIImageView){
