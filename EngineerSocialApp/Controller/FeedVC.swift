@@ -10,10 +10,8 @@ import UIKit
 import Firebase
 import SwiftKeychainWrapper
 
-class FeedVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class FeedVC: UIViewController{
 
-    @IBOutlet weak var imageAdd: CircleView!
-    @IBOutlet weak var captionField: FancyField!
     @IBOutlet weak var mainView: UIView!
     
     var posts = [Post]()
@@ -29,9 +27,7 @@ class FeedVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCon
         super.viewDidLoad()
         
         imagePicker = UIImagePickerController()
-        imagePicker.delegate = self
         imagePicker.allowsEditing = true
-        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -39,22 +35,6 @@ class FeedVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCon
             setPostTableView()
         }
         self.getPostsFromFireBase()
-    }
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        
-        if let image = info[UIImagePickerControllerEditedImage] as? UIImage {
-            imageAdd.image = image
-            imageSelected = true
-        } else {
-            print("JESS: A valid image wasn't salected")
-        }
-        
-        
-        imagePicker.dismiss(animated: true, completion: nil)
-    }
-    @IBAction func addImageTapped(_ sender: Any) {
-        present(imagePicker, animated: true, completion: nil)
     }
     
     /// データベースから投稿情報を取得
@@ -87,7 +67,7 @@ class FeedVC: UIViewController, UIImagePickerControllerDelegate, UINavigationCon
     
     /// 投稿表示用のテーブルビュー
     func setPostTableView(){
-        // ここ、サイズをmainViewで設定すると小さくなるのでviewで設定。なんで小さくなるかわわからん。→ 描画タイミングの問題。didloadでなく、willappearで使用すると想定通りに動く。
+        // ここ、サイズをmainViewで設定すると小さくなるのでviewで設定。なんで小さくなるかわわからん。→ 描画タイミングの問題。didloadでなく、willappearで使用すると想定通りに動く。　→ didlayoutSubviewに書く
         let frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.mainView.frame.size.height)
         self.postTableView = PostTableView(frame: frame,style: UITableViewStyle.plain)
         postTableView.posts = self.posts

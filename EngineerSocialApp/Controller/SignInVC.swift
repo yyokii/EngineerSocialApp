@@ -137,7 +137,7 @@ class SignInVC: UIViewController {
             return
         }
         // ログイン時にユーザーのアイコンイメージをストレージに保存する
-        if let imgData = UIImageJPEGRepresentation(UIImage(data: imageData!)!, 0.2) {
+        if let imgData = UIImageJPEGRepresentation(UIImage(data: imageData!)!, 0.5) {
             let imgUid = user.uid
             let matadata = FIRStorageMetadata()
             matadata.contentType = "image/jpeg"
@@ -158,34 +158,6 @@ class SignInVC: UIViewController {
         let keychainResult = KeychainWrapper.standard.set(id, forKey: KEY_UID)
         print("JESS: Data saved to keychain \(keychainResult)")
         performSegue(withIdentifier: "goToFeed", sender: nil)
-    }
-    
-    static func downloadImageWithDataTask(urlString: String, imageView: UIImageView){
-        
-        // FIXME: 5minの間違い？
-        let fiveSecondsCache: TimeInterval = 5 * 60
-        
-        //urlをエンコーディングして無効なURLが入ったら処理を抜ける
-        guard let encURL = URL(string:urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!) else {
-            print("Error：　urlをエンコード出来なかったよ!")
-            return
-        }
-        
-        let req = URLRequest(url: encURL, cachePolicy: .returnCacheDataElseLoad, timeoutInterval: fiveSecondsCache)
-        
-        let conf = URLSessionConfiguration.default
-        let session = URLSession(configuration: conf, delegate: nil, delegateQueue: OperationQueue.main)
-        
-        session.dataTask(with: req, completionHandler:
-            { (data, resp, err) in
-                if (err == nil){
-                    print("画像表示成功！")
-                    let image = UIImage(data: data!)
-                    imageView.image = image
-                } else {
-                    print("Error：　画像の取得に失敗しました")
-                }
-        }).resume()
     }
 }
 

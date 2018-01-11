@@ -30,17 +30,10 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NOs-j7-nka" customClass="FancyView" customModule="EngineerSocialApp" customModuleProvider="target">
-                                <rect key="frame" x="0.0" y="0.0" width="375" height="150"/>
-                                <subviews>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="devslopes-logo" translatesAutoresizingMaskIntoConstraints="NO" id="Cou-4u-24d">
-                                        <rect key="frame" x="112" y="28" width="150" height="94"/>
-                                    </imageView>
-                                </subviews>
-                                <color key="backgroundColor" red="0.0" green="0.73725490199999999" blue="0.83137254900000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
+                                <color key="backgroundColor" red="0.019854545590000001" green="0.023144053299999998" blue="0.2549199164" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
-                                    <constraint firstAttribute="height" constant="150" id="Pnu-PO-7Bd"/>
-                                    <constraint firstItem="Cou-4u-24d" firstAttribute="centerX" secondItem="NOs-j7-nka" secondAttribute="centerX" id="pZc-1c-gfz"/>
-                                    <constraint firstItem="Cou-4u-24d" firstAttribute="centerY" secondItem="NOs-j7-nka" secondAttribute="centerY" id="qFA-Y8-JEe"/>
+                                    <constraint firstAttribute="height" constant="100" id="Pnu-PO-7Bd"/>
                                 </constraints>
                             </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NL7-ws-rqv">
@@ -53,7 +46,7 @@
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
-                                <color key="backgroundColor" red="0.0" green="0.51372549020000002" blue="0.56078431370000004" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.019854545590000001" green="0.023144053299999998" blue="0.2549199164" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                                 <constraints>
                                     <constraint firstItem="I2G-le-CWb" firstAttribute="top" secondItem="NL7-ws-rqv" secondAttribute="top" constant="8" id="D96-8i-xa3"/>
                                     <constraint firstItem="I2G-le-CWb" firstAttribute="leading" secondItem="NL7-ws-rqv" secondAttribute="leading" constant="8" id="DUs-EP-e3i"/>
@@ -63,16 +56,16 @@
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select a sign in method" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IqG-vI-Bfc">
-                                <rect key="frame" x="16" y="170" width="343" height="20"/>
+                                <rect key="frame" x="16" y="120" width="343" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="dFt-GM-hxe"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="15"/>
-                                <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FTB-qY-JmD" customClass="RoundBtn" customModule="EngineerSocialApp" customModuleProvider="target">
-                                <rect key="frame" x="113" y="230" width="150" height="150"/>
+                                <rect key="frame" x="113" y="180" width="150" height="150"/>
                                 <color key="backgroundColor" red="0.25490196079999999" green="0.36078431370000003" blue="0.64313725489999995" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="150" id="sHA-qR-hRx"/>
@@ -84,7 +77,7 @@
                                 </connections>
                             </button>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="y9f-ax-8CA">
-                                <rect key="frame" x="46" y="420" width="283" height="115"/>
+                                <rect key="frame" x="46" y="370" width="283" height="115"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email addres" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="OTA-k7-jny" customClass="FancyField" customModule="EngineerSocialApp" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="283" height="24"/>
@@ -112,7 +105,7 @@
                                 </subviews>
                             </stackView>
                         </subviews>
-                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="backgroundColor" red="0.094117647058823528" green="0.074509803921568626" blue="0.062745098039215685" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="NL7-ws-rqv" secondAttribute="trailing" id="0Cx-S5-CxB"/>
                             <constraint firstItem="NOs-j7-nka" firstAttribute="leading" secondItem="kDP-rl-452" secondAttribute="leading" id="5k8-7I-9Ub"/>
@@ -178,14 +171,14 @@
                                             <constraint firstAttribute="width" constant="60" id="r1x-qP-Z6R"/>
                                         </constraints>
                                         <state key="normal" title="投稿">
-                                            <color key="titleColor" red="0.20000000000000001" green="0.20000000000000001" blue="0.20000000000000001" alpha="1" colorSpace="calibratedRGB"/>
+                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
                                             <action selector="postTapped:" destination="bRk-BO-LLx" eventType="touchUpInside" id="J9b-21-oCT"/>
                                         </connections>
                                     </button>
                                 </subviews>
-                                <color key="backgroundColor" red="0.0" green="0.73725490199999999" blue="0.83137254900000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="backgroundColor" red="0.023529411764705882" green="0.023529411764705882" blue="0.26666666666666666" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="1hT-sG-pU8" firstAttribute="centerY" secondItem="0RX-W8-waN" secondAttribute="centerY" id="0EP-YJ-w1I"/>
                                     <constraint firstItem="igV-qE-0Vs" firstAttribute="top" secondItem="UCa-gl-aJN" secondAttribute="top" constant="15" id="FuT-Tt-MaF"/>
@@ -198,78 +191,25 @@
                                     <constraint firstAttribute="trailing" secondItem="igV-qE-0Vs" secondAttribute="trailing" constant="16" id="yza-wA-cQa"/>
                                 </constraints>
                             </view>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ZJC-Nh-YSt" customClass="FancyView" customModule="EngineerSocialApp" customModuleProvider="target">
-                                <rect key="frame" x="16" y="101" width="343" height="65"/>
-                                <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="10" translatesAutoresizingMaskIntoConstraints="NO" id="CuK-7I-V3R">
-                                        <rect key="frame" x="8" y="8" width="327" height="49"/>
-                                        <subviews>
-                                            <imageView contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="add-image" translatesAutoresizingMaskIntoConstraints="NO" id="dCd-4a-PHb" customClass="CircleView" customModule="EngineerSocialApp" customModuleProvider="target">
-                                                <rect key="frame" x="0.0" y="0.0" width="49" height="49"/>
-                                                <color key="backgroundColor" red="0.0" green="0.51372549020000002" blue="0.56078431370000004" alpha="1" colorSpace="calibratedRGB"/>
-                                                <gestureRecognizers/>
-                                                <constraints>
-                                                    <constraint firstAttribute="width" constant="49" id="DgR-vI-2Xy"/>
-                                                    <constraint firstAttribute="height" constant="49" id="Ucg-6Q-KK5"/>
-                                                </constraints>
-                                                <connections>
-                                                    <outletCollection property="gestureRecognizers" destination="3S4-jy-B6h" appends="YES" id="38u-gK-49E"/>
-                                                </connections>
-                                            </imageView>
-                                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Add a caption" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="LJd-hd-AkT" customClass="FancyField" customModule="EngineerSocialApp" customModuleProvider="target">
-                                                <rect key="frame" x="59" y="0.0" width="209" height="49"/>
-                                                <nil key="textColor"/>
-                                                <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="18"/>
-                                                <textInputTraits key="textInputTraits"/>
-                                            </textField>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5Zo-Um-ubs" customClass="RoundBtn" customModule="EngineerSocialApp" customModuleProvider="target">
-                                                <rect key="frame" x="278" y="0.0" width="49" height="49"/>
-                                                <color key="backgroundColor" red="0.86666666670000003" green="0.17254901959999999" blue="0.0" alpha="0.87" colorSpace="calibratedRGB"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" constant="49" id="LAq-YJ-Flg"/>
-                                                    <constraint firstAttribute="width" constant="49" id="wi0-UO-XYZ"/>
-                                                </constraints>
-                                                <state key="normal" image="add-post"/>
-                                                <connections>
-                                                    <action selector="postBtnTapped:" destination="bRk-BO-LLx" eventType="touchUpInside" id="OsV-wW-PUb"/>
-                                                </connections>
-                                            </button>
-                                        </subviews>
-                                    </stackView>
-                                </subviews>
-                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                <constraints>
-                                    <constraint firstItem="CuK-7I-V3R" firstAttribute="leading" secondItem="ZJC-Nh-YSt" secondAttribute="leading" constant="8" id="6vT-Cv-ekj"/>
-                                    <constraint firstAttribute="height" constant="65" id="9O0-i6-iWr"/>
-                                    <constraint firstAttribute="bottom" secondItem="CuK-7I-V3R" secondAttribute="bottom" constant="8" id="KKQ-9D-0kA"/>
-                                    <constraint firstItem="CuK-7I-V3R" firstAttribute="top" secondItem="ZJC-Nh-YSt" secondAttribute="top" constant="8" id="e48-52-fwN"/>
-                                    <constraint firstAttribute="trailing" secondItem="CuK-7I-V3R" secondAttribute="trailing" constant="8" id="ecb-tu-fff"/>
-                                </constraints>
-                            </view>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="Lqq-ta-XFN">
-                                <rect key="frame" x="0.0" y="174" width="375" height="444"/>
-                                <color key="backgroundColor" red="0.85148793458938599" green="0.87428200244903564" blue="0.89019972085952759" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <rect key="frame" x="0.0" y="85" width="375" height="533"/>
+                                <color key="backgroundColor" red="0.44705882352941173" green="0.47058823529411764" blue="0.50196078431372548" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                             </view>
                         </subviews>
-                        <color key="backgroundColor" red="0.81176470590000005" green="0.84705882349999995" blue="0.86274509799999999" alpha="1" colorSpace="calibratedRGB"/>
+                        <color key="backgroundColor" red="0.019854545590000001" green="0.023144053299999998" blue="0.2549199164" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <constraints>
-                            <constraint firstItem="ZJC-Nh-YSt" firstAttribute="top" secondItem="UCa-gl-aJN" secondAttribute="bottom" constant="16" id="38N-tt-ISc"/>
                             <constraint firstItem="UCa-gl-aJN" firstAttribute="top" secondItem="kFR-FX-i4d" secondAttribute="top" id="45z-Ss-imr"/>
-                            <constraint firstAttribute="trailing" secondItem="ZJC-Nh-YSt" secondAttribute="trailing" constant="16" id="BmK-nb-S0r"/>
                             <constraint firstItem="Lqq-ta-XFN" firstAttribute="leading" secondItem="kFR-FX-i4d" secondAttribute="leading" id="EKy-ju-97G"/>
                             <constraint firstItem="Lqq-ta-XFN" firstAttribute="bottom" secondItem="3q3-4c-KBv" secondAttribute="top" id="Ems-gZ-oc3"/>
-                            <constraint firstItem="ZJC-Nh-YSt" firstAttribute="leading" secondItem="33U-I5-Zil" secondAttribute="leading" constant="16" id="dAb-bp-GAB"/>
+                            <constraint firstItem="Lqq-ta-XFN" firstAttribute="top" secondItem="UCa-gl-aJN" secondAttribute="bottom" id="JXJ-jm-vfU"/>
                             <constraint firstAttribute="trailing" secondItem="UCa-gl-aJN" secondAttribute="trailing" id="eX0-zA-n5z"/>
                             <constraint firstItem="UCa-gl-aJN" firstAttribute="leading" secondItem="33U-I5-Zil" secondAttribute="leading" id="j9x-lQ-n0w"/>
-                            <constraint firstItem="Lqq-ta-XFN" firstAttribute="top" secondItem="ZJC-Nh-YSt" secondAttribute="bottom" constant="8" id="o1D-UO-8Rh"/>
                             <constraint firstItem="kFR-FX-i4d" firstAttribute="trailing" secondItem="Lqq-ta-XFN" secondAttribute="trailing" id="rDv-6Y-wjD"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="kFR-FX-i4d"/>
                     </view>
                     <tabBarItem key="tabBarItem" systemItem="recents" id="ruS-ud-IFs"/>
                     <connections>
-                        <outlet property="captionField" destination="LJd-hd-AkT" id="lMV-J1-E1y"/>
-                        <outlet property="imageAdd" destination="dCd-4a-PHb" id="IAP-7G-J0u"/>
                         <outlet property="mainView" destination="Lqq-ta-XFN" id="YAY-LC-eVa"/>
                         <segue destination="C0q-35-68Z" kind="show" identifier="goToSignIn" id="TOf-4q-AYb">
                             <nil key="action"/>
@@ -308,7 +248,7 @@
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="iaf-dJ-O2l">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                        <color key="barTintColor" red="0.019854545593261719" green="0.023144053295254707" blue="0.25491991639137268" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                     </tabBar>
                     <connections>
                         <segue destination="bRk-BO-LLx" kind="relationship" relationship="viewControllers" id="iTH-hW-j0h"/>
@@ -390,9 +330,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="add-image" width="88" height="88"/>
-        <image name="add-post" width="88" height="88"/>
-        <image name="devslopes-logo" width="150" height="94"/>
         <image name="f" width="352" height="328"/>
         <image name="profile" width="573" height="505"/>
         <image name="sign-out" width="92" height="65"/>

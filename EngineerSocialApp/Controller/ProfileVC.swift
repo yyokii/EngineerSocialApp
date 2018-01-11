@@ -8,7 +8,7 @@
 import UIKit
 import Firebase
 
-class ProfileVC: UIViewController, UIScrollViewDelegate{
+class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIScrollViewDelegate{
     
     @IBOutlet weak var profileScrollView: UIScrollView!
     @IBOutlet weak var userImageView: CircleView!
@@ -22,14 +22,25 @@ class ProfileVC: UIViewController, UIScrollViewDelegate{
     var postTableView: PostTableView!
     var myPosts = [Post]()
 
+    // プロフィール画像を設定
+    var imagePicker: UIImagePickerController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setProfileScrollView()
         setUserInfo()
+        
+        // ユーザーのプロフィール画像をタップしてカメラロールから変更できるようにする
+        let userImageTap = UITapGestureRecognizer(target: self, action: #selector(userImageTapped))
+        userImageView.isUserInteractionEnabled = true
+        userImageView.addGestureRecognizer(userImageTap)
+        
+        imagePicker = UIImagePickerController()
+        imagePicker.delegate = self
+        imagePicker.allowsEditing = true
     }
     
-    // FIXME: オートレイアウト使用時、viewWillAppearでもframe.sizeは決定していないので、ここでサイズ決めのメソッドとか使用してるとまずいよ　→ didlayoutに処理を移したよん
+    // FIXME: オートレイアウト使用時、viewWillAppearでもframe.sizeは決定していないので、ここでサイズ決めのメソッドとか使用してるとまずいよ　→ didlayoutに処理を移したよん、ほかのvcでも気を付けてね
     override func viewWillAppear(_ animated: Bool) {
         if self.developDataView != nil {
             self.getMyPostData()
@@ -63,14 +74,32 @@ class ProfileVC: UIViewController, UIScrollViewDelegate{
         self.profileScrollView.isPagingEnabled = true
     }
     
-    // FIXME: ここ、DataServiceクラスのカレントユーザー使わないと、キーチェーン利用してログインした時にcurrentUserが取得できない可能せいある気がする。→ 言う通り
+    // FIXME: ここ、DataServiceクラスのカレントユーザー使わないと、キーチェーン利用してログインした時にcurrentUserが取得できない可能性ある気がする。→ 言う通り
     func setUserInfo() {
-        let loginUser = FIRAuth.auth()?.currentUser
-        let name = loginUser?.displayName
-        let imageUrl = loginUser?.photoURL?.absoluteString
+//        let loginUser = FIRAuth.auth()?.currentUser
+//        let name = loginUser?.displayName
+//        let imageUrl = loginUser?.photoURL?.absoluteString
+//        self.nameLabel.text = name
+
+        //let imageUrl =
         
-        self.nameLabel.text = name
-        ProfileVC.downloadImageWithDataTask(urlString: imageUrl!, imageView: userImageView)
+        let loginUser = DataService.ds.REF_USER_CURRENT
+        let userImageRef = DataService.ds.REF_USER_IMAGES.child(loginUser.key)
+        userImageRef.data(withMaxSize: 2 * 1024 * 1024, completion: { (data, error) in
+            if error != nil {
+                print("Error: Firebase storageからアイコン画像の取得失敗")
+            } else {
+                print("OK: Firebase storageからアイコン取得成功")
+                if let imgData = data {
+                    if let img = UIImage(data: imgData) {
+                        self.userImageView.image = img
+                        //FeedVC.imageCache.setObject(img, forKey: post.imageUrl as NSString)
+                    }
+                }
+            }
+        })
+        
+        //ProfileVC.downloadImageWithDataTask(urlString: imageUrl!, imageView: userImageView)
     }
     
     /// 開発言語と開発項目のデータを取得して配列に保存
@@ -168,31 +197,33 @@ class ProfileVC: UIViewController, UIScrollViewDelegate{
         self.profileScrollView.addSubview(postTableView)
     }
     
-    static func downloadImageWithDataTask(urlString: String, imageView: UIImageView){
+    @objc func userImageTapped() {
+        present(imagePicker, animated: true, completion: nil)
+    }
+    
+    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
         
-        // FIXME: 5minの間違い？
-        let fiveSecondsCache: TimeInterval = 5 * 60
-        
-        //urlをエンコーディングして無効なURLが入ったら処理を抜ける
-        guard let encURL = URL(string:urlString.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed)!) else {
-            print("Error：　urlをエンコード出来なかったよ!")
-            return
+        if let image = info[UIImagePickerControllerEditedImage] as? UIImage {
+            userImageView.image = image
+            // 選択した画像をストレージに画像を保存する
+            if let imgData = UIImageJPEGRepresentation(image, 0.5) {
+                let imgUid = DataService.ds.REF_USER_CURRENT.key
+                let matadata = FIRStorageMetadata()
+                matadata.contentType = "image/jpeg"
+                
+                // 画像をfirebaseストレージに追加する
+                DataService.ds.REF_USER_IMAGES.child(imgUid).put(imgData, metadata: matadata) { (metadata, error) in
+                    if error != nil {
+                        print("Error: Firebasee storageへの画像アップロード失敗")
+                    } else {
+                        print("OK:　Firebase storageへの画像アップロード成功")
+                    }
+                }
+            }
+        } else {
+            print("Error: 適切な画像が選択されなかったよん")
         }
         
-        let req = URLRequest(url: encURL, cachePolicy: .returnCacheDataElseLoad, timeoutInterval: fiveSecondsCache)
-        
-        let conf = URLSessionConfiguration.default
-        let session = URLSession(configuration: conf, delegate: nil, delegateQueue: OperationQueue.main)
-        
-        session.dataTask(with: req, completionHandler:
-            { (data, resp, err) in
-                if (err == nil){
-                    print("画像表示成功！")
-                    let image = UIImage(data: data!)
-                    imageView.image = image
-                } else {
-                    print("Error：　画像の取得に失敗しました")
-                }
-        }).resume()
+        imagePicker.dismiss(animated: true, completion: nil)
     }
 }

@@ -143,7 +143,7 @@ class PostData: UIView {
         data.setValueFont(.systemFont(ofSize: 15, weight: .heavy))
         data.setValueTextColor(.white)
         
-        developThingsChart.centerText = "Use Language"
+        developThingsChart.centerText = "Do"
         developThingsChart.legend.enabled = false
         developThingsChart.chartDescription?.enabled = false
         developThingsChart.rotationEnabled = false

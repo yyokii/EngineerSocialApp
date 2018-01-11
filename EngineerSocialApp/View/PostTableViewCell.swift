@@ -145,7 +145,7 @@ class PostTableViewCell: UITableViewCell {
     ///
     /// - Parameter uid: 投稿者のid
     func setUserImage(uid: String) {
-        let ref = FIRStorage.storage().reference().child("user-icon-pics").child(uid)
+        let ref = DataService.ds.REF_USER_IMAGES.child(uid)
         
         ref.data(withMaxSize: 2 * 1024 * 1024, completion: { (data, error) in
             if error != nil {

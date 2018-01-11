@@ -19,7 +19,7 @@ class PostTableView: UITableView ,UITableViewDelegate,UITableViewDataSource{
         self.dataSource = self
 
         self.register(UINib(nibName: "PostTableViewCell",bundle: nil), forCellReuseIdentifier: "PostTableViewCell")
-        
+        self.separatorColor = UIColor.clear
     }
     
     required init?(coder aDecoder: NSCoder) {
