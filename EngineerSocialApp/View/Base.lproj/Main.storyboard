@@ -15,6 +15,9 @@
         <array key="Avenir.ttc">
             <string>Avenir-Book</string>
         </array>
+        <array key="Kefa.ttf">
+            <string>Kefa-Regular</string>
+        </array>
     </customFonts>
     <scenes>
         <!--Sign InVC-->
@@ -137,7 +140,7 @@
             </objects>
             <point key="canvasLocation" x="136.80000000000001" y="124.58770614692655"/>
         </scene>
-        <!--FeedVC-->
+        <!--タイムライン-->
         <scene sceneID="QMc-Wi-DEF">
             <objects>
                 <viewController id="bRk-BO-LLx" customClass="FeedVC" customModule="EngineerSocialApp" customModuleProvider="target" sceneMemberID="viewController">
@@ -159,9 +162,9 @@
                                             <outletCollection property="gestureRecognizers" destination="wjb-Dj-hCn" appends="YES" id="VUg-Te-YTS"/>
                                         </connections>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Feed" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1hT-sG-pU8">
-                                        <rect key="frame" x="164" y="19" width="46" height="27.5"/>
-                                        <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="20"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DevCom" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1hT-sG-pU8">
+                                        <rect key="frame" x="150.5" y="21.5" width="74" height="23.5"/>
+                                        <fontDescription key="fontDescription" name="Kefa-Regular" family="Kefa" pointSize="20"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <nil key="highlightedColor"/>
                                     </label>
@@ -170,7 +173,8 @@
                                         <constraints>
                                             <constraint firstAttribute="width" constant="60" id="r1x-qP-Z6R"/>
                                         </constraints>
-                                        <state key="normal" title="投稿">
+                                        <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="15"/>
+                                        <state key="normal" title="Post">
                                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         </state>
                                         <connections>
@@ -208,7 +212,7 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="kFR-FX-i4d"/>
                     </view>
-                    <tabBarItem key="tabBarItem" systemItem="recents" id="ruS-ud-IFs"/>
+                    <tabBarItem key="tabBarItem" title="タイムライン" image="develop_icon" id="ruS-ud-IFs"/>
                     <connections>
                         <outlet property="mainView" destination="Lqq-ta-XFN" id="YAY-LC-eVa"/>
                         <segue destination="C0q-35-68Z" kind="show" identifier="goToSignIn" id="TOf-4q-AYb">
@@ -259,7 +263,17 @@
             </objects>
             <point key="canvasLocation" x="1042" y="125"/>
         </scene>
-        <!--ProfileVC-->
+        <!--Post-->
+        <scene sceneID="45U-iW-iIf">
+            <objects>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="9e6-PA-JPL" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <viewControllerPlaceholder storyboardName="Post" id="XgZ-Vg-HKG" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="xYP-0N-lbO"/>
+                </viewControllerPlaceholder>
+            </objects>
+            <point key="canvasLocation" x="1074" y="790"/>
+        </scene>
+        <!--プロフィール-->
         <scene sceneID="oZb-2W-DZI">
             <objects>
                 <viewController id="bfc-oN-6TY" customClass="ProfileVC" customModule="EngineerSocialApp" customModuleProvider="target" sceneMemberID="viewController">
@@ -268,7 +282,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iS0-ag-nY4">
-                                <rect key="frame" x="0.0" y="180" width="375" height="438"/>
+                                <rect key="frame" x="0.0" y="186" width="375" height="432"/>
                             </scrollView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="yyokii" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="73Q-e6-2TQ">
                                 <rect key="frame" x="166" y="30" width="43.5" height="20.5"/>
@@ -284,32 +298,35 @@
                                 </constraints>
                             </imageView>
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="20" translatesAutoresizingMaskIntoConstraints="NO" id="BOR-cX-Cn9">
-                                <rect key="frame" x="30" y="146" width="315" height="24"/>
+                                <rect key="frame" x="10" y="146" width="355" height="30"/>
                                 <subviews>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DATA" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cbI-Fs-9Tn">
-                                        <rect key="frame" x="0.0" y="0.0" width="147.5" height="24"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="DATA" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cbI-Fs-9Tn" customClass="ProfileSetContentLabel" customModule="EngineerSocialApp" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="167.5" height="30"/>
                                         <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="20"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="POST" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0MM-HW-o4A">
-                                        <rect key="frame" x="167.5" y="0.0" width="147.5" height="24"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="MYPOST" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0MM-HW-o4A" customClass="ProfileSetContentLabel" customModule="EngineerSocialApp" customModuleProvider="target">
+                                        <rect key="frame" x="187.5" y="0.0" width="167.5" height="30"/>
                                         <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="20"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="iyK-ET-Fdp"/>
+                                </constraints>
                             </stackView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstItem="BOR-cX-Cn9" firstAttribute="leading" secondItem="isE-u6-rCh" secondAttribute="leading" constant="30" id="39u-OK-LNK"/>
+                            <constraint firstItem="BOR-cX-Cn9" firstAttribute="leading" secondItem="isE-u6-rCh" secondAttribute="leading" constant="10" id="39u-OK-LNK"/>
                             <constraint firstAttribute="bottom" secondItem="iS0-ag-nY4" secondAttribute="bottom" id="BII-Ye-bWW"/>
                             <constraint firstItem="iS0-ag-nY4" firstAttribute="trailing" secondItem="isE-u6-rCh" secondAttribute="trailing" id="E1B-Ja-D0Y"/>
                             <constraint firstItem="73Q-e6-2TQ" firstAttribute="centerX" secondItem="Qwa-bM-tUY" secondAttribute="centerX" id="G1u-kT-BNv"/>
                             <constraint firstItem="iS0-ag-nY4" firstAttribute="top" secondItem="BOR-cX-Cn9" secondAttribute="bottom" constant="10" id="HuJ-9h-pOP"/>
                             <constraint firstItem="73Q-e6-2TQ" firstAttribute="top" secondItem="isE-u6-rCh" secondAttribute="top" constant="10" id="J27-c2-CmL"/>
-                            <constraint firstItem="isE-u6-rCh" firstAttribute="trailing" secondItem="BOR-cX-Cn9" secondAttribute="trailing" constant="30" id="LdI-rA-CPr"/>
+                            <constraint firstItem="isE-u6-rCh" firstAttribute="trailing" secondItem="BOR-cX-Cn9" secondAttribute="trailing" constant="10" id="LdI-rA-CPr"/>
                             <constraint firstItem="lZm-G1-IPR" firstAttribute="centerX" secondItem="Qwa-bM-tUY" secondAttribute="centerX" id="So7-Q7-Swr"/>
                             <constraint firstItem="iS0-ag-nY4" firstAttribute="leading" secondItem="isE-u6-rCh" secondAttribute="leading" id="nlg-dw-Hl0"/>
                             <constraint firstItem="BOR-cX-Cn9" firstAttribute="top" secondItem="lZm-G1-IPR" secondAttribute="bottom" constant="30" id="oIi-TA-qqQ"/>
@@ -317,8 +334,10 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="isE-u6-rCh"/>
                     </view>
-                    <tabBarItem key="tabBarItem" systemItem="bookmarks" id="ETH-RS-O87"/>
+                    <tabBarItem key="tabBarItem" title="プロフィール" image="profile_icon" id="ETH-RS-O87"/>
                     <connections>
+                        <outlet property="myDataLabel" destination="cbI-Fs-9Tn" id="HYK-sr-rum"/>
+                        <outlet property="myPostLabel" destination="0MM-HW-o4A" id="INq-gM-EoZ"/>
                         <outlet property="nameLabel" destination="73Q-e6-2TQ" id="Nlf-Tn-XYL"/>
                         <outlet property="profileScrollView" destination="iS0-ag-nY4" id="FKa-Jk-rsT"/>
                         <outlet property="userImageView" destination="lZm-G1-IPR" id="9fy-D4-cCY"/>
@@ -330,8 +349,10 @@
         </scene>
     </scenes>
     <resources>
+        <image name="develop_icon" width="30" height="30"/>
         <image name="f" width="352" height="328"/>
         <image name="profile" width="573" height="505"/>
+        <image name="profile_icon" width="30" height="30"/>
         <image name="sign-out" width="92" height="65"/>
     </resources>
 </document>

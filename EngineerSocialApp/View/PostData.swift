@@ -10,6 +10,14 @@ import Charts
 
 class PostData: UIView {
     
+    // アクション数を表示するラベル
+    @IBOutlet weak var smileCountLabel: UILabel!
+    @IBOutlet weak var heartCountLabel: UILabel!
+    @IBOutlet weak var cryCountLabel: UILabel!
+    @IBOutlet weak var clapCountLabel: UILabel!
+    @IBOutlet weak var okCountLabel: UILabel!
+
+    // 円グラフのview
     @IBOutlet weak var useLanguageChart: PieChartView!
     @IBOutlet weak var developThingsChart: PieChartView!
     
@@ -39,6 +47,15 @@ class PostData: UIView {
     
     func setDataArray() {
         
+    }
+    
+    func setGetActionsCountLabel(smileCount: String, heartCount: String, cryCount: String, clapCount: String, okCount: String)
+    {
+        smileCountLabel.text = smileCount
+        heartCountLabel.text = heartCount
+        cryCountLabel.text = cryCount
+        clapCountLabel.text = clapCount
+        okCountLabel.text = okCount
     }
     
     /// 開発言語の円グラフをセットアップする

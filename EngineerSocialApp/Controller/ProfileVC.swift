@@ -8,17 +8,29 @@
 import UIKit
 import Firebase
 
-class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UIScrollViewDelegate{
+class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate{
+    
+    // コンテンツ切り替え用のラベル
+    @IBOutlet weak var myDataLabel: ProfileSetContentLabel!
+    @IBOutlet weak var myPostLabel: ProfileSetContentLabel!
     
     @IBOutlet weak var profileScrollView: UIScrollView!
     @IBOutlet weak var userImageView: CircleView!
     @IBOutlet weak var nameLabel: UILabel!
     
+    // 獲得した総アクション数を保持
+    var smiles: Int = 0
+    var heats: Int = 0
+    var cries: Int = 0
+    var claps: Int = 0
+    var oks: Int = 0
+    
     // 投稿データを円グラフで表示するために使用
-    var developDataView: PostData!
+    var postDataView: PostData!
     var devLanguagesArray = [DevelopData]()
     var devThingsArray = [DevelopData]()
     
+    // 過去の投稿を表示するために使用
     var postTableView: PostTableView!
     var myPosts = [Post]()
 
@@ -27,27 +39,36 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setProfileScrollView()
         setUserInfo()
-        
-        // ユーザーのプロフィール画像をタップしてカメラロールから変更できるようにする
-        let userImageTap = UITapGestureRecognizer(target: self, action: #selector(userImageTapped))
-        userImageView.isUserInteractionEnabled = true
-        userImageView.addGestureRecognizer(userImageTap)
+        setProfileScrollView()
+        initSelectCotentLabel()
         
         imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         imagePicker.allowsEditing = true
+        
+        setSelectContentLabel()
+        getGetActionsData()
     }
     
     // FIXME: オートレイアウト使用時、viewWillAppearでもframe.sizeは決定していないので、ここでサイズ決めのメソッドとか使用してるとまずいよ　→ didlayoutに処理を移したよん、ほかのvcでも気を付けてね
     override func viewWillAppear(_ animated: Bool) {
-        if self.developDataView != nil {
+        if self.postDataView != nil {
             self.getMyPostData()
+            self.getGetActionsData()
         }
     }
     
     override func viewDidLayoutSubviews() {
+        
+        // ①開発データを表示するコンテンツを設定。データ取得した後にチャートがすでにあれば、データ更新。なければ生成して表示。
+        if self.postDataView == nil {
+            // チャートビューの生成
+            setDevelopDataView()
+            getMyPostData()
+            getGetActionsData()
+        }
+        // ②自分の過去投稿を表示するコンテンツを設定
         if self.postTableView == nil {
             setMyPostTableView()
         } else {
@@ -56,16 +77,25 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
         // データ取得した後にテーブル更新
         getMyPosts()
         
-        // データ取得した後にチャートがすでにあれば、データ更新。なければ生成して表示。
-        if self.developDataView == nil {
-            // チャートビューの生成
-            self.setDevelopDataView()
-            self.getMyPostData()
-        }
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    func initSelectCotentLabel(){
+        // ユーザーのプロフィール画像をタップしてカメラロールから変更できるようにする
+        let userImageTap = UITapGestureRecognizer(target: self, action: #selector(userImageTapped))
+        userImageView.isUserInteractionEnabled = true
+        userImageView.addGestureRecognizer(userImageTap)
+        
+        // コンテンツ切り替え用のラベルのタップ時の挙動を設定
+        let dataLabelTap = UITapGestureRecognizer(target: self, action: #selector(dataLabelTapped))
+        myDataLabel.isUserInteractionEnabled = true
+        myDataLabel.addGestureRecognizer(dataLabelTap)
+        let postLabelTap = UITapGestureRecognizer(target: self, action: #selector(postLabelTapped))
+        myPostLabel.isUserInteractionEnabled = true
+        myPostLabel.addGestureRecognizer(postLabelTap)
     }
     
     func setProfileScrollView() {
@@ -76,12 +106,6 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     
     // FIXME: ここ、DataServiceクラスのカレントユーザー使わないと、キーチェーン利用してログインした時にcurrentUserが取得できない可能性ある気がする。→ 言う通り
     func setUserInfo() {
-//        let loginUser = FIRAuth.auth()?.currentUser
-//        let name = loginUser?.displayName
-//        let imageUrl = loginUser?.photoURL?.absoluteString
-//        self.nameLabel.text = name
-
-        //let imageUrl =
         
         let loginUser = DataService.ds.REF_USER_CURRENT
         let userImageRef = DataService.ds.REF_USER_IMAGES.child(loginUser.key)
@@ -98,8 +122,34 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
                 }
             }
         })
-        
-        //ProfileVC.downloadImageWithDataTask(urlString: imageUrl!, imageView: userImageView)
+    }
+    
+    /// 獲得したアクション数を取得
+    func getGetActionsData() {
+        // 開発言語のデータ取得
+        DataService.ds.REF_USER_CURRENT.child("getActions").observeSingleEvent(of: .value) { (snapshot) in
+            
+            if let getActions = snapshot.children.allObjects as? [FIRDataSnapshot]{
+                print(getActions)
+                for getAction in getActions{
+                    switch getAction.key {
+                    case "smiles":
+                        self.smiles = getAction.value as! Int
+                    case "hearts":
+                        self.heats = getAction.value as! Int
+                    case "cries":
+                        self.cries = getAction.value as! Int
+                    case "claps":
+                        self.claps = getAction.value as!Int
+                    case "oks":
+                        self.oks = getAction.value as! Int
+                    default:
+                        break
+                    }
+                }
+            }
+            self.postDataView.setGetActionsCountLabel(smileCount: self.smiles.description, heartCount: self.heats.description, cryCount: self.cries.description, clapCount: self.claps.description, okCount: self.oks.description)
+        }
     }
     
     /// 開発言語と開発項目のデータを取得して配列に保存
@@ -115,8 +165,8 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
                 }
             }
             // FIXME: 投稿がない時、引数の配列要素が0になって、サンプルのチャートが表示されているかの確認必要
-            self.developDataView.setupDevLangsPieChartView(developDataArray: self.devLanguagesArray)
-            self.developDataView.animationDevLangsChart()
+            self.postDataView.setupDevLangsPieChartView(developDataArray: self.devLanguagesArray)
+            self.postDataView.animationDevLangsChart()
         }
         
         // 開発項目のデータ取得
@@ -128,8 +178,8 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
                     self.devThingsArray.insert(toDoData, at: 0)
                 }
             }
-            self.developDataView.setupDevThingsPieChartView(developDataArray: self.devThingsArray)
-            self.developDataView.animationDevThingsChart()
+            self.postDataView.setupDevThingsPieChartView(developDataArray: self.devThingsArray)
+            self.postDataView.animationDevThingsChart()
         }
     }
     
@@ -182,8 +232,8 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     
     /// （個人投稿データ（開発言語））下部の横スクロールビュー内のコンテンツを設置
     func setDevelopDataView() {
-            self.developDataView = PostData(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.profileScrollView.frame.height))
-            profileScrollView.addSubview(developDataView)
+            self.postDataView = PostData(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.profileScrollView.frame.height))
+            profileScrollView.addSubview(postDataView)
     }
     
     /// （自分の過去投稿を表示するテーブルビュー）下部の横スクロールビュー内のコンテンツを設置
@@ -195,6 +245,34 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
         postTableView.estimatedRowHeight = 200
         postTableView.rowHeight = UITableViewAutomaticDimension
         self.profileScrollView.addSubview(postTableView)
+    }
+    
+    @objc func dataLabelTapped() {
+        let pointX = 0
+        profileScrollView.setContentOffset(CGPoint(x: pointX, y: 0), animated: true)
+        setSelectContentLabel()
+    }
+    
+    @objc func postLabelTapped() {
+        let pointX = self.view.frame.width
+        profileScrollView.setContentOffset(CGPoint(x: pointX, y: 0), animated: true)
+        setSelectContentLabel()
+    }
+    
+    // スクロールビューのコンテンツ位置に従って選択ラベルの状態を変更させる
+    func setSelectContentLabel(){
+        let page = profileScrollView.contentOffset.x
+        
+        switch page {
+        case 0:
+            myDataLabel.selectedLabel()
+            myPostLabel.notSelectedLabel()
+        case self.view.frame.width:
+            myDataLabel.notSelectedLabel()
+            myPostLabel.selectedLabel()
+        default:
+            break
+        }
     }
     
     @objc func userImageTapped() {
@@ -225,5 +303,16 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
         }
         
         imagePicker.dismiss(animated: true, completion: nil)
+    }
+}
+
+extension ProfileVC: UIScrollViewDelegate {
+    
+    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+        setSelectContentLabel()
+    }
+    
+    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        setSelectContentLabel()
     }
 }

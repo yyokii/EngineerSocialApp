@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -22,8 +23,8 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NEH-Zx-Lf8" customClass="FancyView" customModule="EngineerSocialApp" customModuleProvider="target">
                         <rect key="frame" x="10" y="10" width="430" height="257.5"/>
                         <subviews>
-                            <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="50" translatesAutoresizingMaskIntoConstraints="NO" id="d5O-o8-IG1">
-                                <rect key="frame" x="8" y="8" width="414" height="60"/>
+                            <stackView opaque="NO" contentMode="scaleToFill" alignment="center" spacing="30" translatesAutoresizingMaskIntoConstraints="NO" id="d5O-o8-IG1">
+                                <rect key="frame" x="8" y="8" width="301" height="60"/>
                                 <subviews>
                                     <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="0CE-BO-lg8" customClass="CircleView" customModule="EngineerSocialApp" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="5" width="50" height="50"/>
@@ -33,7 +34,7 @@
                                         </constraints>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="name" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="njh-gV-8la">
-                                        <rect key="frame" x="100" y="18" width="314" height="24"/>
+                                        <rect key="frame" x="80" y="18" width="221" height="24"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
@@ -72,31 +73,31 @@
                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="FK1-RA-Hoe">
                                 <rect key="frame" x="20" y="167" width="390" height="50"/>
                                 <subviews>
-                                    <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="😆" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Shj-CO-hRp" customClass="BorderLabel" customModule="EngineerSocialApp" customModuleProvider="target">
+                                    <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="😆" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Shj-CO-hRp" customClass="PostActionLabel" customModule="EngineerSocialApp" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="0.0" width="74" height="50"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="😍" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Omo-2H-Zep" customClass="BorderLabel" customModule="EngineerSocialApp" customModuleProvider="target">
+                                    <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="😍" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Omo-2H-Zep" customClass="PostActionLabel" customModule="EngineerSocialApp" customModuleProvider="target">
                                         <rect key="frame" x="79" y="0.0" width="74" height="50"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="😭" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZxP-ZT-2Nl" customClass="BorderLabel" customModule="EngineerSocialApp" customModuleProvider="target">
+                                    <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="😭" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ZxP-ZT-2Nl" customClass="PostActionLabel" customModule="EngineerSocialApp" customModuleProvider="target">
                                         <rect key="frame" x="158" y="0.0" width="74" height="50"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="👏" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Z5O-3q-zg9" customClass="BorderLabel" customModule="EngineerSocialApp" customModuleProvider="target">
+                                    <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="👏" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Z5O-3q-zg9" customClass="PostActionLabel" customModule="EngineerSocialApp" customModuleProvider="target">
                                         <rect key="frame" x="237" y="0.0" width="74" height="50"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="👌" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ClJ-wn-2oR" customClass="BorderLabel" customModule="EngineerSocialApp" customModuleProvider="target">
+                                    <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="👌" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ClJ-wn-2oR" customClass="PostActionLabel" customModule="EngineerSocialApp" customModuleProvider="target">
                                         <rect key="frame" x="316" y="0.0" width="74" height="50"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="30"/>
                                         <nil key="textColor"/>
@@ -107,41 +108,47 @@
                                     <constraint firstAttribute="height" constant="50" id="Ca8-CB-mW3"/>
                                 </constraints>
                             </stackView>
-                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" translatesAutoresizingMaskIntoConstraints="NO" id="pdf-Jn-Uch">
+                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="pdf-Jn-Uch">
                                 <rect key="frame" x="20" y="227" width="390" height="20.5"/>
                                 <subviews>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mfG-pE-Agj">
-                                        <rect key="frame" x="0.0" y="0.0" width="78" height="20.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="74" height="20.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eUl-r2-mOv">
-                                        <rect key="frame" x="78" y="0.0" width="78" height="20.5"/>
+                                        <rect key="frame" x="79" y="0.0" width="74" height="20.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MzZ-5r-DUj">
-                                        <rect key="frame" x="156" y="0.0" width="78" height="20.5"/>
+                                        <rect key="frame" x="158" y="0.0" width="74" height="20.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xCw-fO-RaW">
-                                        <rect key="frame" x="234" y="0.0" width="78" height="20.5"/>
+                                        <rect key="frame" x="237" y="0.0" width="74" height="20.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Wae-NB-rzi">
-                                        <rect key="frame" x="312" y="0.0" width="78" height="20.5"/>
+                                        <rect key="frame" x="316" y="0.0" width="74" height="20.5"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                 </subviews>
                             </stackView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2000/01/01" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tl3-WY-ua2">
+                                <rect key="frame" x="317" y="8" width="113" height="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -150,17 +157,20 @@
                             <constraint firstItem="pdf-Jn-Uch" firstAttribute="top" secondItem="FK1-RA-Hoe" secondAttribute="bottom" constant="10" id="DjQ-ZC-ciF"/>
                             <constraint firstAttribute="bottom" secondItem="pdf-Jn-Uch" secondAttribute="bottom" constant="10" id="OyU-t4-n3G"/>
                             <constraint firstItem="d5O-o8-IG1" firstAttribute="top" secondItem="NEH-Zx-Lf8" secondAttribute="top" constant="8" id="TJc-cn-7qP"/>
+                            <constraint firstItem="Tl3-WY-ua2" firstAttribute="top" secondItem="NEH-Zx-Lf8" secondAttribute="top" constant="8" id="ZpX-Nz-fCx"/>
                             <constraint firstItem="4OU-sH-MvP" firstAttribute="leading" secondItem="NEH-Zx-Lf8" secondAttribute="leading" constant="8" id="ayd-g9-MyJ"/>
+                            <constraint firstItem="Tl3-WY-ua2" firstAttribute="leading" secondItem="d5O-o8-IG1" secondAttribute="trailing" constant="8" id="bNy-oo-X2U"/>
                             <constraint firstItem="d5O-o8-IG1" firstAttribute="leading" secondItem="NEH-Zx-Lf8" secondAttribute="leading" constant="8" id="cD0-dF-TYM"/>
-                            <constraint firstAttribute="trailing" secondItem="d5O-o8-IG1" secondAttribute="trailing" constant="8" id="dpV-VG-iDK"/>
                             <constraint firstAttribute="trailing" secondItem="pdf-Jn-Uch" secondAttribute="trailing" constant="20" id="hAi-cB-ubE"/>
                             <constraint firstAttribute="trailing" secondItem="4OU-sH-MvP" secondAttribute="trailing" constant="8" id="igX-0z-YpU"/>
                             <constraint firstItem="4OU-sH-MvP" firstAttribute="top" secondItem="9fI-NF-xZC" secondAttribute="bottom" constant="10" id="jka-of-oiN"/>
                             <constraint firstAttribute="trailing" secondItem="9fI-NF-xZC" secondAttribute="trailing" constant="8" id="ktV-vn-oEk"/>
+                            <constraint firstItem="d5O-o8-IG1" firstAttribute="width" secondItem="NEH-Zx-Lf8" secondAttribute="width" multiplier="0.7" id="mu3-t7-Q4y"/>
                             <constraint firstAttribute="trailing" secondItem="FK1-RA-Hoe" secondAttribute="trailing" constant="20" id="s49-nk-8dy"/>
                             <constraint firstItem="FK1-RA-Hoe" firstAttribute="top" secondItem="4OU-sH-MvP" secondAttribute="bottom" constant="20" id="uGt-8I-tL5"/>
                             <constraint firstItem="pdf-Jn-Uch" firstAttribute="leading" secondItem="NEH-Zx-Lf8" secondAttribute="leading" constant="20" id="w5Y-Ep-fOS"/>
                             <constraint firstItem="FK1-RA-Hoe" firstAttribute="leading" secondItem="NEH-Zx-Lf8" secondAttribute="leading" constant="20" id="z9n-db-z05"/>
+                            <constraint firstAttribute="trailing" secondItem="Tl3-WY-ua2" secondAttribute="trailing" id="zd2-ih-e7g"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -178,6 +188,7 @@
                 <outlet property="clapLabel" destination="Z5O-3q-zg9" id="xxd-f1-6b0"/>
                 <outlet property="cryCountLabel" destination="MzZ-5r-DUj" id="gVL-us-oab"/>
                 <outlet property="cryLabel" destination="ZxP-ZT-2Nl" id="kK1-Hz-ffG"/>
+                <outlet property="dateLabel" destination="Tl3-WY-ua2" id="vF9-N3-ifs"/>
                 <outlet property="heartCountLabel" destination="eUl-r2-mOv" id="nRg-I4-Ycv"/>
                 <outlet property="heartLabel" destination="Omo-2H-Zep" id="Ivm-V2-vQ4"/>
                 <outlet property="okCountLabel" destination="Wae-NB-rzi" id="hWB-8p-EF8"/>

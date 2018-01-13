@@ -15,11 +15,11 @@ class PostTableViewCell: UITableViewCell {
     @IBOutlet weak var caption: UITextView!
     
     // ユーザーのアクション
-    @IBOutlet weak var smileLabel: BorderLabel!
-    @IBOutlet weak var heartLabel: BorderLabel!
-    @IBOutlet weak var cryLabel: BorderLabel!
-    @IBOutlet weak var clapLabel: BorderLabel!
-    @IBOutlet weak var okLabel: BorderLabel!
+    @IBOutlet weak var smileLabel: PostActionLabel!
+    @IBOutlet weak var heartLabel: PostActionLabel!
+    @IBOutlet weak var cryLabel: PostActionLabel!
+    @IBOutlet weak var clapLabel: PostActionLabel!
+    @IBOutlet weak var okLabel: PostActionLabel!
     
     // ユーザーのアクション数を表示するためのラベル
     @IBOutlet weak var smileCountLabel: UILabel!
@@ -27,11 +27,8 @@ class PostTableViewCell: UITableViewCell {
     @IBOutlet weak var cryCountLabel: UILabel!
     @IBOutlet weak var clapCountLabel: UILabel!
     @IBOutlet weak var okCountLabel: UILabel!
-
-    // FIXME: 多分いらない
-//    @IBOutlet weak var postImag: UIImageView!
-//    @IBOutlet weak var likesLbl: UILabel!
-//    @IBOutlet weak var likeImg: UIImageView!
+    
+    @IBOutlet weak var dateLabel:UILabel!
     
     var post: Post!
     
@@ -95,6 +92,7 @@ class PostTableViewCell: UITableViewCell {
         setClapLabel(ref: clapRef)
         setOkLabel(ref: okRef)
         
+        self.dateLabel.text = post.date
         self.caption.text = post.caption
         
         // いいね数表示用ラベル

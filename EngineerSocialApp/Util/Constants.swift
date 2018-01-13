@@ -8,6 +8,11 @@
 
 import UIKit
 
-let SHADOW_GRAY: CGFloat = 120.0 / 255.0
-
 let KEY_UID = "uid"
+
+// Color
+let SHADOW_GRAY: CGFloat = 120.0 / 255.0
+let JET_BLACK: String = "181310"
+let NAVY_BLUE: String = "060644"
+let BABY_BLUE: String = "7EC8E3"
+let COOL_GRAY: String = "727880"

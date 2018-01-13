@@ -60,10 +60,10 @@ class PostVC: UIViewController, UIPopoverPresentationControllerDelegate, PopOver
     func postToFirebase () {
         let action: Dictionary<String, AnyObject> = ["smiles": 0 as AnyObject, "hearts": 0 as AnyObject, "cries": 0 as AnyObject, "claps": 0 as AnyObject, "oks": 0 as AnyObject]
         let post: Dictionary<String, AnyObject> = [
+            "date": getTodayDateString() as AnyObject,
             "programmingLanguage": languageLabel.text! as AnyObject,
             "do": doingLabel.text! as AnyObject,
             "caption": captionTextView.text! as AnyObject,
-            "likes": 0 as AnyObject, // FIXME 消去
             "uid": KeychainWrapper.standard.string(forKey: KEY_UID) as AnyObject,
             "action": action as AnyObject
         ]
@@ -79,7 +79,14 @@ class PostVC: UIViewController, UIPopoverPresentationControllerDelegate, PopOver
         self.dismiss(animated: true, completion: nil)
     }
     
-    /// 投稿時にユーザーの使用言語とやることをユーザー情報としてdbに保存する
+    func getTodayDateString() -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy/MM/dd"
+        let now = Date()
+        return formatter.string(from: now)
+    }
+    
+    /// 投稿時にユーザーの使用言語とやることをユーザー情報としてdbに保存する（チャートで表示するため）
     ///
     /// - Parameters:
     ///   - devLanguage: 使用言語

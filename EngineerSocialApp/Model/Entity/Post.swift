@@ -11,8 +11,9 @@ import Firebase
 
 class Post {
     
+    private var _date: String!
     private var _caption: String!
-    private var _imageUrl: String! = "" // 投稿内容にimageを持たないけど、雛形ではimageをもっている。落ちないように空の文字列を入れとく
+    private var _imageUrl: String! = "" // FIXME: 後で消す。投稿内容にimageを持たないけど、雛形ではimageをもっている。落ちないように空の文字列を入れとく
     
     private var _likes: Int!
     // ユーザーのアクション
@@ -25,6 +26,10 @@ class Post {
     private var _postUserId: String!
     private var _postKey: String!
     private var _postRef: FIRDatabaseReference!
+    
+    var date: String {
+        return _date
+    }
     
     var caption: String {
         return _caption
@@ -66,17 +71,16 @@ class Post {
         return _postKey
     }
     
-    // FIXME: これ使ってない。消去。
-    init(caption: String, imageUrl: String, liles: Int) {
-        
-        self._caption = caption
-        self._imageUrl = imageUrl
-        self._likes = likes
-    }
-    
     init(postKey: String, postData: Dictionary<String, AnyObject>) {
         
         self._postKey = postKey
+        
+        if let date = postData["date"] as? String {
+            self._date = date
+        } else{
+            // FIXME:後で消す。post内容にdateをいれていないものがあるのでそのケア用。
+            self._date = "1111/22/33"
+        }
         
         if let caption = postData["caption"] as? String {
             self._caption = caption
@@ -114,7 +118,6 @@ class Post {
         }
         
         _postRef = DataService.ds.REF_POSTS.child(_postKey)
-        
     }
     
     func ajustLike (addLike: Bool) {

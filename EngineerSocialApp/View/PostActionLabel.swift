@@ -1,5 +1,5 @@
 //
-//  BorderLabel.swift
+//  PostActionLabel.swift
 //  EngineerSocialApp
 //
 //  Created by Yoki on 2018/01/03.
@@ -7,7 +7,7 @@
 
 import UIKit
 
-class BorderLabel: UILabel {
+class PostActionLabel: UILabel {
     override func awakeFromNib() {
         super.awakeFromNib()
         
@@ -16,7 +16,7 @@ class BorderLabel: UILabel {
     
     func notSelectedLabel() {
         self.alpha = 0.5
-        layer.borderColor = UIColor.gray.cgColor
+        layer.borderColor = UIColor.init(hex: COOL_GRAY).cgColor
         layer.backgroundColor = UIColor.white.cgColor
         layer.borderWidth = 0.7
         layer.cornerRadius = 10
@@ -24,8 +24,8 @@ class BorderLabel: UILabel {
     
     func selectedLabel() {
         self.alpha = 1
-        layer.borderColor = UIColor.blue.cgColor
-        layer.backgroundColor = UIColor.green.cgColor
+        layer.borderColor = UIColor.init(hex: BABY_BLUE, alpha: 0.6).cgColor
+        layer.backgroundColor = UIColor.init(hex: BABY_BLUE, alpha: 0.2).cgColor
         layer.borderWidth = 0.7
         layer.cornerRadius = 10
     }
