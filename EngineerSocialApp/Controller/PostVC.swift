@@ -58,14 +58,14 @@ class PostVC: UIViewController, UIPopoverPresentationControllerDelegate, PopOver
     ///
     /// - Parameter imgUrl: 画像のurl
     func postToFirebase () {
-        let action: Dictionary<String, AnyObject> = ["smiles": 0 as AnyObject, "hearts": 0 as AnyObject, "cries": 0 as AnyObject, "claps": 0 as AnyObject, "oks": 0 as AnyObject]
+        let action: Dictionary<String, AnyObject> = [SMILES: 0 as AnyObject, HEARTS: 0 as AnyObject, CRIES: 0 as AnyObject, CLAPS: 0 as AnyObject, OKS: 0 as AnyObject]
         let post: Dictionary<String, AnyObject> = [
-            "date": getTodayDateString() as AnyObject,
-            "programmingLanguage": languageLabel.text! as AnyObject,
-            "do": doingLabel.text! as AnyObject,
-            "caption": captionTextView.text! as AnyObject,
-            "uid": KeychainWrapper.standard.string(forKey: KEY_UID) as AnyObject,
-            "action": action as AnyObject
+            DATE: getTodayDateString() as AnyObject,
+            PROGRAMMING_LANGUAGE: languageLabel.text! as AnyObject,
+            DEVELOP: doingLabel.text! as AnyObject,
+            CAPTION: captionTextView.text! as AnyObject,
+            KEY_UID: KeychainWrapper.standard.string(forKey: KEY_UID) as AnyObject,
+            ACTION: action as AnyObject
         ]
         
         let firebasePost = DataService.ds.REF_POSTS.childByAutoId()
@@ -92,8 +92,8 @@ class PostVC: UIViewController, UIPopoverPresentationControllerDelegate, PopOver
     ///   - devLanguage: 使用言語
     ///   - develop: やること
     func setUserDevelopData(devLanguage: String, develop: String) {
-        let userDevLanguageDataRef = DataService.ds.REF_USER_CURRENT.child("devLanguage").child(devLanguage)
-        let userDevelopThingsDataRef = DataService.ds.REF_USER_CURRENT.child("do").child(develop)
+        let userDevLanguageDataRef = DataService.ds.REF_USER_CURRENT.child(PROGRAMMING_LANGUAGE).child(devLanguage)
+        let userDevelopThingsDataRef = DataService.ds.REF_USER_CURRENT.child(DEVELOP).child(develop)
         
         userDevLanguageDataRef.observeSingleEvent(of: .value) { (snapshot) in
             if let counts = snapshot.value as? Int {
@@ -116,7 +116,7 @@ class PostVC: UIViewController, UIPopoverPresentationControllerDelegate, PopOver
     /// TODO：削除機能つける時はpostkey消す（投稿情報関連は全て消す必要あり、ん〜面倒　→　removeを監視できるのでそれでやる感じですね）
     /// - Parameter myPostKey: postのkey（autoIdで作成されたもの）
     func setUserPost (myPostKey:String){
-        let userPostsRef = DataService.ds.REF_USER_CURRENT.child("posts").child(myPostKey)
+        let userPostsRef = DataService.ds.REF_USER_CURRENT.child(POSTS).child(myPostKey)
         userPostsRef.setValue(true)
     }
     

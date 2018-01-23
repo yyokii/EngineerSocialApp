@@ -71,7 +71,7 @@ class SignInVC: UIViewController {
         self.view.addSubview(logInButton)
     }
     
-    // FIXME: ログイン時に獲得アクション数を各要素0にしてdbに登録しておく。アドレスでログインした時もdbが同じになっているかの確認必要かも
+    // FIXME: ログイン時に獲得アクション数を各要素0にしてdbに登録しておく。アドレスでログインした時もdbが同じになってるようにしておく
     // snsログインで使用するfirebase認証用のメソッド
     func firebaseAuth (_ credential: FIRAuthCredential) {
         
@@ -84,8 +84,14 @@ class SignInVC: UIViewController {
                 print("OK: Successfully authenticated with Firebase")
                 if let user = user {
                     
+                    // ユーザー名を保存
+                    var name = "anonymous"
+                    if let displayName = user.displayName{
+                        name = displayName
+                    }
+                    // 初回ログイン時に、獲得アクション数を0にしてdbに登録する
                     let getActions: Dictionary<String, AnyObject> = ["smiles": 0 as AnyObject, "hearts": 0 as AnyObject, "cries": 0 as AnyObject, "claps": 0 as AnyObject, "oks": 0 as AnyObject]
-                    let userData: Dictionary<String,Any> = ["provider": credential.provider, "getActions": getActions]
+                    let userData: Dictionary<String,Any> = ["provider": credential.provider, "getActions": getActions, "name": name]
                     
                     self.uploadImage(user: user)
                     self.completeSignIn(id: user.uid, userData: userData)

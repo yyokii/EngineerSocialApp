@@ -7,6 +7,7 @@
 
 import UIKit
 import Firebase
+import SwiftKeychainWrapper
 
 class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     
@@ -36,6 +37,9 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
 
     // プロフィール画像を設定
     var imagePicker: UIImagePickerController!
+    
+    // スクロールビューテスト
+    var scrollBeginingPoint: CGPoint!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -104,10 +108,19 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
         self.profileScrollView.isPagingEnabled = true
     }
     
-    // FIXME: ここ、DataServiceクラスのカレントユーザー使わないと、キーチェーン利用してログインした時にcurrentUserが取得できない可能性ある気がする。→ 言う通り
     func setUserInfo() {
         
         let loginUser = DataService.ds.REF_USER_CURRENT
+        
+        loginUser.child(NAME).observeSingleEvent(of: .value, with: { (snapshot) in
+            if let name = snapshot.value {
+                self.nameLabel.text = name as? String
+            }
+            
+        }) { (error) in
+            print(error.localizedDescription)
+        }
+        
         let userImageRef = DataService.ds.REF_USER_IMAGES.child(loginUser.key)
         userImageRef.data(withMaxSize: 2 * 1024 * 1024, completion: { (data, error) in
             if error != nil {
@@ -127,21 +140,21 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     /// 獲得したアクション数を取得
     func getGetActionsData() {
         // 開発言語のデータ取得
-        DataService.ds.REF_USER_CURRENT.child("getActions").observeSingleEvent(of: .value) { (snapshot) in
+        DataService.ds.REF_USER_CURRENT.child(GET_ACTIONS).observeSingleEvent(of: .value) { (snapshot) in
             
             if let getActions = snapshot.children.allObjects as? [FIRDataSnapshot]{
                 print(getActions)
                 for getAction in getActions{
                     switch getAction.key {
-                    case "smiles":
+                    case SMILES:
                         self.smiles = getAction.value as! Int
-                    case "hearts":
+                    case HEARTS:
                         self.heats = getAction.value as! Int
-                    case "cries":
+                    case CRIES:
                         self.cries = getAction.value as! Int
-                    case "claps":
+                    case CLAPS:
                         self.claps = getAction.value as!Int
-                    case "oks":
+                    case OKS:
                         self.oks = getAction.value as! Int
                     default:
                         break
@@ -155,7 +168,7 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     /// 開発言語と開発項目のデータを取得して配列に保存
     func getMyPostData() {
         // 開発言語のデータ取得
-        DataService.ds.REF_USER_CURRENT.child("devLanguage").queryOrderedByValue().observeSingleEvent(of: .value) { (snapshot) in
+        DataService.ds.REF_USER_CURRENT.child(PROGRAMMING_LANGUAGE).queryOrderedByValue().observeSingleEvent(of: .value) { (snapshot) in
             if let devLanguages = snapshot.children.allObjects as? [FIRDataSnapshot]{
                 // 前回取得したデータが残らないように一度空にする
                 self.devLanguagesArray = []
@@ -170,7 +183,7 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
         }
         
         // 開発項目のデータ取得
-        DataService.ds.REF_USER_CURRENT.child("do").queryOrderedByValue().observeSingleEvent(of: .value) { (snapshot) in
+        DataService.ds.REF_USER_CURRENT.child(DEVELOP).queryOrderedByValue().observeSingleEvent(of: .value) { (snapshot) in
             if let toDos = snapshot.children.allObjects as? [FIRDataSnapshot]{
                 self.devThingsArray = []
                 for todo in toDos{
@@ -184,7 +197,7 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     }
     
     func getMyPosts() {
-        DataService.ds.REF_USER_CURRENT.child("posts").observeSingleEvent(of: .value) { (snapshot) in
+        DataService.ds.REF_USER_CURRENT.child(POSTS).observeSingleEvent(of: .value) { (snapshot) in
             print("取得したデータ：\(snapshot)")
             
             var myPostsKey = [String]()
@@ -304,6 +317,28 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
         
         imagePicker.dismiss(animated: true, completion: nil)
     }
+    
+//    @IBAction func linkButtonTapped(_ sender: Any) {
+//        let url = URL(string: "https://www.twitter.com/yoki_engineer")!
+//        if UIApplication.shared.canOpenURL(url) {
+//            UIApplication.shared.open(url)
+//        }
+//    }
+//    
+
+    // 暫時的にサインアウトボタンと投稿ボタンを設置
+    @IBAction func signOutTapped(_ sender: Any) {
+        
+        let keychainResult = KeychainWrapper.standard.removeObject(forKey: KEY_UID)
+        print("JESS: ID removed from keychain \(keychainResult)")
+        try! FIRAuth.auth()?.signOut()
+        performSegue(withIdentifier: "goToSignIn", sender: nil)
+    }
+    
+    @IBAction func postTapped(_ sender: Any) {
+        performSegue(withIdentifier: "toPost", sender: nil)
+    }
+    
 }
 
 extension ProfileVC: UIScrollViewDelegate {
@@ -315,4 +350,5 @@ extension ProfileVC: UIScrollViewDelegate {
     func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
         setSelectContentLabel()
     }
+    
 }

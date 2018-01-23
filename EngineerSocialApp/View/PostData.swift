@@ -45,10 +45,6 @@ class PostData: UIView {
         self.addSubview(view)
     }
     
-    func setDataArray() {
-        
-    }
-    
     func setGetActionsCountLabel(smileCount: String, heartCount: String, cryCount: String, clapCount: String, okCount: String)
     {
         smileCountLabel.text = smileCount

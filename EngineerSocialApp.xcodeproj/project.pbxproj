@@ -41,6 +41,7 @@
 		B6F5251420023D71004C00BC /* DevelopData.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6F5251320023D71004C00BC /* DevelopData.swift */; };
 		B6F525172009DF78004C00BC /* ProfileSetContentLabel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6F525162009DF78004C00BC /* ProfileSetContentLabel.swift */; };
 		B6F525192009E0BF004C00BC /* ExtensionUIColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6F525182009E0BF004C00BC /* ExtensionUIColor.swift */; };
+		B6F5251B200E2ABE004C00BC /* SimpleTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6F5251A200E2ABE004C00BC /* SimpleTextView.swift */; };
 		E8D11CDF2A2641E6EDD2F76C /* Pods_EngineerSocialApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3EE49FC36E95678BE601B5D4 /* Pods_EngineerSocialApp.framework */; };
 /* End PBXBuildFile section */
 
@@ -108,6 +109,7 @@
 		B6F5251320023D71004C00BC /* DevelopData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DevelopData.swift; sourceTree = "<group>"; };
 		B6F525162009DF78004C00BC /* ProfileSetContentLabel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSetContentLabel.swift; sourceTree = "<group>"; };
 		B6F525182009E0BF004C00BC /* ExtensionUIColor.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtensionUIColor.swift; sourceTree = "<group>"; };
+		B6F5251A200E2ABE004C00BC /* SimpleTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SimpleTextView.swift; sourceTree = "<group>"; };
 		CA38BEFBAFB7DC0D41CD40A1 /* Pods-EngineerSocialAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-EngineerSocialAppTests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-EngineerSocialAppTests/Pods-EngineerSocialAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		EEC2985F702B283E404BE37D /* Pods_EngineerSocialAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_EngineerSocialAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -238,6 +240,7 @@
 			children = (
 				B683828C1FFCF99300B37589 /* PostActionLabel.swift */,
 				B6F525162009DF78004C00BC /* ProfileSetContentLabel.swift */,
+				B6F5251A200E2ABE004C00BC /* SimpleTextView.swift */,
 				B6F25D481FEEA5D0007A4A6A /* FancyView.swift */,
 				B6F25D4A1FEEA5D0007A4A6A /* FancyBtn.swift */,
 				B6F25D471FEEA5CF007A4A6A /* RoundBtn.swift */,
@@ -246,12 +249,12 @@
 				B6C614071FF8A5B6009FF96D /* PostTableViewCell.swift */,
 				B6C613FF1FF77E48009FF96D /* PostData.swift */,
 				B6C614051FF8A573009FF96D /* PostTableView.swift */,
+				B683828A1FFB3AC300B37589 /* ProgrammingLanguageCell.swift */,
 				B6F25CE51FEEA002007A4A6A /* Main.storyboard */,
 				B6F25D571FEEE36F007A4A6A /* Post.storyboard */,
 				B614A2B41FF28F1B001E1F80 /* PopOver.storyboard */,
 				B6C613FB1FF7079F009FF96D /* PostData.xib */,
 				B6C614081FF8A5B6009FF96D /* PostTableViewCell.xib */,
-				B683828A1FFB3AC300B37589 /* ProgrammingLanguageCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -616,6 +619,7 @@
 				B6F25D4D1FEEA5D1007A4A6A /* RoundBtn.swift in Sources */,
 				B6F525192009E0BF004C00BC /* ExtensionUIColor.swift in Sources */,
 				B6F25D551FEEA5DA007A4A6A /* SignInVC.swift in Sources */,
+				B6F5251B200E2ABE004C00BC /* SimpleTextView.swift in Sources */,
 				B6F25CE21FEEA002007A4A6A /* AppDelegate.swift in Sources */,
 				B683828B1FFB3AC300B37589 /* ProgrammingLanguageCell.swift in Sources */,
 				B6C614001FF77E48009FF96D /* PostData.swift in Sources */,

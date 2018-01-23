@@ -8,11 +8,16 @@
 import UIKit
 import Firebase
 
+
+/// cellに投稿情報を表示するために、cell内のuiに値をセットするクラス
 class PostTableViewCell: UITableViewCell {
 
     @IBOutlet weak var profileImg: CircleView!
     @IBOutlet weak var usernameLbl: UILabel!
     @IBOutlet weak var caption: UITextView!
+    @IBOutlet weak var programmingLangLabel: UILabel!
+    @IBOutlet weak var developLabel: UILabel!
+
     
     // ユーザーのアクション
     @IBOutlet weak var smileLabel: PostActionLabel!
@@ -49,13 +54,6 @@ class PostTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        
-        // FIXME: 後で消す。いいね機能の参考になる
-        //let tap = UITapGestureRecognizer(target: self, action: #selector(likeTapped))
-        //tap.numberOfTapsRequired = 1
-        //likeImg.addGestureRecognizer(tap)
-        //likeImg.isUserInteractionEnabled = true
-        
         addTapGestureToLabel()
     }
     
@@ -80,11 +78,11 @@ class PostTableViewCell: UITableViewCell {
     func configureCell (post: Post, img: UIImage? = nil) {
         self.post = post
         // ユーザーの投稿へのアクション情報を見るための参照
-        smileRef = DataService.ds.REF_USER_CURRENT.child("action").child("smile").child(post.postKey)
-        heartRef = DataService.ds.REF_USER_CURRENT.child("action").child("heart").child(post.postKey)
-        cryRef = DataService.ds.REF_USER_CURRENT.child("action").child("cry").child(post.postKey)
-        clapRef = DataService.ds.REF_USER_CURRENT.child("action").child("clap").child(post.postKey)
-        okRef = DataService.ds.REF_USER_CURRENT.child("action").child("ok").child(post.postKey)
+        smileRef = DataService.ds.REF_USER_CURRENT.child(ACTION).child(SMILE).child(post.postKey)
+        heartRef = DataService.ds.REF_USER_CURRENT.child(ACTION).child(HEART).child(post.postKey)
+        cryRef = DataService.ds.REF_USER_CURRENT.child(ACTION).child(CRY).child(post.postKey)
+        clapRef = DataService.ds.REF_USER_CURRENT.child(ACTION).child(CLAP).child(post.postKey)
+        okRef = DataService.ds.REF_USER_CURRENT.child(ACTION).child(OK).child(post.postKey)
 
         setSmileLabel(ref: smileRef)
         setHeartLabel(ref: heartRef)
@@ -93,6 +91,8 @@ class PostTableViewCell: UITableViewCell {
         setOkLabel(ref: okRef)
         
         self.dateLabel.text = post.date
+        self.programmingLangLabel.text = post.programmingLang
+        self.developLabel.text = post.develop
         self.caption.text = post.caption
         
         // いいね数表示用ラベル
@@ -103,9 +103,9 @@ class PostTableViewCell: UITableViewCell {
         self.clapCountLabel.text = "\(post.claps)"
         self.okCountLabel.text = "\(post.oks)"
 
-        
         // FIXEME:　全体のタイムラインと個人の過去投稿でif分岐したい　→　別になくてもいいか
         setUserImage(uid: post.postUserId)
+        setUserName(uid: post.postUserId)
         
 //        //Cacheにある場合とない場合（storageからとってきてCaCheに入れる）
 //        //TODO:Cache適宜消さないと容量まずいきがする
@@ -139,8 +139,18 @@ class PostTableViewCell: UITableViewCell {
 //        })
     }
     
-    /// 投稿者のアイコン取得 FIXME:画像荒い
-    ///
+    /// 投稿者のname取得
+    /// - Parameter uid: 投稿者のid
+    func setUserName(uid: String) {
+        let postUserNameRef = DataService.ds.REF_USERS.child(uid).child("name")
+        postUserNameRef.observeSingleEvent(of: .value, with: { (snapshot) in
+            self.usernameLbl.text = snapshot.value as? String
+        }) { (error) in
+            print(error.localizedDescription)
+        }
+    }
+    
+    /// 投稿者のアイコン取得
     /// - Parameter uid: 投稿者のid
     func setUserImage(uid: String) {
         let ref = DataService.ds.REF_USER_IMAGES.child(uid)

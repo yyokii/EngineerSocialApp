@@ -20,9 +20,6 @@ class FeedVC: UIViewController{
     static var imageCache: NSCache<NSString, UIImage> = NSCache()
     var postTableView: PostTableView!
     
-    // FIXME: メンバ変数にしなくていいかも
-    var userPostsRef: FIRDatabaseReference!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -31,10 +28,14 @@ class FeedVC: UIViewController{
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        if self.postTableView == nil {
-            setPostTableView()
+        if postTableView != nil{
+            self.getPostsFromFireBase()
         }
-        self.getPostsFromFireBase()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        setPostTableView()
+        getPostsFromFireBase()
     }
     
     /// データベースから投稿情報を取得
@@ -67,8 +68,7 @@ class FeedVC: UIViewController{
     
     /// 投稿表示用のテーブルビュー
     func setPostTableView(){
-        // ここ、サイズをmainViewで設定すると小さくなるのでviewで設定。なんで小さくなるかわわからん。→ 描画タイミングの問題。didloadでなく、willappearで使用すると想定通りに動く。　→ didlayoutSubviewに書く
-        let frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.mainView.frame.size.height)
+        let frame = CGRect(x: 0, y: 0, width: self.mainView.frame.width, height: self.mainView.frame.height)
         self.postTableView = PostTableView(frame: frame,style: UITableViewStyle.plain)
         postTableView.posts = self.posts
         // セルの高さを可変にする

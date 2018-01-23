@@ -23,6 +23,10 @@ class Post {
     private var _claps: Int!
     private var _oks: Int!
     
+    // 開発項目と開発言語
+    private var _develop: String!
+    private var _programmingLang: String!
+    
     private var _postUserId: String!
     private var _postKey: String!
     private var _postRef: FIRDatabaseReference!
@@ -33,6 +37,14 @@ class Post {
     
     var caption: String {
         return _caption
+    }
+    
+    var programmingLang: String {
+        return _programmingLang
+    }
+    
+    var develop: String {
+        return _develop
     }
     
     var imageUrl: String {
@@ -75,45 +87,49 @@ class Post {
         
         self._postKey = postKey
         
-        if let date = postData["date"] as? String {
+        if let date = postData[DATE] as? String {
             self._date = date
         } else{
             // FIXME:後で消す。post内容にdateをいれていないものがあるのでそのケア用。
             self._date = "1111/22/33"
         }
         
-        if let caption = postData["caption"] as? String {
+        if let caption = postData[CAPTION] as? String {
             self._caption = caption
         }
         
-        if let imageUrl = postData["imageUrl"] as? String {
-            self._imageUrl = imageUrl
+        if let develop = postData[DEVELOP] as? String {
+            self._develop = develop
         }
         
-        if let likes = postData["likes"] as? Int{
+        if let programmingLang = postData[PROGRAMMING_LANGUAGE] as? String {
+            self._programmingLang = programmingLang
+        }
+        
+        if let likes = postData[LIKES] as? Int{
             self._likes = likes
         }
         
         // 投稿が取得しているアクション情報を取得
-        let actionDictionary = postData["action"] as! Dictionary<String, AnyObject>
-        if let smiles = actionDictionary["smiles"] as? Int{
+        let actionDictionary = postData[ACTION] as! Dictionary<String, AnyObject>
+        if let smiles = actionDictionary[SMILES] as? Int{
             self._smiles = smiles
         }
-        if let hearts = actionDictionary["hearts"] as? Int{
+        if let hearts = actionDictionary[HEARTS] as? Int{
             self._hearts = hearts
         }
-        if let cries = actionDictionary["cries"] as? Int{
+        if let cries = actionDictionary[CRIES] as? Int{
             self._cries = cries
         }
-        if let claps = actionDictionary["claps"] as? Int{
+        if let claps = actionDictionary[CLAPS] as? Int{
             self._claps = claps
         }
-        if let oks = actionDictionary["oks"] as? Int{
+        if let oks = actionDictionary[OKS] as? Int{
             self._oks = oks
         }
         
         
-        if let postUserId = postData["uid"] as? String {
+        if let postUserId = postData[KEY_UID] as? String {
             self._postUserId = postUserId
         }
         
@@ -126,7 +142,7 @@ class Post {
         } else {
             _likes = _likes - 1    //////////////////
         }
-        _postRef.child("likes").setValue(_likes)
+        _postRef.child(LIKES).setValue(_likes)
     }
     
     // ユーザーのアクション数をdbに反映させる。postツリーの中の個々の投稿の中でアクション数を保持する。
@@ -136,7 +152,7 @@ class Post {
         } else {
             _smiles = _smiles - 1
         }
-        _postRef.child("action").child("smiles").setValue(_smiles)
+        _postRef.child(ACTION).child(SMILES).setValue(_smiles)
     }
     
     func ajustHeart (addHeart: Bool) {
@@ -145,7 +161,7 @@ class Post {
         } else {
             _hearts = _hearts - 1
         }
-        _postRef.child("action").child("hearts").setValue(_hearts)
+        _postRef.child(ACTION).child(HEARTS).setValue(_hearts)
     }
     func ajustCry (addCry: Bool) {
         if addCry {
@@ -153,7 +169,7 @@ class Post {
         } else {
             _cries = _cries - 1
         }
-        _postRef.child("action").child("cries").setValue(_cries)
+        _postRef.child(ACTION).child(CRIES).setValue(_cries)
     }
     func ajustClap (addClap: Bool) {
         if addClap {
@@ -161,7 +177,7 @@ class Post {
         } else {
             _claps = _claps - 1
         }
-        _postRef.child("action").child("claps").setValue(_claps)
+        _postRef.child(ACTION).child(CLAPS).setValue(_claps)
     }
     func ajustOk (addOk: Bool) {
         if addOk {
@@ -169,6 +185,6 @@ class Post {
         } else {
             _oks = _oks - 1
         }
-        _postRef.child("action").child("oks").setValue(_oks)
+        _postRef.child(ACTION).child(OKS).setValue(_oks)
     }
 }
