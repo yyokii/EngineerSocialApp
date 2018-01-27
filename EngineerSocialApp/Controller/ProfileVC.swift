@@ -19,6 +19,10 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     @IBOutlet weak var userImageView: CircleView!
     @IBOutlet weak var nameLabel: UILabel!
     
+    // ベースになってるテーブルビュー関係
+    var baseTableView: UITableView!
+    var headerView: UIView!
+    
     // 獲得した総アクション数を保持
     var smiles: Int = 0
     var heats: Int = 0
@@ -318,13 +322,41 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
         imagePicker.dismiss(animated: true, completion: nil)
     }
     
+    // FIXME: 作成途中
+    func setBaseTableView() {
+        
+        let statusBarHeight = UIApplication.shared.statusBarFrame.height
+        let displayWidth = self.view.frame.width
+        let displayHeight = self.view.frame.height
+        
+        // テーブル
+        baseTableView = UITableView(frame: CGRect(x: 0, y: statusBarHeight, width: displayWidth, height: displayHeight))
+        baseTableView.register(UINib(nibName: "MyTableViewCell",bundle: nil), forCellReuseIdentifier: "MyTableViewCell")
+//        baseTableView.dataSource = self
+//        baseTableView.delegate = self
+        //コンテンツをヘッダーの高さ分だけ下げる
+        baseTableView.contentInset.top = 200
+        baseTableView.rowHeight = self.view.frame.height
+        self.view.addSubview(baseTableView)
+        
+        // オリジナルヘッダービューを作成
+        headerView = UIView(frame: CGRect(x: 0, y: -200, width: displayHeight, height: 200)) //（★..コンテンツの上にヘッダーを配置）
+        headerView.backgroundColor = UIColor.green
+        headerView.alpha = 0.5
+        baseTableView.addSubview(headerView)
+        let myLabel = UILabel(frame: CGRect(x: 0, y: 0, width: displayWidth, height: 50))
+        myLabel.text = "高さ200のオリジナルヘッダービュー"
+        myLabel.font = UIFont.systemFont(ofSize: 12)
+        myLabel.textAlignment = .center
+        headerView.addSubview(myLabel)
+    }
+    
 //    @IBAction func linkButtonTapped(_ sender: Any) {
 //        let url = URL(string: "https://www.twitter.com/yoki_engineer")!
 //        if UIApplication.shared.canOpenURL(url) {
 //            UIApplication.shared.open(url)
 //        }
 //    }
-//    
 
     // 暫時的にサインアウトボタンと投稿ボタンを設置
     @IBAction func signOutTapped(_ sender: Any) {
@@ -352,3 +384,23 @@ extension ProfileVC: UIScrollViewDelegate {
     }
     
 }
+
+// FIXME: 作成途中
+extension ProfileVC: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 100
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        return UITableViewCell()
+    }
+    
+    
+}
+
+// FIXME: 作成途中
+extension ProfileVC: UITableViewDelegate {
+    
+}
+
+
