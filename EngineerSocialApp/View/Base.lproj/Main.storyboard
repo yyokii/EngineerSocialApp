@@ -205,7 +205,7 @@
                     <connections>
                         <segue destination="t13-T6-XgR" kind="relationship" relationship="viewControllers" id="iTH-hW-j0h"/>
                         <segue destination="Z15-6N-AZU" kind="relationship" relationship="viewControllers" id="vP4-ZS-d1p"/>
-                        <segue destination="bfc-oN-6TY" kind="relationship" relationship="viewControllers" id="SXy-Yi-gae"/>
+                        <segue destination="6E7-2g-pBE" kind="relationship" relationship="viewControllers" id="J4x-aX-dRh"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lVo-Fl-KG5" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -217,7 +217,7 @@
             <objects>
                 <viewController id="bfc-oN-6TY" customClass="ProfileVC" customModule="EngineerSocialApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Qwa-bM-tUY">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="eUK-r4-HF7">
@@ -316,7 +316,7 @@
                                 </constraints>
                             </view>
                             <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" showsVerticalScrollIndicator="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iS0-ag-nY4">
-                                <rect key="frame" x="0.0" y="178" width="375" height="440"/>
+                                <rect key="frame" x="0.0" y="178" width="375" height="489"/>
                             </scrollView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -349,16 +349,17 @@
             </objects>
             <point key="canvasLocation" x="1956" y="1014"/>
         </scene>
-        <!--ProfileVC-->
+        <!--Item-->
         <scene sceneID="Qci-Hs-2Pw">
             <objects>
                 <viewController id="6E7-2g-pBE" customClass="ProfileVC" customModule="EngineerSocialApp" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="S0w-oA-z6O">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="N07-Tl-W63"/>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Item" id="uCM-YM-7pZ"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="cuD-wo-R2v" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

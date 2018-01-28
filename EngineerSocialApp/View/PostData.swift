@@ -1,5 +1,5 @@
 //
-//  PostData.swift
+//  PostDataView.swift
 //  EngineerSocialApp
 //
 //  Created by Yoki on 2017/12/30.
@@ -8,7 +8,14 @@
 import UIKit
 import Charts
 
-class PostData: UIView {
+protocol PostDataViewDelegate: class {
+    func didScrollToBottom(y: CGFloat) -> Void
+    func didScrollToTop(y: CGFloat) -> Void
+}
+
+class PostDataView: UIView {
+    
+    @IBOutlet weak var scrollView: UIScrollView!
     
     // アクション数を表示するラベル
     @IBOutlet weak var smileCountLabel: UILabel!
@@ -20,6 +27,8 @@ class PostData: UIView {
     // 円グラフのview
     @IBOutlet weak var useLanguageChart: PieChartView!
     @IBOutlet weak var developThingsChart: PieChartView!
+    
+    weak var delegate: PostDataViewDelegate?
     
     enum ChartContents {
         case devLanguage
@@ -40,8 +49,9 @@ class PostData: UIView {
     }
     
     func loadNib(){
-        let view = Bundle.main.loadNibNamed("PostData", owner: self, options: nil)?.first as! UIView
+        let view = Bundle.main.loadNibNamed("PostDataView", owner: self, options: nil)?.first as! UIView
         view.frame = self.bounds
+        self.scrollView.delegate = self
         self.addSubview(view)
     }
     
@@ -190,5 +200,17 @@ class PostData: UIView {
     
     func animationDevThingsChart() {
         developThingsChart.animate(xAxisDuration: 1.4, easingOption: .easeOutBack)
+    }
+}
+
+extension PostDataView: UIScrollViewDelegate {
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.y > 0{
+            self.delegate?.didScrollToBottom(y: scrollView.contentOffset.y)
+        }else if scrollView.contentOffset.y < 0 {
+            // cellの0番目以前はみせないようにする
+            //            scrollView.contentOffset = CGPoint(x: 0, y: 0)
+            self.delegate?.didScrollToTop(y: scrollView.contentOffset.y)
+        }
     }
 }

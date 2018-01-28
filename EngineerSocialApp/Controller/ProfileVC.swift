@@ -31,7 +31,7 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     var oks: Int = 0
     
     // 投稿データを円グラフで表示するために使用
-    var postDataView: PostData!
+    var postDataView: PostDataView!
     var devLanguagesArray = [DevelopData]()
     var devThingsArray = [DevelopData]()
     
@@ -47,45 +47,53 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUserInfo()
-        setProfileScrollView()
-        initSelectCotentLabel()
+        
+        // ユーザー情報
+//        setUserInfo()
+//        setProfileScrollView()
+        
+        // tapGestureの設定を初期化
+//        initSelectCotentLabel()
         
         imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         imagePicker.allowsEditing = true
         
-        setSelectContentLabel()
-        getGetActionsData()
+        // データ取得
+//        setSelectContentLabel()
+//        getGetActionsData()
+        
+        setBaseTableView()
+        getMyPosts()
     }
     
     // FIXME: オートレイアウト使用時、viewWillAppearでもframe.sizeは決定していないので、ここでサイズ決めのメソッドとか使用してるとまずいよ　→ didlayoutに処理を移したよん、ほかのvcでも気を付けてね
-    override func viewWillAppear(_ animated: Bool) {
-        if self.postDataView != nil {
-            self.getMyPostData()
-            self.getGetActionsData()
-        }
-    }
+//    override func viewWillAppear(_ animated: Bool) {
+//        if self.postDataView != nil {
+//            self.getMyPostData()
+//            self.getGetActionsData()
+//        }
+//    }
     
-    override func viewDidLayoutSubviews() {
-        
-        // ①開発データを表示するコンテンツを設定。データ取得した後にチャートがすでにあれば、データ更新。なければ生成して表示。
-        if self.postDataView == nil {
-            // チャートビューの生成
-            setDevelopDataView()
-            getMyPostData()
-            getGetActionsData()
-        }
-        // ②自分の過去投稿を表示するコンテンツを設定
-        if self.postTableView == nil {
-            setMyPostTableView()
-        } else {
-            // FIXME: ビューを生成せずにデータだけ更新する
-        }
-        // データ取得した後にテーブル更新
-        getMyPosts()
-        
-    }
+//    override func viewDidLayoutSubviews() {
+//
+//        // ①開発データを表示するコンテンツを設定。データ取得した後にチャートがすでにあれば、データ更新。なければ生成して表示。
+//        if self.postDataView == nil {
+//            // チャートビューの生成
+//            setDevelopDataView()
+//            getMyPostData()
+//            getGetActionsData()
+//        }
+//        // ②自分の過去投稿を表示するコンテンツを設定
+//        if self.postTableView == nil {
+//            setMyPostTableView()
+//        } else {
+//            // FIXME: ビューを生成せずにデータだけ更新する
+//        }
+//        // データ取得した後にテーブル更新
+//        getMyPosts()
+//
+//    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -237,7 +245,10 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
                                 }
                             }
                             self.postTableView.posts = self.myPosts
-                            self.postTableView.reloadData()
+                            if let _ = self.postTableView {
+                                // 多分ないが（描画よりデータ取得の方が時間かかるのでデータ取れたころにはviewはあるはず）、nilをケア
+                                self.postTableView.reloadData()
+                            }
                         }
                     }
                 } else {
@@ -249,7 +260,7 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     
     /// （個人投稿データ（開発言語））下部の横スクロールビュー内のコンテンツを設置
     func setDevelopDataView() {
-            self.postDataView = PostData(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.profileScrollView.frame.height))
+            self.postDataView = PostDataView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.profileScrollView.frame.height))
             profileScrollView.addSubview(postDataView)
     }
     
@@ -331,12 +342,14 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
         
         // テーブル
         baseTableView = UITableView(frame: CGRect(x: 0, y: statusBarHeight, width: displayWidth, height: displayHeight))
-        baseTableView.register(UINib(nibName: "MyTableViewCell",bundle: nil), forCellReuseIdentifier: "MyTableViewCell")
-//        baseTableView.dataSource = self
-//        baseTableView.delegate = self
-        //コンテンツをヘッダーの高さ分だけ下げる
+        baseTableView.register(UINib(nibName: "BaseTableViewCell",bundle: nil), forCellReuseIdentifier: "BaseTableViewCell")
+        baseTableView.dataSource = self
+        baseTableView.delegate = self
+        // コンテンツをヘッダーの高さ分だけ下げる
         baseTableView.contentInset.top = 200
+        // FIXME: cellの高さは調整の余地あり
         baseTableView.rowHeight = self.view.frame.height
+        baseTableView.register(UITableViewCell.self, forCellReuseIdentifier: "MyCell")
         self.view.addSubview(baseTableView)
         
         // オリジナルヘッダービューを作成
@@ -370,37 +383,105 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     @IBAction func postTapped(_ sender: Any) {
         performSegue(withIdentifier: "toPost", sender: nil)
     }
-    
 }
 
-extension ProfileVC: UIScrollViewDelegate {
-    
-    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-        setSelectContentLabel()
-    }
-    
-    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-        setSelectContentLabel()
-    }
-    
-}
+// FIXME: 挙動がおかしかったので一旦コメントアウト（baseTableView入れた時におかしくなってた）→ cell内のscrollを制御する必要がある
+//extension ProfileVC: UIScrollViewDelegate {
+//
+//    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
+//        setSelectContentLabel()
+//    }
+//
+//    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+//        setSelectContentLabel()
+//    }
+//
+//}
 
 // FIXME: 作成途中
-extension ProfileVC: UITableViewDataSource {
+extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 100
+        return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        return UITableViewCell()
+        let cell = tableView.dequeueReusableCell(withIdentifier: "BaseTableViewCell", for: indexPath) as! BaseTableViewCell
+        cell.setScrollView(contentWidth: self.view.frame.width*2)
+        let contentHeight = self.view.frame.height - UIApplication.shared.statusBarFrame.height - 200 + 100
+        
+        // ①投稿データviewの生成
+        postDataView = PostDataView(frame:  CGRect(x: 0, y: 0, width: self.view.frame.width, height: contentHeight))
+        postDataView.scrollView.isScrollEnabled = false
+        postDataView.delegate = self
+
+        // ②過去の投稿を表示するviewの生成
+        let frame = CGRect(x: self.view.frame.width, y: 0, width: self.view.frame.width, height: contentHeight)
+        self.postTableView = PostTableView(frame: frame,style: UITableViewStyle.plain)
+        postTableView.posts = myPosts
+        // セルの高さを可変にする
+        postTableView.estimatedRowHeight = 200
+        postTableView.rowHeight = UITableViewAutomaticDimension
+        postTableView.isScrollEnabled = false
+        postTableView.postTableViewDelegate = self
+        
+        cell.scrollView.addSubview(postDataView)
+        cell.scrollView.addSubview(postTableView)
+        return cell
     }
     
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        // 下に引っ張ったときは、ヘッダー位置を計算して動かないようにする
+        if scrollView.contentOffset.y < -200 {
+            self.headerView.frame = CGRect(x: 0, y: scrollView.contentOffset.y, width: self.view.frame.width, height: 200)
+        }
+        
+        guard let _ = postDataView else {
+            return
+        }
+        
+        if scrollView.contentOffset.y > -100{
+            // cell内のコンテンツだけを動かせる
+            baseTableView.contentOffset = CGPoint(x: 0, y: -100)
+            baseTableView.isScrollEnabled = false
+            // 下部のコンテンツのスクロールの設定を変更
+            postDataView.scrollView.isScrollEnabled = true
+            postTableView.isScrollEnabled = true
+        }else {
+            baseTableView.isScrollEnabled = true
+            postDataView.scrollView.isScrollEnabled = false
+            postTableView.isScrollEnabled = false
+        }
+    }
     
 }
 
 // FIXME: 作成途中
-extension ProfileVC: UITableViewDelegate {
+extension ProfileVC: PostDataViewDelegate{
+    func didScrollToBottom(y: CGFloat) {
+    }
     
+    func didScrollToTop(y: CGFloat) {
+        if baseTableView.contentOffset.y <= 0 {
+            baseTableView.isScrollEnabled = true
+            postDataView.scrollView.isScrollEnabled = false
+            // -100の設定をすることで挙動のカクツキが改善。ないとスクロールが2タップぐらい反応しない
+            baseTableView.contentOffset = CGPoint(x: 0, y: -100)
+        }
+    }
 }
 
+extension ProfileVC: PostTableViewDelegate{
+    func didTableScrollToBottom(y: CGFloat) {
+    }
+    
+    func didTableScrollToTop(y: CGFloat) {
+        if baseTableView.contentOffset.y <= 0 {
+            baseTableView.isScrollEnabled = true
+            postTableView.isScrollEnabled = false
+            // -100の設定をすることで挙動のカクツキが改善。ないとスクロールが2タップぐらい反応しない
+            baseTableView.contentOffset = CGPoint(x: 0, y: -100)
+        }
+    }
+}
 

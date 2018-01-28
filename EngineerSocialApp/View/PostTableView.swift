@@ -8,8 +8,8 @@
 import UIKit
 
 protocol PostTableViewDelegate: class {
-    func didScrollToBottom(y: CGFloat) -> Void
-    func didScrollToTop(y: CGFloat) -> Void
+    func didTableScrollToBottom(y: CGFloat) -> Void
+    func didTableScrollToTop(y: CGFloat) -> Void
 }
 
 class PostTableView: UITableView {
@@ -54,7 +54,15 @@ extension PostTableView: UITableViewDataSource {
 }
 
 extension PostTableView: UITableViewDelegate {
-    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        if scrollView.contentOffset.y > 0{
+            self.postTableViewDelegate?.didTableScrollToBottom(y: scrollView.contentOffset.y)
+        }else if scrollView.contentOffset.y < 0 {
+            // cellの0番目以前はみせないようにする
+            //            scrollView.contentOffset = CGPoint(x: 0, y: 0)
+            self.postTableViewDelegate?.didTableScrollToTop(y: scrollView.contentOffset.y)
+        }
+    }
 }
 
 
