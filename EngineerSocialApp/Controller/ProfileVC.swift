@@ -9,6 +9,8 @@ import UIKit
 import Firebase
 import SwiftKeychainWrapper
 
+/// ＜初回＞didLoad：tableviewセット　didLayout：tableのheaderをセット、ユーザーの情報を取得して表示
+/// ＜初回以後＞willappear：投稿情報、過去投稿の最新データを取得
 class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate{
     
     // コンテンツ切り替え用のラベル
@@ -21,7 +23,9 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     
     // ベースになってるテーブルビュー関係
     var baseTableView: UITableView!
-    var headerView: UIView!
+    var headerView: ProfilehHeaderView!
+    
+    let hederViewHeight = 350
     
     // 獲得した総アクション数を保持
     var smiles: Int = 0
@@ -42,9 +46,6 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     // プロフィール画像を設定
     var imagePicker: UIImagePickerController!
     
-    // スクロールビューテスト
-    var scrollBeginingPoint: CGPoint!
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -54,46 +55,35 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
         
         // tapGestureの設定を初期化
 //        initSelectCotentLabel()
+
+//        setSelectContentLabel()
         
         imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         imagePicker.allowsEditing = true
         
-        // データ取得
-//        setSelectContentLabel()
-//        getGetActionsData()
-        
         setBaseTableView()
+        // ユーザー情報を表示するヘッダーviewを設定
+        setHeaderView()
+        // ユーザ情報表示
+        FirebaseLogic.setUserInfo(nameLabel: headerView.userNameLabel, userImageView: headerView.userImageView)
+        // コンテンツの表示
+        getMyPostData()
+        getGetActionsData()
         getMyPosts()
     }
     
-    // FIXME: オートレイアウト使用時、viewWillAppearでもframe.sizeは決定していないので、ここでサイズ決めのメソッドとか使用してるとまずいよ　→ didlayoutに処理を移したよん、ほかのvcでも気を付けてね
-//    override func viewWillAppear(_ animated: Bool) {
-//        if self.postDataView != nil {
-//            self.getMyPostData()
-//            self.getGetActionsData()
-//        }
-//    }
-    
-//    override func viewDidLayoutSubviews() {
-//
-//        // ①開発データを表示するコンテンツを設定。データ取得した後にチャートがすでにあれば、データ更新。なければ生成して表示。
-//        if self.postDataView == nil {
-//            // チャートビューの生成
-//            setDevelopDataView()
-//            getMyPostData()
-//            getGetActionsData()
-//        }
-//        // ②自分の過去投稿を表示するコンテンツを設定
-//        if self.postTableView == nil {
-//            setMyPostTableView()
-//        } else {
-//            // FIXME: ビューを生成せずにデータだけ更新する
-//        }
-//        // データ取得した後にテーブル更新
-//        getMyPosts()
-//
-//    }
+    override func viewWillAppear(_ animated: Bool) {
+        if headerView != nil {
+            FirebaseLogic.setUserInfo(nameLabel: headerView.userNameLabel, userImageView: headerView.userImageView)
+        }
+        
+        if postDataView != nil {
+            // 投稿データを取得してviewの更新
+            self.getMyPostData()
+            self.getGetActionsData()
+        }
+    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -112,41 +102,6 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
         let postLabelTap = UITapGestureRecognizer(target: self, action: #selector(postLabelTapped))
         myPostLabel.isUserInteractionEnabled = true
         myPostLabel.addGestureRecognizer(postLabelTap)
-    }
-    
-    func setProfileScrollView() {
-        profileScrollView.delegate = self
-        self.profileScrollView.contentSize.width = self.view.frame.width*2
-        self.profileScrollView.isPagingEnabled = true
-    }
-    
-    func setUserInfo() {
-        
-        let loginUser = DataService.ds.REF_USER_CURRENT
-        
-        loginUser.child(NAME).observeSingleEvent(of: .value, with: { (snapshot) in
-            if let name = snapshot.value {
-                self.nameLabel.text = name as? String
-            }
-            
-        }) { (error) in
-            print(error.localizedDescription)
-        }
-        
-        let userImageRef = DataService.ds.REF_USER_IMAGES.child(loginUser.key)
-        userImageRef.data(withMaxSize: 2 * 1024 * 1024, completion: { (data, error) in
-            if error != nil {
-                print("Error: Firebase storageからアイコン画像の取得失敗")
-            } else {
-                print("OK: Firebase storageからアイコン取得成功")
-                if let imgData = data {
-                    if let img = UIImage(data: imgData) {
-                        self.userImageView.image = img
-                        //FeedVC.imageCache.setObject(img, forKey: post.imageUrl as NSString)
-                    }
-                }
-            }
-        })
     }
     
     /// 獲得したアクション数を取得
@@ -208,6 +163,8 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
         }
     }
     
+    
+    /// 過去の投稿を取得
     func getMyPosts() {
         DataService.ds.REF_USER_CURRENT.child(POSTS).observeSingleEvent(of: .value) { (snapshot) in
             print("取得したデータ：\(snapshot)")
@@ -238,11 +195,6 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
                                 
                                 // 投稿データが１つずつ追加されているのがわかる
                                 print("過去の投稿データ：\(self.myPosts)")
-                                
-                                if self.myPosts.count == myPostsKey.count {
-                                    // 過去の投稿情報が全件取得完了 → テーブルビューに表示 FIXME: ここもっとクールに書きたい
-                                    //self.setMyPostTableView()
-                                }
                             }
                             self.postTableView.posts = self.myPosts
                             if let _ = self.postTableView {
@@ -256,23 +208,6 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
                 }
             }
         }
-    }
-    
-    /// （個人投稿データ（開発言語））下部の横スクロールビュー内のコンテンツを設置
-    func setDevelopDataView() {
-            self.postDataView = PostDataView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.profileScrollView.frame.height))
-            profileScrollView.addSubview(postDataView)
-    }
-    
-    /// （自分の過去投稿を表示するテーブルビュー）下部の横スクロールビュー内のコンテンツを設置
-    func setMyPostTableView(){
-        let frame = CGRect(x: self.view.frame.width, y: 0, width: self.view.frame.width, height: self.profileScrollView.frame.height)
-        self.postTableView = PostTableView(frame: frame,style: UITableViewStyle.plain)
-        postTableView.posts = myPosts
-        // セルの高さを可変にする
-        postTableView.estimatedRowHeight = 200
-        postTableView.rowHeight = UITableViewAutomaticDimension
-        self.profileScrollView.addSubview(postTableView)
     }
     
     @objc func dataLabelTapped() {
@@ -333,7 +268,6 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
         imagePicker.dismiss(animated: true, completion: nil)
     }
     
-    // FIXME: 作成途中
     func setBaseTableView() {
         
         let statusBarHeight = UIApplication.shared.statusBarFrame.height
@@ -346,30 +280,18 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
         baseTableView.dataSource = self
         baseTableView.delegate = self
         // コンテンツをヘッダーの高さ分だけ下げる
-        baseTableView.contentInset.top = 200
-        // FIXME: cellの高さは調整の余地あり
+        baseTableView.contentInset.top = CGFloat(hederViewHeight)
         baseTableView.rowHeight = self.view.frame.height
         baseTableView.register(UITableViewCell.self, forCellReuseIdentifier: "MyCell")
         self.view.addSubview(baseTableView)
-        
-        // オリジナルヘッダービューを作成
-        headerView = UIView(frame: CGRect(x: 0, y: -200, width: displayHeight, height: 200)) //（★..コンテンツの上にヘッダーを配置）
-        headerView.backgroundColor = UIColor.green
-        headerView.alpha = 0.5
-        baseTableView.addSubview(headerView)
-        let myLabel = UILabel(frame: CGRect(x: 0, y: 0, width: displayWidth, height: 50))
-        myLabel.text = "高さ200のオリジナルヘッダービュー"
-        myLabel.font = UIFont.systemFont(ofSize: 12)
-        myLabel.textAlignment = .center
-        headerView.addSubview(myLabel)
     }
     
-//    @IBAction func linkButtonTapped(_ sender: Any) {
-//        let url = URL(string: "https://www.twitter.com/yoki_engineer")!
-//        if UIApplication.shared.canOpenURL(url) {
-//            UIApplication.shared.open(url)
-//        }
-//    }
+    func setHeaderView() {
+        // オリジナルヘッダービューを作成
+        headerView = ProfilehHeaderView(frame: CGRect(x: 0, y: -CGFloat(hederViewHeight), width: self.view.frame.width, height: CGFloat(hederViewHeight)))
+        headerView.backgroundColor = UIColor.green
+        baseTableView.addSubview(headerView)
+    }
 
     // 暫時的にサインアウトボタンと投稿ボタンを設置
     @IBAction func signOutTapped(_ sender: Any) {
@@ -398,7 +320,6 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
 //
 //}
 
-// FIXME: 作成途中
 extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -408,7 +329,7 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BaseTableViewCell", for: indexPath) as! BaseTableViewCell
         cell.setScrollView(contentWidth: self.view.frame.width*2)
-        let contentHeight = self.view.frame.height - UIApplication.shared.statusBarFrame.height - 200 + 100
+        let contentHeight = self.view.frame.height - UIApplication.shared.statusBarFrame.height - CGFloat(hederViewHeight) + CGFloat(hederViewHeight/2)
         
         // ①投稿データviewの生成
         postDataView = PostDataView(frame:  CGRect(x: 0, y: 0, width: self.view.frame.width, height: contentHeight))
@@ -418,7 +339,6 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
         // ②過去の投稿を表示するviewの生成
         let frame = CGRect(x: self.view.frame.width, y: 0, width: self.view.frame.width, height: contentHeight)
         self.postTableView = PostTableView(frame: frame,style: UITableViewStyle.plain)
-        postTableView.posts = myPosts
         // セルの高さを可変にする
         postTableView.estimatedRowHeight = 200
         postTableView.rowHeight = UITableViewAutomaticDimension
@@ -432,17 +352,17 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         // 下に引っ張ったときは、ヘッダー位置を計算して動かないようにする
-        if scrollView.contentOffset.y < -200 {
-            self.headerView.frame = CGRect(x: 0, y: scrollView.contentOffset.y, width: self.view.frame.width, height: 200)
+        if scrollView.contentOffset.y < -CGFloat(hederViewHeight) {
+            self.headerView.frame = CGRect(x: 0, y: scrollView.contentOffset.y, width: self.view.frame.width, height: CGFloat(hederViewHeight))
         }
         
         guard let _ = postDataView else {
             return
         }
         
-        if scrollView.contentOffset.y > -100{
+        if scrollView.contentOffset.y > -CGFloat(hederViewHeight/2){
             // cell内のコンテンツだけを動かせる
-            baseTableView.contentOffset = CGPoint(x: 0, y: -100)
+            baseTableView.contentOffset = CGPoint(x: 0, y: -CGFloat(hederViewHeight/2))
             baseTableView.isScrollEnabled = false
             // 下部のコンテンツのスクロールの設定を変更
             postDataView.scrollView.isScrollEnabled = true
@@ -456,7 +376,6 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
     
 }
 
-// FIXME: 作成途中
 extension ProfileVC: PostDataViewDelegate{
     func didScrollToBottom(y: CGFloat) {
     }
@@ -465,8 +384,8 @@ extension ProfileVC: PostDataViewDelegate{
         if baseTableView.contentOffset.y <= 0 {
             baseTableView.isScrollEnabled = true
             postDataView.scrollView.isScrollEnabled = false
-            // -100の設定をすることで挙動のカクツキが改善。ないとスクロールが2タップぐらい反応しない
-            baseTableView.contentOffset = CGPoint(x: 0, y: -100)
+            // -100（固定させるヘッダーの高さ）の設定をすることで挙動のカクツキが改善。ないとスクロールが2タップぐらい反応しない
+            baseTableView.contentOffset = CGPoint(x: 0, y: -CGFloat(hederViewHeight/2))
         }
     }
 }
@@ -479,8 +398,8 @@ extension ProfileVC: PostTableViewDelegate{
         if baseTableView.contentOffset.y <= 0 {
             baseTableView.isScrollEnabled = true
             postTableView.isScrollEnabled = false
-            // -100の設定をすることで挙動のカクツキが改善。ないとスクロールが2タップぐらい反応しない
-            baseTableView.contentOffset = CGPoint(x: 0, y: -100)
+            // -100（固定させるヘッダーの高さ）の設定をすることで挙動のカクツキが改善。ないとスクロールが2タップぐらい反応しない
+            baseTableView.contentOffset = CGPoint(x: 0, y: -CGFloat(hederViewHeight/2))
         }
     }
 }

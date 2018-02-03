@@ -293,7 +293,7 @@ class PostTableViewCell: UITableViewCell {
                 self.clapLabel.notSelectedLabel()
                 self.post.ajustClap(addClap: false)
                 self.clapRef.removeValue()
-                self.addPostUserGetActinos(actionType: ActionType.smile, isAdd: false)
+                self.addPostUserGetActinos(actionType: ActionType.clap, isAdd: false)
             }
             self.clapLabel.isEnabled = true
         })
