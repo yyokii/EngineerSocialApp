@@ -124,14 +124,15 @@ class FeedVC: UIViewController{
 extension FeedVC: PostTableViewDelegate{
     func didSelectCell(postUserId: String) {
         selectedPostUserId = postUserId
-        performSegue(withIdentifier: TO_POST_USER_PROFILE, sender: nil)
+        if selectedPostUserId != DataService.ds.REF_USER_CURRENT.key{
+            performSegue(withIdentifier: TO_POST_USER_PROFILE, sender: nil)
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == TO_POST_USER_PROFILE {
             let profileVC = segue.destination as! ProfileVC
             profileVC.profileType = ProfileVC.ProfileType.others
-            // FIXME: テスト用に自分のキーでも遷移してる。自分のキーの時はぶるぶるしたいね
             profileVC.uid = selectedPostUserId!
         }
     }
