@@ -19,6 +19,7 @@ class FeedVC: UIViewController{
     var imagePicker: UIImagePickerController!
     static var imageCache: NSCache<NSString, UIImage> = NSCache()
     var postTableView: PostTableView!
+    var selectedPostUserId: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -70,6 +71,7 @@ class FeedVC: UIViewController{
     func setPostTableView(){
         let frame = CGRect(x: 0, y: 0, width: self.mainView.frame.width, height: self.mainView.frame.height)
         self.postTableView = PostTableView(frame: frame,style: UITableViewStyle.plain)
+        postTableView.postTableViewDelegate = self
         postTableView.posts = self.posts
         // セルの高さを可変にする
         postTableView.estimatedRowHeight = 100
@@ -111,13 +113,36 @@ class FeedVC: UIViewController{
         let keychainResult = KeychainWrapper.standard.removeObject(forKey: KEY_UID)
         print("JESS: ID removed from keychain \(keychainResult)")
         try! FIRAuth.auth()?.signOut()
-        performSegue(withIdentifier: "goToSignIn", sender: nil)
+        performSegue(withIdentifier: TO_SIGN_IN, sender: nil)
     }
 
     @IBAction func postTapped(_ sender: Any) {
-        performSegue(withIdentifier: "toPost", sender: nil)
+        performSegue(withIdentifier: TO_POST, sender: nil)
     }
 }
+
+extension FeedVC: PostTableViewDelegate{
+    func didSelectCell(postUserId: String) {
+        selectedPostUserId = postUserId
+        performSegue(withIdentifier: TO_POST_USER_PROFILE, sender: nil)
+    }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == TO_POST_USER_PROFILE {
+            let profileVC = segue.destination as! ProfileVC
+            profileVC.profileType = ProfileVC.ProfileType.others
+            // FIXME: テスト用に自分のキーでも遷移してる。自分のキーの時はぶるぶるしたいね
+            profileVC.uid = selectedPostUserId!
+        }
+    }
+    
+    func didTableScrollToBottom(y: CGFloat) {
+        // なにもしない
+    }
+    
+    func didTableScrollToTop(y: CGFloat) {
+        // なにもしない
+    }
+}
     
 

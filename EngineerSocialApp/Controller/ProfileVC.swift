@@ -9,6 +9,10 @@ import UIKit
 import Firebase
 import SwiftKeychainWrapper
 
+
+/// 自分のプロフィール表示、他のユーザーのプロフィール表示の2パターン使い方あり
+/// （デフォルトは自分のプロフィールを表示、他のユーザーのものを表示する場合はタイプとuidを遷移前にセットしてね）
+/// 自分のプロフィールでは：画像変更可能、投稿にアクションできない、、、、とかとか
 /// ＜初回＞didLoad：tableviewセット　didLayout：tableのheaderをセット、ユーザーの情報を取得して表示
 /// ＜初回以後＞willappear：投稿情報、過去投稿の最新データを取得
 class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate{
@@ -21,6 +25,18 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     @IBOutlet weak var userImageView: CircleView!
     @IBOutlet weak var nameLabel: UILabel!
     
+    enum ProfileType {
+        case myProfile
+        case others
+    }
+    /// 自分のプロフィールか他の人のかで変化する変数
+    var profileType: ProfileType = ProfileType.myProfile
+    /// タブからこの画面使用の場合はログインユーザーのuid、その他の場合は他のユーザーuidを格納
+    var uid = ""
+    var baseTableViewHeight: CGFloat?
+    /// （他のひとのプロフィールの場合）フォロー状態かどうかを判断する（true: unfollowできる、false： followできる）
+    var isFollowState = false
+
     // ベースになってるテーブルビュー関係
     var baseTableView: UITableView!
     var headerView: ProfilehHeaderView!
@@ -43,50 +59,63 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     var postTableView: PostTableView!
     var myPosts = [Post]()
 
-    // プロフィール画像を設定
+    /// プロフィール画像を設定
     var imagePicker: UIImagePickerController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // ユーザー情報
-//        setUserInfo()
-//        setProfileScrollView()
-        
         // tapGestureの設定を初期化
 //        initSelectCotentLabel()
-
 //        setSelectContentLabel()
         
         imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         imagePicker.allowsEditing = true
         
+        /// 自分の？それとも他の人の？を判断
+        initProfileViewType()
+        
         setBaseTableView()
-        // ユーザー情報を表示するヘッダーviewを設定
+        /// ユーザー情報を表示するヘッダーviewを設定
         setHeaderView()
-        // ユーザ情報表示
-        FirebaseLogic.setUserInfo(nameLabel: headerView.userNameLabel, userImageView: headerView.userImageView)
+        // ヘッダーviewの設定（ユーザ情報表示、フォローボタンの状態）
+        FirebaseLogic.setUserName(uid: uid, nameLabel: headerView.userNameLabel)
+        FirebaseLogic.setUserImage(uid: uid, userImageView: headerView.userImageView)
+        applySettingBtn()
         // コンテンツの表示
         getMyPostData()
-        getGetActionsData()
+        setActionsData()
         getMyPosts()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         if headerView != nil {
-            FirebaseLogic.setUserInfo(nameLabel: headerView.userNameLabel, userImageView: headerView.userImageView)
+            FirebaseLogic.setUserName(uid: uid, nameLabel: headerView.userNameLabel)
+            FirebaseLogic.setUserImage(uid: uid, userImageView: headerView.userImageView)
         }
         
         if postDataView != nil {
             // 投稿データを取得してviewの更新
-            self.getMyPostData()
-            self.getGetActionsData()
+            getMyPostData()
+            setActionsData()
         }
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
+    }
+    
+    /// 自分のプロフィール画面か他の人の画面かでviewの位置や機能を分ける。フォロー非表示、設定表示、
+    func initProfileViewType(){
+        if profileType == ProfileType.myProfile {
+            uid = DataService.ds.REF_USER_CURRENT.key
+            baseTableViewHeight = UIApplication.shared.statusBarFrame.height
+            print("自分のプロフィール画面")
+        } else if profileType == ProfileType.others {
+            baseTableViewHeight = (self.navigationController?.navigationBar.frame.height)! + UIApplication.shared.statusBarFrame.height
+            print("他のユーザーのプロフィール画面")
+        }
     }
     
     func initSelectCotentLabel(){
@@ -104,34 +133,32 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
         myPostLabel.addGestureRecognizer(postLabelTap)
     }
     
-    /// 獲得したアクション数を取得
-    func getGetActionsData() {
-        // 開発言語のデータ取得
-        DataService.ds.REF_USER_CURRENT.child(GET_ACTIONS).observeSingleEvent(of: .value) { (snapshot) in
-            
-            if let getActions = snapshot.children.allObjects as? [FIRDataSnapshot]{
-                print(getActions)
-                for getAction in getActions{
-                    switch getAction.key {
-                    case SMILES:
-                        self.smiles = getAction.value as! Int
-                    case HEARTS:
-                        self.heats = getAction.value as! Int
-                    case CRIES:
-                        self.cries = getAction.value as! Int
-                    case CLAPS:
-                        self.claps = getAction.value as!Int
-                    case OKS:
-                        self.oks = getAction.value as! Int
-                    default:
-                        break
-                    }
+    /// 自分のプロフィールの際は設定ボタンを表示する
+    func applySettingBtn(){
+        if profileType == ProfileType.myProfile {
+            // 設定ボタンをフォローボタンを代わりに表示
+        } else if profileType == ProfileType.others {
+            // フォロー状態を取得してヘッダーのボタンに反映
+            FirebaseLogic.fetchFollowState(uid: uid, completion: { (isFollowState) in
+                if isFollowState {
+                    // フォロー済みの場合
+                    self.isFollowState = true
+                    self.headerView.applyUnFollowBtn()
+                } else {
+                    // 未フォローの場合
+                    self.headerView.applyFollowBtn()
                 }
-            }
-            self.postDataView.setGetActionsCountLabel(smileCount: self.smiles.description, heartCount: self.heats.description, cryCount: self.cries.description, clapCount: self.claps.description, okCount: self.oks.description)
+            })
         }
     }
     
+    func setActionsData(){
+        FirebaseLogic.getGetActionsData(uid: uid) { (dict) in
+            self.postDataView.setGetActionsCountLabel(smileCount: String(describing: dict[SMILES]!), heartCount: String(describing: dict[HEARTS]!), cryCount: String(describing: dict[CRIES]!), clapCount: String(describing: dict[CLAPS]!), okCount: String(describing: dict[OKS]!))
+        }
+    }
+    
+    //FIXME: カレントユーザーではなく、uidを指定して取得する
     /// 開発言語と開発項目のデータを取得して配列に保存
     func getMyPostData() {
         // 開発言語のデータ取得
@@ -269,13 +296,12 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     }
     
     func setBaseTableView() {
-        
-        let statusBarHeight = UIApplication.shared.statusBarFrame.height
         let displayWidth = self.view.frame.width
         let displayHeight = self.view.frame.height
         
         // テーブル
-        baseTableView = UITableView(frame: CGRect(x: 0, y: statusBarHeight, width: displayWidth, height: displayHeight))
+        print("テーブルのy座標：\(baseTableViewHeight!)")
+        baseTableView = UITableView(frame: CGRect(x: 0, y: baseTableViewHeight!, width: displayWidth, height: displayHeight))
         baseTableView.register(UINib(nibName: "BaseTableViewCell",bundle: nil), forCellReuseIdentifier: "BaseTableViewCell")
         baseTableView.dataSource = self
         baseTableView.delegate = self
@@ -290,6 +316,7 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
         // オリジナルヘッダービューを作成
         headerView = ProfilehHeaderView(frame: CGRect(x: 0, y: -CGFloat(hederViewHeight), width: self.view.frame.width, height: CGFloat(hederViewHeight)))
         headerView.backgroundColor = UIColor.green
+        headerView.profilehHeaderViewDelegate = self
         baseTableView.addSubview(headerView)
     }
 
@@ -329,7 +356,7 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BaseTableViewCell", for: indexPath) as! BaseTableViewCell
         cell.setScrollView(contentWidth: self.view.frame.width*2)
-        let contentHeight = self.view.frame.height - UIApplication.shared.statusBarFrame.height - CGFloat(hederViewHeight) + CGFloat(hederViewHeight/2)
+        let contentHeight = self.view.frame.height - baseTableViewHeight! - CGFloat(hederViewHeight) + CGFloat(hederViewHeight/2)
         
         // ①投稿データviewの生成
         postDataView = PostDataView(frame:  CGRect(x: 0, y: 0, width: self.view.frame.width, height: contentHeight))
@@ -391,6 +418,11 @@ extension ProfileVC: PostDataViewDelegate{
 }
 
 extension ProfileVC: PostTableViewDelegate{
+    func didSelectCell(postUserId: String) {
+        // なにもしない
+    }
+    
+    // Fixme:使わないっぽいので消そうぜ
     func didTableScrollToBottom(y: CGFloat) {
     }
     
@@ -404,3 +436,20 @@ extension ProfileVC: PostTableViewDelegate{
     }
 }
 
+extension ProfileVC: ProfilehHeaderViewDelegate{
+    func followButtonTapped() {
+        if (isFollowState){
+            // 「フォローをはずす」場合
+            FirebaseLogic.unfollowAction(uid: uid, completion: { [weak self] in
+                self?.isFollowState  = false
+                self?.headerView.applyFollowBtn()
+            })
+        } else {
+            // 「フォローする」場合
+            FirebaseLogic.followAction(uid: uid, completion: { [weak self] in
+                self?.isFollowState  = true
+                self?.headerView.applyUnFollowBtn()
+            })
+        }
+    }
+}

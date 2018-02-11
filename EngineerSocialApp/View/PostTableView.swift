@@ -8,6 +8,7 @@
 import UIKit
 
 protocol PostTableViewDelegate: class {
+    func didSelectCell(postUserId: String) -> Void
     func didTableScrollToBottom(y: CGFloat) -> Void
     func didTableScrollToTop(y: CGFloat) -> Void
 }
@@ -54,6 +55,11 @@ extension PostTableView: UITableViewDataSource {
 }
 
 extension PostTableView: UITableViewDelegate {
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        postTableViewDelegate?.didSelectCell(postUserId: posts[indexPath.row].postUserId)
+    }
+    
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
         if scrollView.contentOffset.y > 0{
             self.postTableViewDelegate?.didTableScrollToBottom(y: scrollView.contentOffset.y)

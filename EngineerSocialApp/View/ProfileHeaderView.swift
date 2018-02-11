@@ -6,13 +6,29 @@
 //
 
 import UIKit
+import SwiftKeychainWrapper
+import FirebaseAuth
+
+protocol ProfilehHeaderViewDelegate: class {
+    func followButtonTapped() -> Void
+}
 
 class ProfilehHeaderView: UIView {
     
     @IBOutlet weak var userImageView: CircleView!
     @IBOutlet weak var userNameLabel: UILabel!
     @IBOutlet weak var userDescription: UITextView!
-    @IBOutlet weak var follorImageView: UIImageView!
+    @IBOutlet weak var followBtn: UIButton!
+    
+    weak var profilehHeaderViewDelegate: ProfilehHeaderViewDelegate?
+    
+    // FIXME: デバッグ用
+    @IBAction func signOutTap(_ sender: Any) {
+        let keychainResult = KeychainWrapper.standard.removeObject(forKey: KEY_UID)
+        print("JESS: ID removed from keychain \(keychainResult)")
+        try! FIRAuth.auth()?.signOut()
+    }
+    
     
     override init(frame: CGRect){
         super.init(frame: frame)
@@ -27,6 +43,22 @@ class ProfilehHeaderView: UIView {
     func loadNib(){
         let view = Bundle.main.loadNibNamed("ProfileHeaderView", owner: self, options: nil)?.first as! UIView
         view.frame = self.bounds
+        // dbからフォロー状態を取得できるまでは反応させない
+        followBtn.isEnabled = false
         self.addSubview(view)
+    }
+    
+    @IBAction func tapFollowBtn(_ sender: Any) {
+        profilehHeaderViewDelegate?.followButtonTapped()
+    }
+    
+    func applyFollowBtn(){
+        followBtn.setTitle("フォローする", for: .normal)
+        followBtn.isEnabled = true
+    }
+    
+    func applyUnFollowBtn(){
+        followBtn.setTitle("フォローをはずす", for: .normal)
+        followBtn.isEnabled = true
     }
 }

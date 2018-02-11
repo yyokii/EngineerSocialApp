@@ -24,6 +24,7 @@
 		B6DDE269201E0CD200856FF7 /* ProfileHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DDE268201E0CD200856FF7 /* ProfileHeaderView.swift */; };
 		B6DDE26B201E0E8400856FF7 /* ProfileHeaderView.xib in Resources */ = {isa = PBXBuildFile; fileRef = B6DDE26A201E0E8400856FF7 /* ProfileHeaderView.xib */; };
 		B6DDE26D20261ACE00856FF7 /* FirebaseLogic.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DDE26C20261ACE00856FF7 /* FirebaseLogic.swift */; };
+		B6DDE26F2029E80200856FF7 /* SearchVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6DDE26E2029E80200856FF7 /* SearchVC.swift */; };
 		B6F25CE21FEEA002007A4A6A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = B6F25CE11FEEA002007A4A6A /* AppDelegate.swift */; };
 		B6F25CE71FEEA002007A4A6A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = B6F25CE51FEEA002007A4A6A /* Main.storyboard */; };
 		B6F25CE91FEEA002007A4A6A /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = B6F25CE81FEEA002007A4A6A /* Assets.xcassets */; };
@@ -90,6 +91,7 @@
 		B6DDE268201E0CD200856FF7 /* ProfileHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileHeaderView.swift; sourceTree = "<group>"; };
 		B6DDE26A201E0E8400856FF7 /* ProfileHeaderView.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = ProfileHeaderView.xib; sourceTree = "<group>"; };
 		B6DDE26C20261ACE00856FF7 /* FirebaseLogic.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseLogic.swift; sourceTree = "<group>"; };
+		B6DDE26E2029E80200856FF7 /* SearchVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchVC.swift; sourceTree = "<group>"; };
 		B6F25CDE1FEEA002007A4A6A /* EngineerSocialApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = EngineerSocialApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		B6F25CE11FEEA002007A4A6A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		B6F25CE61FEEA002007A4A6A /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -249,6 +251,7 @@
 				B6F25D591FEF575E007A4A6A /* PostVC.swift */,
 				B614A2B21FF28D2F001E1F80 /* PopOverContentViewController.swift */,
 				B6C614011FF78032009FF96D /* ProfileVC.swift */,
+				B6DDE26E2029E80200856FF7 /* SearchVC.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -267,15 +270,15 @@
 				B6C614051FF8A573009FF96D /* PostTableView.swift */,
 				B6C614071FF8A5B6009FF96D /* PostTableViewCell.swift */,
 				B6DDE264201D883E00856FF7 /* BaseTableViewCell.swift */,
+				B6DDE268201E0CD200856FF7 /* ProfileHeaderView.swift */,
 				B6C613FF1FF77E48009FF96D /* PostData.swift */,
 				B683828A1FFB3AC300B37589 /* ProgrammingLanguageCell.swift */,
+				B6DDE265201D883E00856FF7 /* BaseTableViewCell.xib */,
 				B6F25CE51FEEA002007A4A6A /* Main.storyboard */,
 				B6F25D571FEEE36F007A4A6A /* Post.storyboard */,
 				B614A2B41FF28F1B001E1F80 /* PopOver.storyboard */,
 				B6C613FB1FF7079F009FF96D /* PostDataView.xib */,
 				B6C614081FF8A5B6009FF96D /* PostTableViewCell.xib */,
-				B6DDE265201D883E00856FF7 /* BaseTableViewCell.xib */,
-				B6DDE268201E0CD200856FF7 /* ProfileHeaderView.swift */,
 				B6DDE26A201E0E8400856FF7 /* ProfileHeaderView.xib */,
 			);
 			path = View;
@@ -638,6 +641,7 @@
 				B6F25D5A1FEF575E007A4A6A /* PostVC.swift in Sources */,
 				B6F25D541FEEA5DA007A4A6A /* FeedVC.swift in Sources */,
 				B6F25D501FEEA5D1007A4A6A /* FancyBtn.swift in Sources */,
+				B6DDE26F2029E80200856FF7 /* SearchVC.swift in Sources */,
 				B6F25D4F1FEEA5D1007A4A6A /* FancyField.swift in Sources */,
 				B6C614021FF78032009FF96D /* ProfileVC.swift in Sources */,
 				B6F25D411FEEA4E3007A4A6A /* DataService.swift in Sources */,
