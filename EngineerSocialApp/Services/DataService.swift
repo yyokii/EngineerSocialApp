@@ -19,11 +19,11 @@ class DataService {
     
     //DB referrence
     private var _REF_BASE = DB_BASE
-    private var _REF_POSTS = DB_BASE.child("posts")
-    private var _REF_USERS = DB_BASE.child("users")
-    
-    //Storage reference
-    private var _REF_POST_IMAGES = STORAGE_BASE.child("post-pics")
+    private var _REF_POSTS = DB_BASE.child(POSTS)
+    private var _REF_USERS = DB_BASE.child(USERS)
+    private var _REF_FOLLOW_FOLLOWER = DB_BASE.child(FOLLOW_FOLLOWER)
+    //アイコンupload用
+    private var _REF_USER_IMAGES = STORAGE_BASE.child(USER_ICON_PICS)
     
     var REF_BASE: FIRDatabaseReference {
         
@@ -40,6 +40,11 @@ class DataService {
         return _REF_USERS
     }
     
+    var REF_FOLLOW_FOLLOWER: FIRDatabaseReference {
+        
+        return _REF_FOLLOW_FOLLOWER
+    }
+    
     var REF_USER_CURRENT: FIRDatabaseReference {
         
         let uid = KeychainWrapper.standard.string(forKey: KEY_UID)
@@ -47,15 +52,18 @@ class DataService {
         return user
     }
     
-    var REF_POST_IMAGES: FIRStorageReference {
+    var REF_USER_IMAGES: FIRStorageReference {
         
-        return _REF_POST_IMAGES
+        return _REF_USER_IMAGES
     }
-
     
-    func createFirebaseDBUser (uid: String, userData: Dictionary<String, String>) {
+    func createFirebaseDBUser (uid: String, userData: Dictionary<String, Any>) {
         
         REF_USERS.child(uid).updateChildValues(userData)
     }
     
+    func getPostUser(uid: String) -> FIRDatabaseReference{
+        //投稿に紐づくユーザー情報取得
+        return DB_BASE.child(USERS).child(uid)
+    }
 }

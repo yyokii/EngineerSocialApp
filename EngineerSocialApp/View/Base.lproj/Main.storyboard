@@ -1,0 +1,508 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="C0q-35-68Z">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <customFonts key="customFonts">
+        <array key="Avenir.ttc">
+            <string>Avenir-Book</string>
+        </array>
+    </customFonts>
+    <scenes>
+        <!--Sign InVC-->
+        <scene sceneID="Gfh-Fa-6eQ">
+            <objects>
+                <viewController id="C0q-35-68Z" customClass="SignInVC" customModule="EngineerSocialApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="qKT-dG-Nfm"/>
+                        <viewControllerLayoutGuide type="bottom" id="0Eo-OI-mQ2"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="kDP-rl-452" customClass="FancyView" customModule="EngineerSocialApp" customModuleProvider="target">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="NL7-ws-rqv">
+                                <rect key="frame" x="0.0" y="592" width="375" height="75"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="If you haven't signed in before,  an account will be automatically created for you. " textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="I2G-le-CWb">
+                                        <rect key="frame" x="8" y="8" width="359" height="59"/>
+                                        <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="15"/>
+                                        <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.019854545590000001" green="0.023144053299999998" blue="0.2549199164" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
+                                <constraints>
+                                    <constraint firstItem="I2G-le-CWb" firstAttribute="top" secondItem="NL7-ws-rqv" secondAttribute="top" constant="8" id="D96-8i-xa3"/>
+                                    <constraint firstItem="I2G-le-CWb" firstAttribute="leading" secondItem="NL7-ws-rqv" secondAttribute="leading" constant="8" id="DUs-EP-e3i"/>
+                                    <constraint firstAttribute="bottom" secondItem="I2G-le-CWb" secondAttribute="bottom" constant="8" id="OGz-la-Qzl"/>
+                                    <constraint firstAttribute="height" constant="75" id="SiD-V1-d7d"/>
+                                    <constraint firstAttribute="trailing" secondItem="I2G-le-CWb" secondAttribute="trailing" constant="8" id="kMK-9o-dcz"/>
+                                </constraints>
+                            </view>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Select a sign in method" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IqG-vI-Bfc">
+                                <rect key="frame" x="16" y="200" width="343" height="20"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="20" id="dFt-GM-hxe"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="15"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FTB-qY-JmD" customClass="RoundBtn" customModule="EngineerSocialApp" customModuleProvider="target">
+                                <rect key="frame" x="113" y="260" width="150" height="150"/>
+                                <color key="backgroundColor" red="0.25490196079999999" green="0.36078431370000003" blue="0.64313725489999995" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="150" id="sHA-qR-hRx"/>
+                                    <constraint firstAttribute="width" constant="150" id="vZu-Z0-mGd"/>
+                                </constraints>
+                                <state key="normal" image="f"/>
+                                <connections>
+                                    <action selector="facebookBtnTapped:" destination="C0q-35-68Z" eventType="touchUpInside" id="ujZ-xb-BeI"/>
+                                </connections>
+                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="15" translatesAutoresizingMaskIntoConstraints="NO" id="y9f-ax-8CA">
+                                <rect key="frame" x="46" y="450" width="283" height="115"/>
+                                <subviews>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Email addres" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="OTA-k7-jny" customClass="FancyField" customModule="EngineerSocialApp" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="283" height="24"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="17"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Pasaword" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="z4o-FZ-nTs" customClass="FancyField" customModule="EngineerSocialApp" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="39" width="283" height="24"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                        <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="17"/>
+                                        <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
+                                    </textField>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ObX-eZ-GZv" customClass="FancyBtn" customModule="EngineerSocialApp" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="78" width="283" height="37"/>
+                                        <color key="backgroundColor" red="0.86666666670000003" green="0.17254901959999999" blue="0.0" alpha="0.87" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" name="Avenir-Book" family="Avenir" pointSize="18"/>
+                                        <state key="normal" title="Sign in">
+                                            <color key="titleColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="signInTapped:" destination="C0q-35-68Z" eventType="touchUpInside" id="Dzh-B3-oeD"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                            </stackView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="7" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="AwV-w7-24Q">
+                                <rect key="frame" x="8" y="20" width="359" height="105"/>
+                                <attributedString key="attributedText">
+                                    <fragment content="function">
+                                        <attributes>
+                                            <color key="NSColor" red="0.40000000000000002" green="0.85097999999999996" blue="0.93725000000000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13" name="Helvetica-Oblique"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <color key="NSStrokeColor" red="0.40000000000000002" green="0.85097999999999996" blue="0.93725000000000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content=" ">
+                                        <attributes>
+                                            <color key="NSColor" red="0.97255000000000003" green="0.97255000000000003" blue="0.94901999999999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13" name="Helvetica"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <color key="NSStrokeColor" red="0.97255000000000003" green="0.97255000000000003" blue="0.94901999999999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="musicForProgramming">
+                                        <attributes>
+                                            <color key="NSColor" red="0.65098" green="0.88627" blue="0.18038999999999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13" name="Helvetica"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <color key="NSStrokeColor" red="0.65098" green="0.88627" blue="0.18038999999999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="(">
+                                        <attributes>
+                                            <color key="NSColor" red="0.97255000000000003" green="0.97255000000000003" blue="0.94901999999999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13" name="Helvetica"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <color key="NSStrokeColor" red="0.97255000000000003" green="0.97255000000000003" blue="0.94901999999999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="task">
+                                        <attributes>
+                                            <color key="NSColor" red="0.99216000000000004" green="0.59216000000000002" blue="0.12157" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13" name="Helvetica-Oblique"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <color key="NSStrokeColor" red="0.99216000000000004" green="0.59216000000000002" blue="0.12157" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">) 
+</string>
+                                        <attributes>
+                                            <color key="NSColor" red="0.97255000000000003" green="0.97255000000000003" blue="0.94901999999999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13" name="Helvetica"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <color key="NSStrokeColor" red="0.97255000000000003" green="0.97255000000000003" blue="0.94901999999999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">{
+task </string>
+                                        <attributes>
+                                            <color key="NSColor" red="0.97255000000000003" green="0.97255000000000003" blue="0.94901999999999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13" name="Helvetica"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.97255000000000003" green="0.97255000000000003" blue="0.94901999999999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="=">
+                                        <attributes>
+                                            <color key="NSColor" red="0.92549000000000003" green="0.0" blue="0.48626999999999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13" name="Helvetica"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.92549000000000003" green="0.0" blue="0.48626999999999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content=" (task ">
+                                        <attributes>
+                                            <color key="NSColor" red="0.97255000000000003" green="0.97255000000000003" blue="0.94901999999999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13" name="Helvetica"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.97255000000000003" green="0.97255000000000003" blue="0.94901999999999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="===">
+                                        <attributes>
+                                            <color key="NSColor" red="0.92549000000000003" green="0.0" blue="0.48626999999999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13" name="Helvetica"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.92549000000000003" green="0.0" blue="0.48626999999999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content=" ">
+                                        <attributes>
+                                            <color key="NSColor" red="0.97255000000000003" green="0.97255000000000003" blue="0.94901999999999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13" name="Helvetica"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.97255000000000003" green="0.97255000000000003" blue="0.94901999999999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="undefined">
+                                        <attributes>
+                                            <color key="NSColor" red="0.68235000000000001" green="0.50588" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13" name="Helvetica"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.68235000000000001" green="0.50588" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content=") ? ">
+                                        <attributes>
+                                            <color key="NSColor" red="0.97255000000000003" green="0.97255000000000003" blue="0.94901999999999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13" name="Helvetica"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.97255000000000003" green="0.97255000000000003" blue="0.94901999999999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="'programming'">
+                                        <attributes>
+                                            <color key="NSColor" red="0.93725000000000003" green="0.88234999999999997" blue="0.34510000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13" name="Helvetica"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.93725000000000003" green="0.88234999999999997" blue="0.34510000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content"> : task;
+</string>
+                                        <attributes>
+                                            <color key="NSColor" red="0.97255000000000003" green="0.97255000000000003" blue="0.94901999999999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13" name="Helvetica"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.97255000000000003" green="0.97255000000000003" blue="0.94901999999999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="return">
+                                        <attributes>
+                                            <color key="NSColor" red="0.92549000000000003" green="0.0" blue="0.48626999999999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13" name="Helvetica"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.92549000000000003" green="0.0" blue="0.48626999999999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content=" ">
+                                        <attributes>
+                                            <color key="NSColor" red="0.97255000000000003" green="0.97255000000000003" blue="0.94901999999999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13" name="Helvetica"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.97255000000000003" green="0.97255000000000003" blue="0.94901999999999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="'A series of mixes intended for listening while '">
+                                        <attributes>
+                                            <color key="NSColor" red="0.93725000000000003" green="0.88234999999999997" blue="0.34510000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13" name="Helvetica"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.93725000000000003" green="0.88234999999999997" blue="0.34510000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="+">
+                                        <attributes>
+                                            <color key="NSColor" red="0.92549000000000003" green="0.0" blue="0.48626999999999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13" name="Helvetica"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.92549000000000003" green="0.0" blue="0.48626999999999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="task">
+                                        <attributes>
+                                            <color key="NSColor" red="0.97255000000000003" green="0.97255000000000003" blue="0.94901999999999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13" name="Helvetica"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.97255000000000003" green="0.97255000000000003" blue="0.94901999999999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="+">
+                                        <attributes>
+                                            <color key="NSColor" red="0.92549000000000003" green="0.0" blue="0.48626999999999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13" name="Helvetica"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.92549000000000003" green="0.0" blue="0.48626999999999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment content="' to aid concentration and increase productivity (also compatible with other activities).'">
+                                        <attributes>
+                                            <color key="NSColor" red="0.93725000000000003" green="0.88234999999999997" blue="0.34510000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13" name="Helvetica"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.93725000000000003" green="0.88234999999999997" blue="0.34510000000000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </attributes>
+                                    </fragment>
+                                    <fragment>
+                                        <string key="content">;
+}</string>
+                                        <attributes>
+                                            <color key="NSColor" red="0.97255000000000003" green="0.97255000000000003" blue="0.94901999999999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <font key="NSFont" size="13" name="Helvetica"/>
+                                            <real key="NSKern" value="0.0"/>
+                                            <paragraphStyle key="NSParagraphStyle" alignment="left" lineBreakMode="wordWrapping" baseWritingDirection="leftToRight" defaultTabInterval="36" tighteningFactorForTruncation="0.0" allowsDefaultTighteningForTruncation="NO">
+                                                <tabStops/>
+                                            </paragraphStyle>
+                                            <color key="NSStrokeColor" red="0.97255000000000003" green="0.97255000000000003" blue="0.94901999999999997" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        </attributes>
+                                    </fragment>
+                                </attributedString>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <color key="backgroundColor" red="0.011764705882352941" green="0.14117647058823529" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="trailing" secondItem="NL7-ws-rqv" secondAttribute="trailing" id="0Cx-S5-CxB"/>
+                            <constraint firstItem="NL7-ws-rqv" firstAttribute="leading" secondItem="kDP-rl-452" secondAttribute="leading" id="8fc-Ib-28b"/>
+                            <constraint firstItem="y9f-ax-8CA" firstAttribute="leading" secondItem="kDP-rl-452" secondAttribute="leadingMargin" constant="30" id="C2c-Nd-OOE"/>
+                            <constraint firstItem="IqG-vI-Bfc" firstAttribute="top" secondItem="AwV-w7-24Q" secondAttribute="bottom" constant="75" id="CTY-rA-Jxw"/>
+                            <constraint firstItem="IqG-vI-Bfc" firstAttribute="trailing" secondItem="kDP-rl-452" secondAttribute="trailingMargin" id="FSC-Os-maR"/>
+                            <constraint firstItem="y9f-ax-8CA" firstAttribute="centerX" secondItem="kDP-rl-452" secondAttribute="centerX" id="R5X-Fp-r77"/>
+                            <constraint firstItem="AwV-w7-24Q" firstAttribute="top" secondItem="qKT-dG-Nfm" secondAttribute="bottom" id="UKK-4N-C4n"/>
+                            <constraint firstItem="FTB-qY-JmD" firstAttribute="centerX" secondItem="kDP-rl-452" secondAttribute="centerX" id="Wyz-B2-qwI"/>
+                            <constraint firstItem="IqG-vI-Bfc" firstAttribute="leading" secondItem="kDP-rl-452" secondAttribute="leadingMargin" id="b7S-Pa-Mw5"/>
+                            <constraint firstItem="y9f-ax-8CA" firstAttribute="top" secondItem="FTB-qY-JmD" secondAttribute="bottom" constant="40" id="eXA-jS-UCi"/>
+                            <constraint firstItem="AwV-w7-24Q" firstAttribute="leading" secondItem="sHq-c7-60f" secondAttribute="leading" constant="8" id="l1z-ut-llL"/>
+                            <constraint firstItem="0Eo-OI-mQ2" firstAttribute="top" secondItem="NL7-ws-rqv" secondAttribute="bottom" id="lC6-qw-gCN"/>
+                            <constraint firstItem="FTB-qY-JmD" firstAttribute="top" secondItem="IqG-vI-Bfc" secondAttribute="bottom" constant="40" id="lEj-Nb-eFo"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="y9f-ax-8CA" secondAttribute="trailing" constant="30" id="nuR-Pe-Hmt"/>
+                            <constraint firstAttribute="trailing" secondItem="AwV-w7-24Q" secondAttribute="trailing" constant="8" id="xd3-Bl-OGd"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="sHq-c7-60f"/>
+                    </view>
+                    <connections>
+                        <outlet property="emailField" destination="OTA-k7-jny" id="9eS-sl-CLg"/>
+                        <outlet property="pwdField" destination="z4o-FZ-nTs" id="mQw-fw-nqj"/>
+                        <segue destination="Gnq-k5-Q0e" kind="show" identifier="goToFeed" id="2ok-Bm-JCV">
+                            <nil key="action"/>
+                        </segue>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="ktu-c8-Utk" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="136.80000000000001" y="124.58770614692655"/>
+        </scene>
+        <!--Feed-->
+        <scene sceneID="Mv2-wD-gPx">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Feed" id="eyy-qO-l0l" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="deb-P2-oW8"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="93c-9d-uer" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2611" y="124"/>
+        </scene>
+        <!--Tab Bar Controller-->
+        <scene sceneID="mDf-Xh-0cv">
+            <objects>
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="Gnq-k5-Q0e" sceneMemberID="viewController">
+                    <extendedEdge key="edgesForExtendedLayout"/>
+                    <toolbarItems/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="iaf-dJ-O2l">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.01176470588" green="0.14117647059999999" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <color key="selectedImageTintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                    </tabBar>
+                    <connections>
+                        <segue destination="t13-T6-XgR" kind="relationship" relationship="viewControllers" id="iTH-hW-j0h"/>
+                        <segue destination="Z15-6N-AZU" kind="relationship" relationship="viewControllers" id="vP4-ZS-d1p"/>
+                        <segue destination="THp-1a-KXI" kind="relationship" relationship="viewControllers" id="J4x-aX-dRh"/>
+                    </connections>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lVo-Fl-KG5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1042" y="125"/>
+        </scene>
+        <!--SearchVC-->
+        <scene sceneID="X5r-1l-sZd">
+            <objects>
+                <viewController id="Z15-6N-AZU" customClass="SearchVC" customModule="EngineerSocialApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="INK-nb-tTX">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Si7-Bs-V0P">
+                                <rect key="frame" x="148.5" y="294" width="77" height="30"/>
+                                <state key="normal" title="投稿ボタン"/>
+                                <connections>
+                                    <action selector="searchVC:" destination="Z15-6N-AZU" eventType="touchUpInside" id="TSn-g2-grA"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="Si7-Bs-V0P" firstAttribute="centerX" secondItem="INK-nb-tTX" secondAttribute="centerX" id="CPg-UM-vgn"/>
+                            <constraint firstItem="Si7-Bs-V0P" firstAttribute="centerY" secondItem="INK-nb-tTX" secondAttribute="centerY" id="J0b-5Z-40n"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="7xX-lb-NPE"/>
+                    </view>
+                    <tabBarItem key="tabBarItem" systemItem="search" id="8Wa-xt-xNT"/>
+                    <connections>
+                        <segue destination="lDV-s2-tpu" kind="show" identifier="toPost" id="U7P-cI-vMM"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="mDY-Ar-qLm" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1956" y="1152"/>
+        </scene>
+        <!--Post-->
+        <scene sceneID="d8V-DE-b9n">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Post" id="lDV-s2-tpu" sceneMemberID="viewController"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="VQY-pb-b1v" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2746" y="1151"/>
+        </scene>
+        <!--Posts-->
+        <scene sceneID="f02-K2-yaY">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="t13-T6-XgR" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Posts" image="develop_icon" id="ruS-ud-IFs"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Md4-ei-RBf">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.01176470588" green="0.14117647059999999" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="eyy-qO-l0l" kind="relationship" relationship="rootViewController" id="31g-S0-hnb"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="M3f-V4-7KF" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1956.8" y="124.13793103448276"/>
+        </scene>
+        <!--Item-->
+        <scene sceneID="IN8-qE-BLz">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="THp-1a-KXI" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Item" id="uCM-YM-7pZ"/>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="lIO-j1-C9B">
+                        <rect key="frame" x="0.0" y="20" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                        <color key="barTintColor" red="0.01176470588" green="0.14117647059999999" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="Vq8-g3-qOI" kind="relationship" relationship="rootViewController" id="j1b-1Y-zbP"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="HCP-ru-E3a" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1956" y="2145"/>
+        </scene>
+        <!--Profile-->
+        <scene sceneID="D57-tf-oEf">
+            <objects>
+                <viewControllerPlaceholder storyboardName="Profile" id="Vq8-g3-qOI" sceneMemberID="viewController">
+                    <navigationItem key="navigationItem" id="pK3-34-2Fe"/>
+                </viewControllerPlaceholder>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="7cq-Wq-7qa" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2958" y="2145"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="develop_icon" width="30" height="30"/>
+        <image name="f" width="352" height="328"/>
+    </resources>
+</document>

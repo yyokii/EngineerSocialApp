@@ -6,8 +6,9 @@
 //
 
 import UIKit
-import Firebase
 import FBSDKLoginKit
+import TwitterKit
+import Firebase
 
 
 @UIApplicationMain
@@ -15,15 +16,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
     
-    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         
         FIRApp.configure()
         
-        
         FBSDKApplicationDelegate.sharedInstance().application(application, didFinishLaunchingWithOptions: launchOptions)
-        
+        Twitter.sharedInstance().start(withConsumerKey:"g0e4KAym0wwigruiClvwAZrUZ", consumerSecret:"jmNfkJBgk1NG8ogn57xqgGQ7dUYTvtR4FPPFR9Z32c6dftAMj8")
+
         return true
     }
     
@@ -47,6 +47,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+    }
+    
+    func application(_ app: UIApplication, open url: URL, options: [UIApplicationOpenURLOptionsKey : Any] = [:]) -> Bool {
+        return Twitter.sharedInstance().application(app, open: url, options: options)
     }
     
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool{
