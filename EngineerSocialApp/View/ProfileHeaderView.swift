@@ -11,6 +11,8 @@ import FirebaseAuth
 
 protocol ProfilehHeaderViewDelegate: class {
     func followButtonTapped() -> Void
+    func followLabelTapped() -> Void
+    func followerLabelTapped() -> Void
 }
 
 class ProfilehHeaderView: UIView {
@@ -19,6 +21,8 @@ class ProfilehHeaderView: UIView {
     @IBOutlet weak var userNameLabel: UILabel!
     @IBOutlet weak var userDescription: UITextView!
     @IBOutlet weak var followBtn: UIButton!
+    @IBOutlet weak var followLabel: UILabel!
+    @IBOutlet weak var followerLabel: UILabel!
     
     weak var profilehHeaderViewDelegate: ProfilehHeaderViewDelegate?
     
@@ -60,5 +64,30 @@ class ProfilehHeaderView: UIView {
     func applyUnFollowBtn(){
         followBtn.setTitle("フォローをはずす", for: .normal)
         followBtn.isEnabled = true
+    }
+    
+    func initFollowLabel(followCount: Int){
+        let followTap = UITapGestureRecognizer(target: self, action: #selector(followTapped(sender:)))
+        followLabel.addGestureRecognizer(followTap)
+        
+        followLabel.text = "\(followCount):FOLLOW"
+        followLabel.isUserInteractionEnabled = true
+    }
+    
+    @objc func followTapped (sender: UITapGestureRecognizer) {
+        profilehHeaderViewDelegate?.followLabelTapped()
+    }
+    
+    func initFollowerLabel(followerCount: Int){
+        let followerTap = UITapGestureRecognizer(target: self, action: #selector(followerTapped(sender:)))
+        followerLabel.addGestureRecognizer(followerTap)
+        
+        followerLabel.text = "\(followerCount):FOLLOWER"
+        followerLabel.isUserInteractionEnabled = true
+    }
+    
+    @objc func followerTapped (sender: UITapGestureRecognizer) {
+        profilehHeaderViewDelegate?.followerLabelTapped()
+
     }
 }

@@ -50,6 +50,10 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     var claps: Int = 0
     var oks: Int = 0
     
+    // フォロー、フォロワーデータ
+    var followUidArray = [String]()
+    var followerUidArray = [String]()
+    
     // 投稿データを円グラフで表示するために使用
     var postDataView: PostDataView!
     var devLanguagesArray = [DevelopData]()
@@ -80,9 +84,12 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
         /// ユーザー情報を表示するヘッダーviewを設定
         setHeaderView()
         // ヘッダーviewの設定（ユーザ情報表示、フォローボタンの状態）
-        FirebaseLogic.setUserName(uid: uid, nameLabel: headerView.userNameLabel)
-        FirebaseLogic.setUserImage(uid: uid, userImageView: headerView.userImageView)
-        applySettingBtn()
+        FirebaseLogic.fetchUserName(uid: uid, completion: {[weak self] (name) in self?.headerView.userNameLabel.text = name})
+        FirebaseLogic.fetchUserImage(uid: uid, completion: {[weak self] (img) in self?.headerView.userImageView.image = img})
+        initSettingBtn()
+        // フォロー、フォロワーラベルの設定
+        applyFollowLabel()
+        applyFollowerLabel()
         // コンテンツの表示
         getMyPostData()
         setActionsData()
@@ -91,8 +98,8 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     
     override func viewWillAppear(_ animated: Bool) {
         if headerView != nil {
-            FirebaseLogic.setUserName(uid: uid, nameLabel: headerView.userNameLabel)
-            FirebaseLogic.setUserImage(uid: uid, userImageView: headerView.userImageView)
+            FirebaseLogic.fetchUserName(uid: uid, completion: {[weak self] (name) in self?.headerView.userNameLabel.text = name})
+            FirebaseLogic.fetchUserImage(uid: uid, completion: {[weak self] (img) in self?.headerView.userImageView.image = img})
         }
         
         if postDataView != nil {
@@ -108,33 +115,19 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     
     /// 自分のプロフィール画面か他の人の画面かでviewの位置や機能を分ける。フォロー非表示、設定表示、
     func initProfileViewType(){
+        baseTableViewHeight = (self.navigationController?.navigationBar.frame.height)! + UIApplication.shared.statusBarFrame.height
+
         if profileType == ProfileType.myProfile {
             uid = DataService.ds.REF_USER_CURRENT.key
-            baseTableViewHeight = UIApplication.shared.statusBarFrame.height
-            print("自分のプロフィール画面")
+            // FIXME:後でリファクタしたい。自分のプロフィール画面でもナビゲーションバーをつける仕様にしたので, baseTableViewHeightは共通
+            //baseTableViewHeight = UIApplication.shared.statusBarFrame.height
         } else if profileType == ProfileType.others {
-            baseTableViewHeight = (self.navigationController?.navigationBar.frame.height)! + UIApplication.shared.statusBarFrame.height
-            print("他のユーザーのプロフィール画面")
+            //baseTableViewHeight = (self.navigationController?.navigationBar.frame.height)! + UIApplication.shared.statusBarFrame.height
         }
     }
     
-    func initSelectCotentLabel(){
-        // ユーザーのプロフィール画像をタップしてカメラロールから変更できるようにする
-        let userImageTap = UITapGestureRecognizer(target: self, action: #selector(userImageTapped))
-        userImageView.isUserInteractionEnabled = true
-        userImageView.addGestureRecognizer(userImageTap)
-        
-        // コンテンツ切り替え用のラベルのタップ時の挙動を設定
-        let dataLabelTap = UITapGestureRecognizer(target: self, action: #selector(dataLabelTapped))
-        myDataLabel.isUserInteractionEnabled = true
-        myDataLabel.addGestureRecognizer(dataLabelTap)
-        let postLabelTap = UITapGestureRecognizer(target: self, action: #selector(postLabelTapped))
-        myPostLabel.isUserInteractionEnabled = true
-        myPostLabel.addGestureRecognizer(postLabelTap)
-    }
-    
     /// 自分のプロフィールの際は設定ボタンを表示する
-    func applySettingBtn(){
+    func initSettingBtn(){
         if profileType == ProfileType.myProfile {
             // 設定ボタンをフォローボタンを代わりに表示
         } else if profileType == ProfileType.others {
@@ -149,6 +142,36 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
                     self.headerView.applyFollowBtn()
                 }
             })
+        }
+    }
+    
+//    func initSelectCotentLabel(){
+//        // ユーザーのプロフィール画像をタップしてカメラロールから変更できるようにする
+//        let userImageTap = UITapGestureRecognizer(target: self, action: #selector(userImageTapped))
+//        userImageView.isUserInteractionEnabled = true
+//        userImageView.addGestureRecognizer(userImageTap)
+//
+//        // コンテンツ切り替え用のラベルのタップ時の挙動を設定
+//        let dataLabelTap = UITapGestureRecognizer(target: self, action: #selector(dataLabelTapped))
+//        myDataLabel.isUserInteractionEnabled = true
+//        myDataLabel.addGestureRecognizer(dataLabelTap)
+//        let postLabelTap = UITapGestureRecognizer(target: self, action: #selector(postLabelTapped))
+//        myPostLabel.isUserInteractionEnabled = true
+//        myPostLabel.addGestureRecognizer(postLabelTap)
+//    }
+    
+    func applyFollowLabel(){
+        FirebaseLogic.fetchFollowUser(uid: uid) {[weak  self] (followUidArray) in
+            self?.followUidArray = followUidArray
+            // ヘッダービューのラベルテキスト更新、タップ可能にさせる、タップ処理はプロトコルをきって専用のテーブルに情報を渡して表示させる
+            self?.headerView.initFollowLabel(followCount: followUidArray.count)
+        }
+    }
+    
+    func applyFollowerLabel(){
+        FirebaseLogic.fetchFollowerUser(uid: uid) {[weak  self] (followerUidArray) in
+            self?.followerUidArray = followerUidArray
+            self?.headerView.initFollowerLabel(followerCount: followerUidArray.count)
         }
     }
     
@@ -237,33 +260,33 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
         }
     }
     
-    @objc func dataLabelTapped() {
-        let pointX = 0
-        profileScrollView.setContentOffset(CGPoint(x: pointX, y: 0), animated: true)
-        setSelectContentLabel()
-    }
+//    @objc func dataLabelTapped() {
+//        let pointX = 0
+//        profileScrollView.setContentOffset(CGPoint(x: pointX, y: 0), animated: true)
+//        setSelectContentLabel()
+//    }
     
-    @objc func postLabelTapped() {
-        let pointX = self.view.frame.width
-        profileScrollView.setContentOffset(CGPoint(x: pointX, y: 0), animated: true)
-        setSelectContentLabel()
-    }
+//    @objc func postLabelTapped() {
+//        let pointX = self.view.frame.width
+//        profileScrollView.setContentOffset(CGPoint(x: pointX, y: 0), animated: true)
+//        setSelectContentLabel()
+//    }
     
-    // スクロールビューのコンテンツ位置に従って選択ラベルの状態を変更させる
-    func setSelectContentLabel(){
-        let page = profileScrollView.contentOffset.x
-        
-        switch page {
-        case 0:
-            myDataLabel.selectedLabel()
-            myPostLabel.notSelectedLabel()
-        case self.view.frame.width:
-            myDataLabel.notSelectedLabel()
-            myPostLabel.selectedLabel()
-        default:
-            break
-        }
-    }
+//    // スクロールビューのコンテンツ位置に従って選択ラベルの状態を変更させる
+//    func setSelectContentLabel(){
+//        let page = profileScrollView.contentOffset.x
+//
+//        switch page {
+//        case 0:
+//            myDataLabel.selectedLabel()
+//            myPostLabel.notSelectedLabel()
+//        case self.view.frame.width:
+//            myDataLabel.notSelectedLabel()
+//            myPostLabel.selectedLabel()
+//        default:
+//            break
+//        }
+//    }
     
     @objc func userImageTapped() {
         present(imagePicker, animated: true, completion: nil)
@@ -300,7 +323,6 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
         let displayHeight = self.view.frame.height
         
         // テーブル
-        print("テーブルのy座標：\(baseTableViewHeight!)")
         baseTableView = UITableView(frame: CGRect(x: 0, y: baseTableViewHeight!, width: displayWidth, height: displayHeight))
         baseTableView.register(UINib(nibName: "BaseTableViewCell",bundle: nil), forCellReuseIdentifier: "BaseTableViewCell")
         baseTableView.dataSource = self
@@ -401,6 +423,15 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
         }
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == TO_FOLLOW_FOLLOWER {
+            // ユーザーリストに表示するuidの配列を遷移時に渡す
+            let  userListVC = segue.destination as! UserListVC
+            userListVC.followUidArray = followUidArray
+            userListVC.followerUidArray = followerUidArray
+        }
+    }
+    
 }
 
 extension ProfileVC: PostDataViewDelegate{
@@ -437,6 +468,14 @@ extension ProfileVC: PostTableViewDelegate{
 }
 
 extension ProfileVC: ProfilehHeaderViewDelegate{
+    func followLabelTapped() {
+        performSegue(withIdentifier: TO_FOLLOW_FOLLOWER, sender: nil)
+    }
+    
+    func followerLabelTapped() {
+        performSegue(withIdentifier: TO_FOLLOW_FOLLOWER, sender: nil)
+    }
+    
     func followButtonTapped() {
         if (isFollowState){
             // 「フォローをはずす」場合

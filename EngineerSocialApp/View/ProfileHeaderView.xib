@@ -13,6 +13,8 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="ProfilehHeaderView" customModule="EngineerSocialApp" customModuleProvider="target">
             <connections>
                 <outlet property="followBtn" destination="n3F-Uh-9g3" id="WsA-BZ-9Cr"/>
+                <outlet property="followLabel" destination="gx7-w9-qDY" id="5fH-lG-IDf"/>
+                <outlet property="followerLabel" destination="hJv-sD-Dfz" id="KHb-qD-gIR"/>
                 <outlet property="userDescription" destination="Cd8-Zg-qn4" id="sS9-Bz-IWc"/>
                 <outlet property="userImageView" destination="Vm4-Vo-yp3" id="E2X-E5-KAE"/>
                 <outlet property="userNameLabel" destination="4x7-XJ-ASy" id="kX6-Qt-flC"/>

@@ -103,8 +103,8 @@ class PostTableViewCell: UITableViewCell {
 
         // FIXEME:　全体のタイムラインと個人の過去投稿でif分岐したい　→　別になくてもいいか
         // ユーザ情報表示
-        FirebaseLogic.setUserName(uid: post.postUserId, nameLabel: usernameLbl)
-        FirebaseLogic.setUserImage(uid: post.postUserId, userImageView: profileImg)
+        FirebaseLogic.fetchUserName(uid: post.postUserId, completion: {[weak self] (name) in self?.usernameLbl.text = name})
+        FirebaseLogic.fetchUserImage(uid: post.postUserId, completion: {[weak self] (img) in self?.profileImg.image = img})
         
 //        //Cacheにある場合とない場合（storageからとってきてCaCheに入れる）
 //        //TODO:Cache適宜消さないと容量まずいきがする

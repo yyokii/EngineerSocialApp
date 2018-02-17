@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="LXh-hl-Ndx">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--User ListVC-->
+        <scene sceneID="INI-ri-Ly9">
+            <objects>
+                <viewController id="LXh-hl-Ndx" customClass="UserListVC" customModule="EngineerSocialApp" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="IqB-Ta-AQ9">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pLg-C8-eDf">
+                                <rect key="frame" x="0.0" y="20" width="375" height="70"/>
+                                <color key="backgroundColor" red="0.40000000000000002" green="0.85097999999999996" blue="0.93725000000000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="70" id="G5S-cZ-atw"/>
+                                </constraints>
+                            </view>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="OgO-RL-yfd">
+                                <rect key="frame" x="0.0" y="90" width="375" height="577"/>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="OgO-RL-yfd" firstAttribute="trailing" secondItem="VwL-9U-GDf" secondAttribute="trailing" id="2FY-1S-vY8"/>
+                            <constraint firstItem="OgO-RL-yfd" firstAttribute="top" secondItem="pLg-C8-eDf" secondAttribute="bottom" id="3G5-mF-C3c"/>
+                            <constraint firstItem="pLg-C8-eDf" firstAttribute="leading" secondItem="VwL-9U-GDf" secondAttribute="leading" id="FTL-Sf-xeB"/>
+                            <constraint firstItem="pLg-C8-eDf" firstAttribute="trailing" secondItem="VwL-9U-GDf" secondAttribute="trailing" id="HTD-h9-3BG"/>
+                            <constraint firstItem="OgO-RL-yfd" firstAttribute="bottom" secondItem="VwL-9U-GDf" secondAttribute="bottom" id="Ola-Ae-HnY"/>
+                            <constraint firstItem="pLg-C8-eDf" firstAttribute="top" secondItem="VwL-9U-GDf" secondAttribute="top" id="jSR-Um-okO"/>
+                            <constraint firstItem="OgO-RL-yfd" firstAttribute="leading" secondItem="VwL-9U-GDf" secondAttribute="leading" id="jpq-PC-CRH"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="VwL-9U-GDf"/>
+                    </view>
+                    <navigationItem key="navigationItem" id="sYf-Eu-ecI"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XVh-km-uVs" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1391.2" y="88.605697151424295"/>
+        </scene>
+    </scenes>
+</document>

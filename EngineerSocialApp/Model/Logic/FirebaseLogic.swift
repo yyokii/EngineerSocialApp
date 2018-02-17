@@ -10,18 +10,19 @@ import Firebase
 
 class FirebaseLogic {
     
-    static func setUserName (uid: String, nameLabel: UILabel){
+    // FIXME: complitionで書きたい
+    static func fetchUserName (uid: String, completion: @escaping ((String) -> Void)){
         let postUserNameRef = DataService.ds.REF_USERS.child(uid).child(NAME)
         postUserNameRef.observeSingleEvent(of: .value, with: { (snapshot) in
-            if let name = snapshot.value {
-                nameLabel.text = name as? String
+            if let name = snapshot.value as? String {
+                completion(name)
             }
         }) { (error) in
             print(error.localizedDescription)
         }
     }
     
-    static func setUserImage (uid: String, userImageView: UIImageView){
+    static func fetchUserImage (uid: String, completion: @escaping ((UIImage) -> Void)){
         let userImageRef = DataService.ds.REF_USER_IMAGES.child(uid)
         userImageRef.data(withMaxSize: 2 * 1024 * 1024, completion: { (data, error) in
             if error != nil {
@@ -30,7 +31,7 @@ class FirebaseLogic {
                 print("OK: Firebase storageからアイコン取得成功")
                 if let imgData = data {
                     if let img = UIImage(data: imgData) {
-                        userImageView.image = img
+                        completion(img)
                         // FIXME: キャッシュどうしましょ
                         //FeedVC.imageCache.setObject(img, forKey: post.imageUrl as NSString)
                     }
@@ -45,7 +46,6 @@ class FirebaseLogic {
     static func getGetActionsData(uid: String, completion: ((Dictionary<String, Int>) -> Void)?) {
         DataService.ds.REF_USERS.child(uid).child(GET_ACTIONS).observeSingleEvent(of: .value, with: { (snapshot) in
             if let dict = snapshot.value as? Dictionary<String, Int> {
-                print(dict)
                 completion?(dict)
             }
         }){ (error) in
@@ -105,6 +105,41 @@ class FirebaseLogic {
             }else {
                 completion()
             }
+        }
+    }
+    
+    /// フォローしているユーザー情報を取得
+    ///
+    /// - Parameter completion: 通信成功後の処理
+    static func fetchFollowUser (uid: String, completion: @escaping (([String]) -> Void)){
+        DataService.ds.REF_FOLLOW_FOLLOWER.child(uid).child(FOLLOW).observeSingleEvent(of: .value, with: { (snapshot) in
+            if let dict = snapshot.value as? Dictionary<String, Bool> {
+                var followUidArray = [String]()
+                for uid in dict.keys {
+                    followUidArray.append(uid)
+                }
+                completion(followUidArray)
+            }
+        }){ (error) in
+            print(error.localizedDescription)
+        }
+    }
+    
+    /// フォローされているユーザー情報を取得
+    ///
+    /// - Parameter completion: 通信成功後の処理
+    static func fetchFollowerUser (uid: String, completion: @escaping (([String]) -> Void)){
+        DataService.ds.REF_FOLLOW_FOLLOWER.child(uid).child(FOLLOWER).observeSingleEvent(of: .value, with: { (snapshot) in
+            if let dict = snapshot.value as? Dictionary<String, Bool> {
+                var followerUidArray = [String]()
+                for uid in dict.keys {
+                    followerUidArray.append(uid)
+                }
+                completion(followerUidArray)
+            }
+        }){ (error) in
+            print("--------------------------")
+            print(error.localizedDescription)
         }
     }
 }
