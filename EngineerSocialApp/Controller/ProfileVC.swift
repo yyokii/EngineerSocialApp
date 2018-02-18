@@ -39,6 +39,7 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
 
     // ベースになってるテーブルビュー関係
     var baseTableView: UITableView!
+    var baseTableViewCell: BaseTableViewCell!
     var headerView: ProfilehHeaderView!
     
     let hederViewHeight = 350
@@ -376,8 +377,9 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "BaseTableViewCell", for: indexPath) as! BaseTableViewCell
-        cell.setScrollView(contentWidth: self.view.frame.width*2)
+        baseTableViewCell = tableView.dequeueReusableCell(withIdentifier: "BaseTableViewCell", for: indexPath) as! BaseTableViewCell
+        baseTableViewCell.baseTableViewCellDelegate = self
+        baseTableViewCell.setScrollView(contentWidth: self.view.frame.width*2)
         let contentHeight = self.view.frame.height - baseTableViewHeight! - CGFloat(hederViewHeight) + CGFloat(hederViewHeight/2)
         
         // ①投稿データviewの生成
@@ -394,9 +396,9 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
         postTableView.isScrollEnabled = false
         postTableView.postTableViewDelegate = self
         
-        cell.scrollView.addSubview(postDataView)
-        cell.scrollView.addSubview(postTableView)
-        return cell
+        baseTableViewCell.scrollView.addSubview(postDataView)
+        baseTableViewCell.scrollView.addSubview(postTableView)
+        return baseTableViewCell
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -489,6 +491,24 @@ extension ProfileVC: ProfilehHeaderViewDelegate{
                 self?.isFollowState  = true
                 self?.headerView.applyUnFollowBtn()
             })
+        }
+    }
+    
+    func dataLblTapped() {
+        baseTableViewCell.adjustContent(pointX: 0)
+    }
+    
+    func postLblTapped() {
+        baseTableViewCell.adjustContent(pointX: Int(self.baseTableView.frame.width))
+    }
+}
+
+extension ProfileVC: BaseTableViewCellDelegate{
+    func scrollViewDidEndScroll(x: CGFloat) {
+        if x == 0 {
+            headerView.dataContentSelected()
+        }else {
+            headerView.postContentSelected()
         }
     }
 }

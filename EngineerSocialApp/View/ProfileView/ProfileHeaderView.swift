@@ -13,6 +13,9 @@ protocol ProfilehHeaderViewDelegate: class {
     func followButtonTapped() -> Void
     func followLabelTapped() -> Void
     func followerLabelTapped() -> Void
+    
+    func dataLblTapped() -> Void
+    func postLblTapped() -> Void
 }
 
 class ProfilehHeaderView: UIView {
@@ -23,6 +26,8 @@ class ProfilehHeaderView: UIView {
     @IBOutlet weak var followBtn: UIButton!
     @IBOutlet weak var followLabel: UILabel!
     @IBOutlet weak var followerLabel: UILabel!
+    @IBOutlet weak var dataLabel: UILabel!
+    @IBOutlet weak var postLabel: UILabel!
     
     weak var profilehHeaderViewDelegate: ProfilehHeaderViewDelegate?
     
@@ -47,6 +52,7 @@ class ProfilehHeaderView: UIView {
     func loadNib(){
         let view = Bundle.main.loadNibNamed("ProfileHeaderView", owner: self, options: nil)?.first as! UIView
         view.frame = self.bounds
+        initContentLabel()
         // dbからフォロー状態を取得できるまでは反応させない
         followBtn.isEnabled = false
         self.addSubview(view)
@@ -70,24 +76,58 @@ class ProfilehHeaderView: UIView {
         let followTap = UITapGestureRecognizer(target: self, action: #selector(followTapped(sender:)))
         followLabel.addGestureRecognizer(followTap)
         
-        followLabel.text = "\(followCount):FOLLOW"
+        followLabel.text = "<\(followCount):FOLLOW/>"
         followLabel.isUserInteractionEnabled = true
-    }
-    
-    @objc func followTapped (sender: UITapGestureRecognizer) {
-        profilehHeaderViewDelegate?.followLabelTapped()
     }
     
     func initFollowerLabel(followerCount: Int){
         let followerTap = UITapGestureRecognizer(target: self, action: #selector(followerTapped(sender:)))
         followerLabel.addGestureRecognizer(followerTap)
         
-        followerLabel.text = "\(followerCount):FOLLOWER"
+        followerLabel.text = "<\(followerCount):FOLLOWER/>"
         followerLabel.isUserInteractionEnabled = true
+    }
+    
+    func initContentLabel() {
+        // 「DATA」、「POST」ボタンタップ時の処理を設定
+        let dataLblTap = UITapGestureRecognizer(target: self, action: #selector(dataLblTapped(sender:)))
+        dataLabel.isUserInteractionEnabled = true
+        dataLabel.addGestureRecognizer(dataLblTap)
+        let postLblTap = UITapGestureRecognizer(target: self, action: #selector(postLblTapped(sender:)))
+        postLabel.isUserInteractionEnabled = true
+        postLabel.addGestureRecognizer(postLblTap)
+        
+        dataLabel.textColor = UIColor(hex: TERMINAL_TEXT_WHITE)
+        postLabel.textColor = UIColor(hex: TERMINAL_TEXT_GRAY)
+    }
+    
+    func dataContentSelected() {
+        dataLabel.textColor = UIColor(hex: TERMINAL_TEXT_WHITE)
+        postLabel.textColor = UIColor(hex: TERMINAL_TEXT_GRAY)
+    }
+    
+    func postContentSelected() {
+        dataLabel.textColor = UIColor(hex: TERMINAL_TEXT_GRAY)
+        postLabel.textColor = UIColor(hex: TERMINAL_TEXT_WHITE)
+    }
+    
+    //MARK: action
+    @objc func followTapped (sender: UITapGestureRecognizer) {
+        profilehHeaderViewDelegate?.followLabelTapped()
     }
     
     @objc func followerTapped (sender: UITapGestureRecognizer) {
         profilehHeaderViewDelegate?.followerLabelTapped()
-
+        
+    }
+    
+    @objc func dataLblTapped (sender: UITapGestureRecognizer) {
+        profilehHeaderViewDelegate?.dataLblTapped()
+        dataContentSelected()
+    }
+    
+    @objc func postLblTapped (sender: UITapGestureRecognizer) {
+        profilehHeaderViewDelegate?.postLblTapped()
+        postContentSelected()
     }
 }
