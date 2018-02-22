@@ -22,19 +22,6 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="8TL-mF-zGa">
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="65"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ERe-oE-4Jn">
-                                        <rect key="frame" x="16" y="15" width="35" height="35"/>
-                                        <constraints>
-                                            <constraint firstAttribute="width" secondItem="ERe-oE-4Jn" secondAttribute="height" multiplier="1:1" id="YoP-9o-Hus"/>
-                                        </constraints>
-                                        <fontDescription key="fontDescription" type="system" pointSize="57"/>
-                                        <state key="normal" title="×">
-                                            <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="closeTapped:" destination="d2t-TI-fAO" eventType="touchUpInside" id="sVD-w6-8PR"/>
-                                        </connections>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="srJ-fi-o43">
                                         <rect key="frame" x="289" y="15" width="70" height="35"/>
                                         <constraints>
@@ -61,10 +48,7 @@
                                     <constraint firstItem="i9O-XR-ABt" firstAttribute="centerX" secondItem="8TL-mF-zGa" secondAttribute="centerX" id="7PZ-yp-W3J"/>
                                     <constraint firstItem="i9O-XR-ABt" firstAttribute="centerY" secondItem="8TL-mF-zGa" secondAttribute="centerY" id="E9d-1D-fAB"/>
                                     <constraint firstAttribute="height" constant="65" id="Nti-Qj-2Om"/>
-                                    <constraint firstItem="ERe-oE-4Jn" firstAttribute="top" secondItem="8TL-mF-zGa" secondAttribute="top" constant="15" id="Szg-wn-eai"/>
-                                    <constraint firstItem="ERe-oE-4Jn" firstAttribute="leading" secondItem="8TL-mF-zGa" secondAttribute="leading" constant="16" id="W98-Ye-Ei1"/>
                                     <constraint firstAttribute="trailing" secondItem="srJ-fi-o43" secondAttribute="trailing" constant="16" id="odx-G6-nJf"/>
-                                    <constraint firstAttribute="bottom" secondItem="ERe-oE-4Jn" secondAttribute="bottom" constant="15" id="w1J-cm-7fP"/>
                                     <constraint firstAttribute="bottom" secondItem="srJ-fi-o43" secondAttribute="bottom" constant="15" id="z0H-Lh-18j"/>
                                     <constraint firstItem="srJ-fi-o43" firstAttribute="top" secondItem="8TL-mF-zGa" secondAttribute="top" constant="15" id="zQH-nj-PPZ"/>
                                 </constraints>

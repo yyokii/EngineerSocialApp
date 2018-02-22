@@ -76,7 +76,7 @@ class ProfilehHeaderView: UIView {
         let followTap = UITapGestureRecognizer(target: self, action: #selector(followTapped(sender:)))
         followLabel.addGestureRecognizer(followTap)
         
-        followLabel.text = "<\(followCount):FOLLOW/>"
+        followLabel.text = "<FOLLOW:\(followCount)/>"
         followLabel.isUserInteractionEnabled = true
     }
     
@@ -84,7 +84,7 @@ class ProfilehHeaderView: UIView {
         let followerTap = UITapGestureRecognizer(target: self, action: #selector(followerTapped(sender:)))
         followerLabel.addGestureRecognizer(followerTap)
         
-        followerLabel.text = "<\(followerCount):FOLLOWER/>"
+        followerLabel.text = "<FOLLOWER:\(followerCount)/>"
         followerLabel.isUserInteractionEnabled = true
     }
     

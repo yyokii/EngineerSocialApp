@@ -42,7 +42,12 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     var baseTableViewCell: BaseTableViewCell!
     var headerView: ProfilehHeaderView!
     
-    let hederViewHeight = 350
+    // ここはProfileHeaderViewのviewの高さと同じにする必要あり
+    let hederViewHeight = 300
+    let headerViewHeightDouble: Double = 300.0
+    
+    // ヘッダービューの下部のどれくらいを固定させるか（ex: 2.5 → x/2.5 → 40%）
+    let stickHeaderRation = 2.5
     
     // 獲得した総アクション数を保持
     var smiles: Int = 0
@@ -261,34 +266,6 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
         }
     }
     
-//    @objc func dataLabelTapped() {
-//        let pointX = 0
-//        profileScrollView.setContentOffset(CGPoint(x: pointX, y: 0), animated: true)
-//        setSelectContentLabel()
-//    }
-    
-//    @objc func postLabelTapped() {
-//        let pointX = self.view.frame.width
-//        profileScrollView.setContentOffset(CGPoint(x: pointX, y: 0), animated: true)
-//        setSelectContentLabel()
-//    }
-    
-//    // スクロールビューのコンテンツ位置に従って選択ラベルの状態を変更させる
-//    func setSelectContentLabel(){
-//        let page = profileScrollView.contentOffset.x
-//
-//        switch page {
-//        case 0:
-//            myDataLabel.selectedLabel()
-//            myPostLabel.notSelectedLabel()
-//        case self.view.frame.width:
-//            myDataLabel.notSelectedLabel()
-//            myPostLabel.selectedLabel()
-//        default:
-//            break
-//        }
-//    }
-    
     @objc func userImageTapped() {
         present(imagePicker, animated: true, completion: nil)
     }
@@ -357,19 +334,6 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     }
 }
 
-// FIXME: 挙動がおかしかったので一旦コメントアウト（baseTableView入れた時におかしくなってた）→ cell内のscrollを制御する必要がある
-//extension ProfileVC: UIScrollViewDelegate {
-//
-//    func scrollViewDidEndScrollingAnimation(_ scrollView: UIScrollView) {
-//        setSelectContentLabel()
-//    }
-//
-//    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
-//        setSelectContentLabel()
-//    }
-//
-//}
-
 extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -380,7 +344,7 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
         baseTableViewCell = tableView.dequeueReusableCell(withIdentifier: "BaseTableViewCell", for: indexPath) as! BaseTableViewCell
         baseTableViewCell.baseTableViewCellDelegate = self
         baseTableViewCell.setScrollView(contentWidth: self.view.frame.width*2)
-        let contentHeight = self.view.frame.height - baseTableViewHeight! - CGFloat(hederViewHeight) + CGFloat(hederViewHeight/2)
+        let contentHeight = self.view.frame.height - baseTableViewHeight! - CGFloat(headerViewHeightDouble/stickHeaderRation)
         
         // ①投稿データviewの生成
         postDataView = PostDataView(frame:  CGRect(x: 0, y: 0, width: self.view.frame.width, height: contentHeight))
@@ -411,9 +375,9 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
             return
         }
         
-        if scrollView.contentOffset.y > -CGFloat(hederViewHeight/2){
+        if scrollView.contentOffset.y > -CGFloat(headerViewHeightDouble/stickHeaderRation){
             // cell内のコンテンツだけを動かせる
-            baseTableView.contentOffset = CGPoint(x: 0, y: -CGFloat(hederViewHeight/2))
+            baseTableView.contentOffset = CGPoint(x: 0, y: -CGFloat(headerViewHeightDouble/stickHeaderRation))
             baseTableView.isScrollEnabled = false
             // 下部のコンテンツのスクロールの設定を変更
             postDataView.scrollView.isScrollEnabled = true
@@ -445,7 +409,7 @@ extension ProfileVC: PostDataViewDelegate{
             baseTableView.isScrollEnabled = true
             postDataView.scrollView.isScrollEnabled = false
             // -100（固定させるヘッダーの高さ）の設定をすることで挙動のカクツキが改善。ないとスクロールが2タップぐらい反応しない
-            baseTableView.contentOffset = CGPoint(x: 0, y: -CGFloat(hederViewHeight/2))
+            baseTableView.contentOffset = CGPoint(x: 0, y: -CGFloat(headerViewHeightDouble/stickHeaderRation))
         }
     }
 }
@@ -464,7 +428,7 @@ extension ProfileVC: PostTableViewDelegate{
             baseTableView.isScrollEnabled = true
             postTableView.isScrollEnabled = false
             // -100（固定させるヘッダーの高さ）の設定をすることで挙動のカクツキが改善。ないとスクロールが2タップぐらい反応しない
-            baseTableView.contentOffset = CGPoint(x: 0, y: -CGFloat(hederViewHeight/2))
+            baseTableView.contentOffset = CGPoint(x: 0, y: -CGFloat(headerViewHeightDouble/stickHeaderRation))
         }
     }
 }

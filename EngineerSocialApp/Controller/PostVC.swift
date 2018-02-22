@@ -27,28 +27,29 @@ class PostVC: UIViewController, UIPopoverPresentationControllerDelegate, PopOver
         super.didReceiveMemoryWarning()
     }
     
-    @IBAction func closeTapped(_ sender: Any) {
-        self.dismiss(animated: true, completion: nil)
-    }
-    
     // FIXME: 入力内容が不十分の場合は投稿ボタンにalphaをかけておく
     @IBAction func postTapped(_ sender: Any) {
         
-        guard let language = languageLabel.text, language != "" else {
-            print("Error: 言語が設定されてませんよっ")
-            return
-        }
+//        guard let language = languageLabel.text, language != "" else {
+//            print("Error: 言語が設定されてませんよっ")
+//            return
+//        }
+//
+//        guard let doing = doingLabel.text, doing != "" else {
+//            print("Error: やることが設定されてませんよっ")
+//            return
+//        }
+//
+//        guard let caption = captionTextView.text, caption != "" else {
+//            print("Error: キャプションなし！？")
+//            return
+//        }
         
-        guard let doing = doingLabel.text, doing != "" else {
-            print("Error: やることが設定されてませんよっ")
-            return
-        }
-        
-        guard let caption = captionTextView.text, caption != "" else {
-            print("Error: キャプションなし！？")
-            return
-        }
-        postToFirebase()
+        // 遷移させない方が自然かも
+        //self.tabBarController?.selectedIndex = 0
+        PopupView.sharedManager.show()
+        // FIXME: デバッグ用にコメントアウト
+        //postToFirebase()
     }
     
     // FIXME: ここでdbに書き込む際にユーザーのツリーの中にlanguageとdoing要素のカウントを増やす。
