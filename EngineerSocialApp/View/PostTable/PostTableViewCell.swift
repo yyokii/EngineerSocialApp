@@ -32,6 +32,7 @@ class PostTableViewCell: UITableViewCell {
     @IBOutlet weak var okCountLabel: UILabel!
     
     @IBOutlet weak var dateLabel:UILabel!
+    @IBOutlet weak var arrowDownImage: UIImageView!
     
     var post: Post!
     
@@ -53,23 +54,39 @@ class PostTableViewCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         addTapGestureToLabel()
+        addTapGestureToImage()
+    }
+    
+    func addTapGestureToImage(){
+        let arrowDownImageTap = UITapGestureRecognizer(target: self, action: #selector(showActionSheet(sender:)))
+        arrowDownImage.addGestureRecognizer(arrowDownImageTap)
+    }
+    
+    @objc func showActionSheet(sender: UITapGestureRecognizer){
+        let center = NotificationCenter.default
+        center.post(name: Notification.Name.PostCell.arrowDownNotification, object: nil, userInfo: ["postUserId": post.postUserId])
     }
     
     /// ユーザーが投稿にアクションする用のラベルをタップできるように設定する
     func addTapGestureToLabel () {
         let smileTap = UITapGestureRecognizer(target: self, action: #selector(smileTapped(sender:)))
+        smileLabel.isEnabled = true
         smileLabel.addGestureRecognizer(smileTap)
         
         let heartTap = UITapGestureRecognizer(target: self, action: #selector(heartTapped(sender:)))
+        heartLabel.isEnabled = true
         heartLabel.addGestureRecognizer(heartTap)
         
         let cryTap = UITapGestureRecognizer(target: self, action: #selector(cryTapped(sender:)))
+        cryLabel.isEnabled = true
         cryLabel.addGestureRecognizer(cryTap)
         
         let clapTap = UITapGestureRecognizer(target: self, action: #selector(clapTapped(sender:)))
+        clapLabel.isEnabled = true
         clapLabel.addGestureRecognizer(clapTap)
         
         let okTap = UITapGestureRecognizer(target: self, action: #selector(okTapped(sender:)))
+        okLabel.isEnabled = true
         okLabel.addGestureRecognizer(okTap)
     }
     
@@ -93,8 +110,6 @@ class PostTableViewCell: UITableViewCell {
         self.developLabel.text = post.develop
         self.caption.text = post.caption
         
-        // いいね数表示用ラベル
-        //self.likesLbl.text = "\(post.likes)"
         self.smileCountLabel.text = "\(post.smiles)"
         self.heartCountLabel.text = "\(post.hearts)"
         self.cryCountLabel.text = "\(post.cries)"
@@ -130,8 +145,8 @@ class PostTableViewCell: UITableViewCell {
 //        }
     }
     
-    // FIXME: ここともう一つしたのブロックで同じようなメソッドを5個ずつ作ってるのそれぞれ1つにまとめたいなあ
-    ////////// ユーザーのアクション状況をビューに反映させる
+    // FIXME: ここともう一つしたのブロックでそれぞれ同じようなメソッドを5個ずつ作ってるのそれぞれ1つにまとめたいなあ
+    ////////// カレントユーザーのアクション状況をビューに反映させる
     func setSmileLabel(ref: FIRDatabaseReference) {
         ref.observeSingleEvent(of: .value, with: { (snapshot) in
             if let _ = snapshot.value as? NSNull {
@@ -182,99 +197,158 @@ class PostTableViewCell: UITableViewCell {
         })
     }
     
+    /////////
+    
     //////////
-    
-    
-    // FIXME: 2重タップの制御が必要。現状のisEnabledのタイミングでは不十分。
-    ////////// ユーザーのタップアクション時のメソッド5つ。タップ時にユーザーの情報として任意の記事にアクションしたことを保持する。処理はほぼ同じ。dbにのパス,ajust関数が異なる。
+    //ユーザーのタップアクション時のメソッド5つ。処理はほぼ同じ。dbにのパス,ajust関数が異なる。firebase処理：ajustsmile（postのアクションカウント書き換え）→ ユーザーのアクションフラグ　→ ユーザーのアクション獲得総数（それぞれcompletionで次の処理を実行）
     @objc func smileTapped (sender: UITapGestureRecognizer) {
-        self.smileLabel.isEnabled = false
-        smileRef.observeSingleEvent(of: .value, with: { (snapshot) in
-            if let _ = snapshot.value as? NSNull {
-                self.smileLabel.selectedLabel()
-                self.post.ajustSmile(addSmile: true)
-                self.smileRef.setValue(true)
-                self.addPostUserGetActinos(actionType: ActionType.smile, isAdd: true)
-            } else {
-                self.smileLabel.notSelectedLabel()
-                self.post.ajustSmile(addSmile: false)
-                self.smileRef.removeValue()
-                self.addPostUserGetActinos(actionType: ActionType.smile, isAdd: false)
-            }
-            self.smileLabel.isEnabled = true
-        })
+        if self.smileLabel.isEnabled {
+            smileLabel.isEnabled = false
+            smileRef.observeSingleEvent(of: .value, with: { (snapshot) in
+                if let _ = snapshot.value as? NSNull {
+                    self.post.ajustSmile(addSmile: true, completion: { [weak self] in
+                        self?.smileRef.setValue(true, withCompletionBlock: { (error, ref) in
+                            self?.addPostUserGetActinos(actionType: ActionType.smile, isAdd: true, completion: { [weak self] in
+                                self?.smileCountLabel.text = "\((self?.post.smiles)!)"
+                                self?.smileLabel.selectedLabel()
+                                self?.smileLabel.isEnabled = true
+                            })
+                        })
+                    })
+                    
+                } else {
+                    self.post.ajustSmile(addSmile: false, completion: { [weak self] in
+                        self?.smileRef.removeValue(completionBlock: { (error, ref) in
+                            self?.addPostUserGetActinos(actionType: ActionType.smile, isAdd: false, completion: { [weak self] in
+                                self?.smileCountLabel.text = "\((self?.post.smiles)!)"
+                                self?.smileLabel.notSelectedLabel()
+                                self?.smileLabel.isEnabled = true
+                            })
+                        })
+                    })
+                }
+            })
+        }
     }
     
     @objc func heartTapped (sender: UITapGestureRecognizer) {
-        self.heartLabel.isEnabled = false
-        heartRef.observeSingleEvent(of: .value, with: { (snapshot) in
-            if let _ = snapshot.value as? NSNull {
-                self.heartLabel.selectedLabel()
-                self.post.ajustHeart(addHeart: true)
-                self.heartRef.setValue(true)
-                self.addPostUserGetActinos(actionType: ActionType.heart, isAdd: true)
-            } else {
-                self.heartLabel.notSelectedLabel()
-                self.post.ajustHeart(addHeart: false)
-                self.heartRef.removeValue()
-                self.addPostUserGetActinos(actionType: ActionType.heart, isAdd: false)
-            }
-            self.heartLabel.isEnabled = true
-        })
+        if self.heartLabel.isEnabled {
+            heartLabel.isEnabled = false
+            heartRef.observeSingleEvent(of: .value, with: { (snapshot) in
+                if let _ = snapshot.value as? NSNull {
+                    self.post.ajustHeart(addHeart: true, completion: { [weak self] in
+                        self?.heartRef.setValue(true, withCompletionBlock: { (error, ref) in
+                            self?.addPostUserGetActinos(actionType: ActionType.heart, isAdd: true, completion: { [weak self] in
+                                self?.heartCountLabel.text = "\((self?.post.hearts)!)"
+                                self?.heartLabel.selectedLabel()
+                                self?.heartLabel.isEnabled = true
+                            })
+                        })
+                    })
+                    
+                } else {
+                    self.post.ajustHeart(addHeart: false, completion: { [weak self] in
+                        self?.heartRef.removeValue(completionBlock: { (error, ref) in
+                            self?.addPostUserGetActinos(actionType: ActionType.heart, isAdd: false, completion: { [weak self] in
+                                self?.heartCountLabel.text = "\((self?.post.hearts)!)"
+                                self?.heartLabel.notSelectedLabel()
+                                self?.heartLabel.isEnabled = true
+                            })
+                        })
+                    })
+                }
+            })
+        }
     }
     
     @objc func cryTapped (sender: UITapGestureRecognizer) {
-        self.cryLabel.isEnabled = false
-        cryRef.observeSingleEvent(of: .value, with: { (snapshot) in
-            if let _ = snapshot.value as? NSNull {
-                self.cryLabel.selectedLabel()
-                self.post.ajustCry(addCry: true)
-                self.cryRef.setValue(true)
-                self.addPostUserGetActinos(actionType: ActionType.cry, isAdd: true)
-            } else {
-                self.cryLabel.notSelectedLabel()
-                self.post.ajustCry(addCry: false)
-                self.cryRef.removeValue()
-                self.addPostUserGetActinos(actionType: ActionType.cry, isAdd: false)
-            }
-            self.cryLabel.isEnabled = true
-        })
+        if self.cryLabel.isEnabled {
+            cryLabel.isEnabled = false
+            cryRef.observeSingleEvent(of: .value, with: { (snapshot) in
+                if let _ = snapshot.value as? NSNull {
+                    self.post.ajustCry(addCry: true, completion: { [weak self] in
+                        self?.cryRef.setValue(true, withCompletionBlock: { (error, ref) in
+                            self?.addPostUserGetActinos(actionType: ActionType.cry, isAdd: true, completion: { [weak self] in
+                                self?.cryCountLabel.text = "\((self?.post.cries)!)"
+                                self?.cryLabel.selectedLabel()
+                                self?.cryLabel.isEnabled = true
+                            })
+                        })
+                    })
+                    
+                } else {
+                    self.post.ajustCry(addCry: false, completion: { [weak self] in
+                        self?.cryRef.removeValue(completionBlock: { (error, ref) in
+                            self?.addPostUserGetActinos(actionType: ActionType.cry, isAdd: false, completion: { [weak self] in
+                                self?.cryCountLabel.text = "\((self?.post.cries)!)"
+                                self?.cryLabel.notSelectedLabel()
+                                self?.cryLabel.isEnabled = true
+                            })
+                        })
+                    })
+                }
+            })
+        }
     }
     
     @objc func clapTapped (sender: UITapGestureRecognizer) {
-        self.clapLabel.isEnabled = false
-        clapRef.observeSingleEvent(of: .value, with: { (snapshot) in
-            if let _ = snapshot.value as? NSNull {
-                self.clapLabel.selectedLabel()
-                self.post.ajustClap(addClap: true)
-                self.clapRef.setValue(true)
-                self.addPostUserGetActinos(actionType: ActionType.clap, isAdd: true)
-            } else {
-                self.clapLabel.notSelectedLabel()
-                self.post.ajustClap(addClap: false)
-                self.clapRef.removeValue()
-                self.addPostUserGetActinos(actionType: ActionType.clap, isAdd: false)
-            }
-            self.clapLabel.isEnabled = true
-        })
+        if self.clapLabel.isEnabled {
+            clapLabel.isEnabled = false
+            clapRef.observeSingleEvent(of: .value, with: { (snapshot) in
+                if let _ = snapshot.value as? NSNull {
+                    self.post.ajustClap(addClap: true, completion: { [weak self] in
+                        self?.clapRef.setValue(true, withCompletionBlock: { (error, ref) in
+                            self?.addPostUserGetActinos(actionType: ActionType.clap, isAdd: true, completion: { [weak self] in
+                                self?.clapCountLabel.text = "\((self?.post.claps)!)"
+                                self?.clapLabel.selectedLabel()
+                                self?.clapLabel.isEnabled = true
+                            })
+                        })
+                    })
+                    
+                } else {
+                    self.post.ajustClap(addClap: false, completion: { [weak self] in
+                        self?.clapRef.removeValue(completionBlock: { (error, ref) in
+                            self?.addPostUserGetActinos(actionType: ActionType.clap, isAdd: false, completion: { [weak self] in
+                                self?.clapCountLabel.text = "\((self?.post.claps)!)"
+                                self?.clapLabel.notSelectedLabel()
+                                self?.clapLabel.isEnabled = true
+                            })
+                        })
+                    })
+                }
+            })
+        }
     }
     
     @objc func okTapped (sender: UITapGestureRecognizer) {
-        self.okLabel.isEnabled = false
-        okRef.observeSingleEvent(of: .value, with: { (snapshot) in
-            if let _ = snapshot.value as? NSNull {
-                self.okLabel.selectedLabel()
-                self.post.ajustOk(addOk: true)
-                self.okRef.setValue(true)
-                self.addPostUserGetActinos(actionType: ActionType.ok, isAdd: true)
-            } else {
-                self.okLabel.notSelectedLabel()
-                self.post.ajustOk(addOk: false)
-                self.okRef.removeValue()
-                self.addPostUserGetActinos(actionType: ActionType.ok, isAdd: false)
-            }
-            self.okLabel.isEnabled = true
-        })
+        if self.okLabel.isEnabled {
+            okLabel.isEnabled = false
+            okRef.observeSingleEvent(of: .value, with: { (snapshot) in
+                if let _ = snapshot.value as? NSNull {
+                    self.post.ajustOk(addOk: true, completion: { [weak self] in
+                        self?.okRef.setValue(true, withCompletionBlock: { (error, ref) in
+                            self?.addPostUserGetActinos(actionType: ActionType.ok, isAdd: true, completion: { [weak self] in
+                                self?.okCountLabel.text = "\((self?.post.oks)!)"
+                                self?.okLabel.selectedLabel()
+                                self?.okLabel.isEnabled = true
+                            })
+                        })
+                    })
+                    
+                } else {
+                    self.post.ajustOk(addOk: false, completion: { [weak self] in
+                        self?.okRef.removeValue(completionBlock: { (error, ref) in
+                            self?.addPostUserGetActinos(actionType: ActionType.ok, isAdd: false, completion: { [weak self] in
+                                self?.okCountLabel.text = "\((self?.post.oks)!)"
+                                self?.okLabel.notSelectedLabel()
+                                self?.okLabel.isEnabled = true
+                            })
+                        })
+                    })
+                }
+            })
+        }
     }
     //////////
 
@@ -283,7 +357,7 @@ class PostTableViewCell: UITableViewCell {
     /// - Parameters:
     ///   - actionType: どのアクションをタップしたか
     ///   - isAdd: アクション追加か取消か
-    func addPostUserGetActinos(actionType: ActionType, isAdd: Bool) {
+    func addPostUserGetActinos(actionType: ActionType, isAdd: Bool, completion: @escaping (() -> Void)) {
         
         var actionTypeString: String?
         switch actionType {
@@ -300,13 +374,15 @@ class PostTableViewCell: UITableViewCell {
         }
         
         if let _ = actionTypeString {
-            let getSmileActionsTotalRef = DataService.ds.REF_USER_CURRENT.child("getActions").child(actionTypeString!)
-            getSmileActionsTotalRef.observeSingleEvent(of: .value, with: { (snapshot) in
+            let getActionsTotalRef = DataService.ds.REF_USER_CURRENT.child("getActions").child(actionTypeString!)
+            getActionsTotalRef.observeSingleEvent(of: .value, with: { (snapshot) in
                 if let getActions = snapshot.value as? Int {
                     if isAdd {
-                        getSmileActionsTotalRef.setValue(getActions + 1)
+                        getActionsTotalRef.setValue(getActions + 1)
+                        completion()
                     } else {
-                        getSmileActionsTotalRef.setValue(getActions - 1)
+                        getActionsTotalRef.setValue(getActions - 1)
+                        completion()
                     }
                 }
             })

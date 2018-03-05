@@ -27,6 +27,9 @@ class PostVC: UIViewController, UIPopoverPresentationControllerDelegate, PopOver
         super.didReceiveMemoryWarning()
     }
     
+    @IBAction func closeTapped(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+    }
     // FIXME: 入力内容が不十分の場合は投稿ボタンにalphaをかけておく
     @IBAction func postTapped(_ sender: Any) {
         

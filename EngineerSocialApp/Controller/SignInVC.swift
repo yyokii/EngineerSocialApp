@@ -39,19 +39,15 @@ class SignInVC: UIViewController {
         
         facebookLogin.logIn(withReadPermissions: ["email"], from: self) { (result, error) in
             if error != nil {
-                
                 print("JESS: Unable to authenticate with Facebook - \(String(describing: error))")
             } else if result?.isCancelled == true {
-                
                 print("JESS: User cancelled Facebook authentication")
             } else {
-                
                 print("JESS: Successfully authenticated with Facebook")
                 let credential = FIRFacebookAuthProvider.credential(withAccessToken: FBSDKAccessToken.current().tokenString)
                 self.firebaseAuth(credential)
             }
         }
-        
     }
     
     // twitterログイン
@@ -83,9 +79,6 @@ class SignInVC: UIViewController {
                 
                 print("OK: Successfully authenticated with Firebase")
                 if let user = user {
-                    // フォロー、フォロワーツリーを作成
-                    
-                    
                     // ユーザー名を保存
                     var name = "anonymous"
                     if let displayName = user.displayName{

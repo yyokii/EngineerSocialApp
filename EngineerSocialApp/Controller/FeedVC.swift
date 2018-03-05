@@ -9,8 +9,9 @@
 import UIKit
 import Firebase
 import SwiftKeychainWrapper
+import MessageUI
 
-class FeedVC: UIViewController{
+class FeedVC: UIViewController, MFMailComposeViewControllerDelegate{
 
     @IBOutlet weak var mainView: UIView!
     
@@ -24,8 +25,15 @@ class FeedVC: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.tabBarController?.delegate = self
         imagePicker = UIImagePickerController()
         imagePicker.allowsEditing = true
+        
+        let center = NotificationCenter.default
+        center.addObserver(self,
+                           selector: #selector(type(of: self).showActionSheet(notification:)),
+                           name: Notification.Name.PostCell.arrowDownNotification,
+                           object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -37,6 +45,31 @@ class FeedVC: UIViewController{
     override func viewDidLayoutSubviews() {
         setPostTableView()
         getPostsFromFireBase()
+    }
+    
+    @objc func showActionSheet(notification: NSNotification){
+        guard let userInfo = notification.userInfo,
+            let postUserId  = userInfo["postUserId"] as? String else {
+                print("エラー：　No userInfo found in notification")
+                return
+        }
+        print(postUserId)
+        Alert.showReportActionSheet(vc: self, postUserId: postUserId) {
+            //メールを送信できるかチェック
+            if MFMailComposeViewController.canSendMail()==false {
+                return
+            }
+            
+            let mailViewController = MFMailComposeViewController()
+            let toRecipients = ["yyokii.h@gmail.com"]
+            
+            mailViewController.mailComposeDelegate = self
+            mailViewController.setSubject("お問い合わせ")
+            mailViewController.setToRecipients(toRecipients)
+            mailViewController.setMessageBody("不適切な投稿をした次のユーザーを通報しまします。\n " + postUserId, isHTML: false)
+            
+            self.present(mailViewController, animated: true, completion: nil)
+        }
     }
     
     /// データベースから投稿情報を取得
@@ -121,10 +154,23 @@ class FeedVC: UIViewController{
     }
 }
 
+// FIXME: ベースビュー作って処理をまとめた方がいい、と思ったけどここだけに書けばいいみたい。。。
+extension FeedVC: UITabBarControllerDelegate {
+    func tabBarController(_ tabBarController: UITabBarController, shouldSelect viewController: UIViewController) -> Bool {
+        if viewController is PostVC {
+            let postStoryBoard = UIStoryboard(name: "Post", bundle: nil)
+            let postVC = postStoryBoard.instantiateInitialViewController() as! PostVC
+            self.present(postVC, animated: true, completion: nil)
+            return false
+        }
+        return true
+    }
+}
+
 extension FeedVC: PostTableViewDelegate{
     func didSelectCell(postUserId: String) {
         selectedPostUserId = postUserId
-        if selectedPostUserId != DataService.ds.REF_USER_CURRENT.key{
+        if selectedPostUserId != KeychainWrapper.standard.string(forKey: KEY_UID) {
             performSegue(withIdentifier: TO_POST_USER_PROFILE, sender: nil)
         }
     }

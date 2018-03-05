@@ -9,13 +9,14 @@ import UIKit
 import Firebase
 import SwiftKeychainWrapper
 
+//メモ：　コンテンツオフセット、ヘッダーの下部のy座標が0、トップが-200とか-300（ヘッダーの高さ）。
 
 /// 自分のプロフィール表示、他のユーザーのプロフィール表示の2パターン使い方あり
 /// （デフォルトは自分のプロフィールを表示、他のユーザーのものを表示する場合はタイプとuidを遷移前にセットしてね）
 /// 自分のプロフィールでは：画像変更可能、投稿にアクションできない、、、、とかとか
 /// ＜初回＞didLoad：tableviewセット　didLayout：tableのheaderをセット、ユーザーの情報を取得して表示
 /// ＜初回以後＞willappear：投稿情報、過去投稿の最新データを取得
-class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate{
+class ProfileVC: UIViewController{
     
     // コンテンツ切り替え用のラベル
     @IBOutlet weak var myDataLabel: ProfileSetContentLabel!
@@ -68,21 +69,9 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
     // 過去の投稿を表示するために使用
     var postTableView: PostTableView!
     var myPosts = [Post]()
-
-    /// プロフィール画像を設定
-    var imagePicker: UIImagePickerController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // tapGestureの設定を初期化
-//        initSelectCotentLabel()
-//        setSelectContentLabel()
-        
-        imagePicker = UIImagePickerController()
-        imagePicker.delegate = self
-        imagePicker.allowsEditing = true
-        
         /// 自分の？それとも他の人の？を判断
         initProfileViewType()
         
@@ -124,7 +113,7 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
         baseTableViewHeight = (self.navigationController?.navigationBar.frame.height)! + UIApplication.shared.statusBarFrame.height
 
         if profileType == ProfileType.myProfile {
-            uid = DataService.ds.REF_USER_CURRENT.key
+            uid = KeychainWrapper.standard.string(forKey: KEY_UID)!
             // FIXME:後でリファクタしたい。自分のプロフィール画面でもナビゲーションバーをつける仕様にしたので, baseTableViewHeightは共通
             //baseTableViewHeight = UIApplication.shared.statusBarFrame.height
         } else if profileType == ProfileType.others {
@@ -150,21 +139,6 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
             })
         }
     }
-    
-//    func initSelectCotentLabel(){
-//        // ユーザーのプロフィール画像をタップしてカメラロールから変更できるようにする
-//        let userImageTap = UITapGestureRecognizer(target: self, action: #selector(userImageTapped))
-//        userImageView.isUserInteractionEnabled = true
-//        userImageView.addGestureRecognizer(userImageTap)
-//
-//        // コンテンツ切り替え用のラベルのタップ時の挙動を設定
-//        let dataLabelTap = UITapGestureRecognizer(target: self, action: #selector(dataLabelTapped))
-//        myDataLabel.isUserInteractionEnabled = true
-//        myDataLabel.addGestureRecognizer(dataLabelTap)
-//        let postLabelTap = UITapGestureRecognizer(target: self, action: #selector(postLabelTapped))
-//        myPostLabel.isUserInteractionEnabled = true
-//        myPostLabel.addGestureRecognizer(postLabelTap)
-//    }
     
     func applyFollowLabel(){
         FirebaseLogic.fetchFollowUser(uid: uid) {[weak  self] (followUidArray) in
@@ -266,36 +240,6 @@ class ProfileVC: UIViewController, UIImagePickerControllerDelegate, UINavigation
         }
     }
     
-    @objc func userImageTapped() {
-        present(imagePicker, animated: true, completion: nil)
-    }
-    
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        
-        if let image = info[UIImagePickerControllerEditedImage] as? UIImage {
-            userImageView.image = image
-            // 選択した画像をストレージに画像を保存する
-            if let imgData = UIImageJPEGRepresentation(image, 0.5) {
-                let imgUid = DataService.ds.REF_USER_CURRENT.key
-                let matadata = FIRStorageMetadata()
-                matadata.contentType = "image/jpeg"
-                
-                // 画像をfirebaseストレージに追加する
-                DataService.ds.REF_USER_IMAGES.child(imgUid).put(imgData, metadata: matadata) { (metadata, error) in
-                    if error != nil {
-                        print("Error: Firebasee storageへの画像アップロード失敗")
-                    } else {
-                        print("OK:　Firebase storageへの画像アップロード成功")
-                    }
-                }
-            }
-        } else {
-            print("Error: 適切な画像が選択されなかったよん")
-        }
-        
-        imagePicker.dismiss(animated: true, completion: nil)
-    }
-    
     func setBaseTableView() {
         let displayWidth = self.view.frame.width
         let displayHeight = self.view.frame.height
@@ -379,7 +323,7 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
             // cell内のコンテンツだけを動かせる
             baseTableView.contentOffset = CGPoint(x: 0, y: -CGFloat(headerViewHeightDouble/stickHeaderRation))
             baseTableView.isScrollEnabled = false
-            // 下部のコンテンツのスクロールの設定を変更
+            // 下部のコンテンツのスクロールを有効にする
             postDataView.scrollView.isScrollEnabled = true
             postTableView.isScrollEnabled = true
         }else {
@@ -410,6 +354,8 @@ extension ProfileVC: PostDataViewDelegate{
             postDataView.scrollView.isScrollEnabled = false
             // -100（固定させるヘッダーの高さ）の設定をすることで挙動のカクツキが改善。ないとスクロールが2タップぐらい反応しない
             baseTableView.contentOffset = CGPoint(x: 0, y: -CGFloat(headerViewHeightDouble/stickHeaderRation))
+            // ヘッダー全体を表示時はコンテンツのスクロールをリセットする（他のコンテンツも）。そうしないとコンテンツが見切れる場合が生じる。
+            postTableView.contentOffset = CGPoint(x: 0, y: 0)
         }
     }
 }
@@ -429,11 +375,28 @@ extension ProfileVC: PostTableViewDelegate{
             postTableView.isScrollEnabled = false
             // -100（固定させるヘッダーの高さ）の設定をすることで挙動のカクツキが改善。ないとスクロールが2タップぐらい反応しない
             baseTableView.contentOffset = CGPoint(x: 0, y: -CGFloat(headerViewHeightDouble/stickHeaderRation))
+            // ヘッダー全体を表示時はコンテンツのスクロールをリセットする（他のコンテンツも）。そうしないとコンテンツが見切れる場合が生じる。
+            postDataView.scrollView.contentOffset = CGPoint(x: 0, y: 0)
         }
     }
 }
 
 extension ProfileVC: ProfilehHeaderViewDelegate{
+    func settingButtonTapped() {
+        let settingStoryBoard = UIStoryboard(name: "Setting", bundle: nil)
+        let settingVC = settingStoryBoard.instantiateInitialViewController() as! SettingVC
+        
+        var currentUser = User()
+        currentUser.profileImage = headerView.userImageView.image
+        currentUser.name = headerView.userNameLabel.text
+        currentUser.profile = headerView.userDescription.text
+        currentUser.twitter = headerView.twitter
+        currentUser.git = headerView.git
+        settingVC.currentUser = currentUser
+        
+        self.present(settingVC, animated: true, completion: nil)
+    }
+    
     func followLabelTapped() {
         performSegue(withIdentifier: TO_FOLLOW_FOLLOWER, sender: nil)
     }

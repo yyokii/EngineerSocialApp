@@ -136,55 +136,79 @@ class Post {
         _postRef = DataService.ds.REF_POSTS.child(_postKey)
     }
     
-    func ajustLike (addLike: Bool) {
-        if addLike {
-            _likes = _likes + 1   //////////////////
-        } else {
-            _likes = _likes - 1    //////////////////
-        }
-        _postRef.child(LIKES).setValue(_likes)
-    }
-    
     // ユーザーのアクション数をdbに反映させる。postツリーの中の個々の投稿の中でアクション数を保持する。
-    func ajustSmile (addSmile: Bool) {
+    func ajustSmile (addSmile: Bool, completion: @escaping () -> Void) {
         if addSmile {
             _smiles = _smiles + 1
         } else {
             _smiles = _smiles - 1
         }
-        _postRef.child(ACTION).child(SMILES).setValue(_smiles)
+        _postRef.child(ACTION).child(SMILES).setValue(smiles) { (error, ref) in
+            if error == nil {
+                completion()
+            }else {
+                print("エラー: adjustSmile")
+            }
+        }
     }
     
-    func ajustHeart (addHeart: Bool) {
+    func ajustHeart (addHeart: Bool, completion: @escaping () -> Void) {
         if addHeart {
             _hearts = _hearts + 1
         } else {
             _hearts = _hearts - 1
         }
-        _postRef.child(ACTION).child(HEARTS).setValue(_hearts)
+        _postRef.child(ACTION).child(HEARTS).setValue(_hearts) { (error, ref) in
+            if error == nil {
+                completion()
+            }else {
+                print("エラー: adjustHeart")
+            }
+        }
     }
-    func ajustCry (addCry: Bool) {
+    
+    func ajustCry (addCry: Bool, completion: @escaping () -> Void) {
         if addCry {
             _cries = _cries + 1
         } else {
             _cries = _cries - 1
         }
-        _postRef.child(ACTION).child(CRIES).setValue(_cries)
+        _postRef.child(ACTION).child(CRIES).setValue(_cries) { (error, ref) in
+            if error == nil {
+                completion()
+            }else {
+                print("エラー: adjustCry")
+            }
+        }
     }
-    func ajustClap (addClap: Bool) {
+    
+    func ajustClap (addClap: Bool, completion: @escaping () -> Void) {
         if addClap {
             _claps = _claps + 1
         } else {
             _claps = _claps - 1
         }
-        _postRef.child(ACTION).child(CLAPS).setValue(_claps)
+        _postRef.child(ACTION).child(CLAPS).setValue(_claps) { (error, ref) in
+            if error == nil {
+                completion()
+            }else {
+                print("エラー: adjustClap")
+            }
+        }
     }
-    func ajustOk (addOk: Bool) {
+    
+    func ajustOk (addOk: Bool, completion: @escaping () -> Void) {
         if addOk {
             _oks = _oks + 1
         } else {
             _oks = _oks - 1
         }
-        _postRef.child(ACTION).child(OKS).setValue(_oks)
+        _postRef.child(ACTION).child(OKS).setValue(_oks) { (error, ref) in
+            if error == nil {
+                completion()
+            }else {
+                print("エラー: adjustOk")
+            }
+        }
     }
 }

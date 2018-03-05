@@ -13,6 +13,7 @@ import SwiftKeychainWrapper
 let DB_BASE = FIRDatabase.database().reference()
 let STORAGE_BASE = FIRStorage.storage().reference()
 
+// FIXME: dbを参照する処理は極力少なくしたいから、ログインユーザー情報とかは構造体で持っといた方がいいかも
 class DataService {
     
     static let ds = DataService()

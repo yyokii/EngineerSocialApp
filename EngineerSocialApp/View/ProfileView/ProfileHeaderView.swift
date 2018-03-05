@@ -10,6 +10,8 @@ import SwiftKeychainWrapper
 import FirebaseAuth
 
 protocol ProfilehHeaderViewDelegate: class {
+    func settingButtonTapped() -> Void
+    
     func followButtonTapped() -> Void
     func followLabelTapped() -> Void
     func followerLabelTapped() -> Void
@@ -29,15 +31,10 @@ class ProfilehHeaderView: UIView {
     @IBOutlet weak var dataLabel: UILabel!
     @IBOutlet weak var postLabel: UILabel!
     
-    weak var profilehHeaderViewDelegate: ProfilehHeaderViewDelegate?
+    var twitter = ""
+    var git = ""
     
-    // FIXME: デバッグ用
-    @IBAction func signOutTap(_ sender: Any) {
-        let keychainResult = KeychainWrapper.standard.removeObject(forKey: KEY_UID)
-        print("JESS: ID removed from keychain \(keychainResult)")
-        try! FIRAuth.auth()?.signOut()
-    }
-    
+    weak var profilehHeaderViewDelegate: ProfilehHeaderViewDelegate?    
     
     override init(frame: CGRect){
         super.init(frame: frame)
@@ -76,7 +73,7 @@ class ProfilehHeaderView: UIView {
         let followTap = UITapGestureRecognizer(target: self, action: #selector(followTapped(sender:)))
         followLabel.addGestureRecognizer(followTap)
         
-        followLabel.text = "<FOLLOW:\(followCount)/>"
+        followLabel.text = "FOLLOW:\(followCount)"
         followLabel.isUserInteractionEnabled = true
     }
     
@@ -84,7 +81,7 @@ class ProfilehHeaderView: UIView {
         let followerTap = UITapGestureRecognizer(target: self, action: #selector(followerTapped(sender:)))
         followerLabel.addGestureRecognizer(followerTap)
         
-        followerLabel.text = "<FOLLOWER:\(followerCount)/>"
+        followerLabel.text = "FOLLOWER:\(followerCount)/"
         followerLabel.isUserInteractionEnabled = true
     }
     
@@ -109,6 +106,9 @@ class ProfilehHeaderView: UIView {
     func postContentSelected() {
         dataLabel.textColor = UIColor(hex: TERMINAL_TEXT_GRAY)
         postLabel.textColor = UIColor(hex: TERMINAL_TEXT_WHITE)
+    }
+    @IBAction func settingTapped(_ sender: Any) {
+        profilehHeaderViewDelegate?.settingButtonTapped()
     }
     
     //MARK: action
