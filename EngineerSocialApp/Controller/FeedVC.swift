@@ -25,6 +25,8 @@ class FeedVC: UIViewController, MFMailComposeViewControllerDelegate{
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationItem.title = " :) Feed "
+        
         self.tabBarController?.delegate = self
         imagePicker = UIImagePickerController()
         imagePicker.allowsEditing = true
@@ -54,50 +56,26 @@ class FeedVC: UIViewController, MFMailComposeViewControllerDelegate{
                 return
         }
         print(postUserId)
-        Alert.showReportActionSheet(vc: self, postUserId: postUserId) {
-            //メールを送信できるかチェック
-            if MFMailComposeViewController.canSendMail()==false {
-                return
-            }
-            
-            let mailViewController = MFMailComposeViewController()
-            let toRecipients = ["yyokii.h@gmail.com"]
-            
-            mailViewController.mailComposeDelegate = self
-            mailViewController.setSubject("お問い合わせ")
-            mailViewController.setToRecipients(toRecipients)
-            mailViewController.setMessageBody("不適切な投稿をした次のユーザーを通報しまします。\n " + postUserId, isHTML: false)
-            
-            self.present(mailViewController, animated: true, completion: nil)
+        Alert.presentReportActionSheet(vc: self, postUserId: postUserId) { [weak self] in
+            Util.presentMailView(vc: self!, subject: "お問い合わせ", message: "不適切な投稿をした次のユーザーを通報します。\n " + postUserId)
         }
     }
     
     /// データベースから投稿情報を取得
     func getPostsFromFireBase() {
-        //.value means  Any new posts or changes to a post
-        DataService.ds.REF_POSTS.observeSingleEvent(of: .value , with: { (snapshot) in
-            
-            print("全ての投稿情報:\(snapshot)")
-            
-            self.posts = []
-            
-            if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
-                for snap in snapshot {
-                    print("Snap: \(snap)")
+        FirebaseLogic.fetchLatestPostsData { [weak self] (snapshot) in
+            self?.posts = []
+            for snap in snapshot {
+                if let postDict = snap.value as? Dictionary<String, AnyObject> {
+                    let key = snap.key
+                    let post = Post(postKey: key, postData: postDict)
+                    self?.posts.insert(post, at: 0)
                     
-                    if let postDict = snap.value as? Dictionary<String, AnyObject> {
-                        
-                        let key = snap.key
-                        let post = Post(postKey: key, postData: postDict)
-                        //self.posts.append(post)
-                        self.posts.insert(post, at: 0)
-                        
-                    }
                 }
-                self.postTableView.posts = self.posts
-                self.postTableView.reloadData()
             }
-        })
+            self?.postTableView.posts = (self?.posts)!
+            self?.postTableView.reloadData()
+        }
     }
     
     /// 投稿表示用のテーブルビュー
@@ -118,39 +96,28 @@ class FeedVC: UIViewController, MFMailComposeViewControllerDelegate{
     }
     
     @objc func refreshControlValueChanged(sender: UIRefreshControl) {
-        // FIXME: getPost()メソッドの処理と最後以外同じなのでリファクタしたい
-        DataService.ds.REF_POSTS.observeSingleEvent(of: .value , with: { (snapshot) in
-            self.posts = []
-            if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
-                for snap in snapshot {
-                    print("Snap: \(snap)")
-                    
-                    if let postDict = snap.value as? Dictionary<String, AnyObject> {
-                        
-                        let key = snap.key
-                        let post = Post(postKey: key, postData: postDict)
-                        //self.posts.append(post)
-                        self.posts.insert(post, at: 0)
-                        
-                    }
-                }
-                sender.endRefreshing()
-                self.postTableView.posts = self.posts
-                self.postTableView.reloadData()
-            }
-        })
-    }
-    
-    @IBAction func signOutTapped(_ sender: Any) {
         
-        let keychainResult = KeychainWrapper.standard.removeObject(forKey: KEY_UID)
-        print("JESS: ID removed from keychain \(keychainResult)")
-        try! FIRAuth.auth()?.signOut()
-        performSegue(withIdentifier: TO_SIGN_IN, sender: nil)
-    }
-
-    @IBAction func postTapped(_ sender: Any) {
-        performSegue(withIdentifier: TO_POST, sender: nil)
+        getPostsFromFireBase()
+        sender.endRefreshing()
+//        // FIXME: getPost()メソッドの処理と最後以外同じなのでリファクタしたい
+//        DataService.ds.REF_POSTS.observeSingleEvent(of: .value , with: { (snapshot) in
+//            self.posts = []
+//            if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
+//                for snap in snapshot {
+//
+//                    if let postDict = snap.value as? Dictionary<String, AnyObject> {
+//
+//                        let key = snap.key
+//                        let post = Post(postKey: key, postData: postDict)
+//                        self.posts.insert(post, at: 0)
+//
+//                    }
+//                }
+//                sender.endRefreshing()
+//                self.postTableView.posts = self.posts
+//                self.postTableView.reloadData()
+//            }
+//        })
     }
 }
 
@@ -191,3 +158,4 @@ extension FeedVC: PostTableViewDelegate{
         // なにもしない
     }
 }
+

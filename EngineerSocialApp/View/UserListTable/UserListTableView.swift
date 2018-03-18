@@ -8,7 +8,7 @@
 import UIKit
 
 protocol UserListTableViewDelegate: class {
-    func didSelectCell() -> Void
+    func didSelectCell(userId: String) -> Void
 }
 
 class UserListTableView: UITableView {
@@ -57,6 +57,6 @@ extension UserListTableView: UITableViewDataSource {
 extension UserListTableView: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        userListTableViewDelegate?.didSelectCell()
+        userListTableViewDelegate?.didSelectCell(userId: uidArray[indexPath.row])
     }
 }

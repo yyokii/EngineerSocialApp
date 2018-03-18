@@ -9,6 +9,14 @@
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="Helvetica.ttc">
+            <string>Helvetica-Bold</string>
+        </array>
+        <array key="Menlo.ttc">
+            <string>Menlo-Bold</string>
+        </array>
+    </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="PostDataView" customModule="EngineerSocialApp" customModuleProvider="target">
             <connections>
@@ -34,30 +42,30 @@
                             <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                             <subviews>
                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4EB-Hc-tDG">
-                                    <rect key="frame" x="0.0" y="0.0" width="375" height="766"/>
+                                    <rect key="frame" x="0.0" y="0.0" width="375" height="795"/>
                                     <subviews>
-                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Total" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dBi-dh-f14">
-                                            <rect key="frame" x="167" y="10" width="42" height="20.5"/>
-                                            <fontDescription key="fontDescription" type="system" weight="heavy" pointSize="17"/>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="You Got" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="dBi-dh-f14">
+                                            <rect key="frame" x="155" y="10" width="65" height="20"/>
+                                            <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="17"/>
                                             <nil key="textColor"/>
                                             <nil key="highlightedColor"/>
                                         </label>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="VML-am-KSQ" customClass="PieChartView" customModule="Charts">
-                                            <rect key="frame" x="10" y="146" width="355" height="300"/>
+                                            <rect key="frame" x="10" y="175" width="355" height="300"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="300" id="wdg-TL-ax3"/>
                                             </constraints>
                                         </view>
                                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WVm-yu-uBn" customClass="PieChartView" customModule="Charts">
-                                            <rect key="frame" x="8" y="456" width="359" height="300"/>
+                                            <rect key="frame" x="8" y="485" width="359" height="300"/>
                                             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                             <constraints>
                                                 <constraint firstAttribute="height" constant="300" id="GaF-sF-5FX"/>
                                             </constraints>
                                         </view>
                                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="MAX-4E-XXP">
-                                            <rect key="frame" x="8" y="40.5" width="359" height="50"/>
+                                            <rect key="frame" x="8" y="40" width="359" height="50"/>
                                             <subviews>
                                                 <label opaque="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="😆" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="zyx-lm-bSN">
                                                     <rect key="frame" x="0.0" y="0.0" width="68" height="50"/>
@@ -95,40 +103,46 @@
                                             </constraints>
                                         </stackView>
                                         <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="eos-Ff-eZi">
-                                            <rect key="frame" x="8" y="95.5" width="359" height="20.5"/>
+                                            <rect key="frame" x="8" y="95" width="359" height="20"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="me8-iM-0du">
-                                                    <rect key="frame" x="0.0" y="0.0" width="68" height="20.5"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="68" height="20"/>
+                                                    <fontDescription key="fontDescription" name="Menlo-Bold" family="Menlo" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xAE-BR-kmN">
-                                                    <rect key="frame" x="73" y="0.0" width="67.5" height="20.5"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <rect key="frame" x="73" y="0.0" width="67.5" height="20"/>
+                                                    <fontDescription key="fontDescription" name="Menlo-Bold" family="Menlo" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zqk-Yz-lLQ">
-                                                    <rect key="frame" x="145.5" y="0.0" width="68" height="20.5"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <rect key="frame" x="145.5" y="0.0" width="68" height="20"/>
+                                                    <fontDescription key="fontDescription" name="Menlo-Bold" family="Menlo" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1JG-Vw-KWy">
-                                                    <rect key="frame" x="218.5" y="0.0" width="67.5" height="20.5"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <rect key="frame" x="218.5" y="0.0" width="67.5" height="20"/>
+                                                    <fontDescription key="fontDescription" name="Menlo-Bold" family="Menlo" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pq6-g5-jMW">
-                                                    <rect key="frame" x="291" y="0.0" width="68" height="20.5"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <rect key="frame" x="291" y="0.0" width="68" height="20"/>
+                                                    <fontDescription key="fontDescription" name="Menlo-Bold" family="Menlo" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
                                         </stackView>
+                                        <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Develop Data" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8ng-kD-rI1">
+                                            <rect key="frame" x="8" y="145" width="359" height="20"/>
+                                            <fontDescription key="fontDescription" name="Helvetica-Bold" family="Helvetica" pointSize="17"/>
+                                            <nil key="textColor"/>
+                                            <nil key="highlightedColor"/>
+                                        </label>
                                     </subviews>
                                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                     <constraints>
@@ -136,16 +150,19 @@
                                         <constraint firstItem="MAX-4E-XXP" firstAttribute="top" secondItem="dBi-dh-f14" secondAttribute="bottom" constant="10" id="5jM-4p-l0w"/>
                                         <constraint firstAttribute="bottom" secondItem="WVm-yu-uBn" secondAttribute="bottom" constant="10" id="6wb-3j-mOF"/>
                                         <constraint firstItem="dBi-dh-f14" firstAttribute="top" secondItem="4EB-Hc-tDG" secondAttribute="top" constant="10" id="Ade-jF-sUh"/>
+                                        <constraint firstItem="8ng-kD-rI1" firstAttribute="top" secondItem="eos-Ff-eZi" secondAttribute="bottom" constant="30" id="Ei1-RP-n4B"/>
                                         <constraint firstItem="eos-Ff-eZi" firstAttribute="leading" secondItem="4EB-Hc-tDG" secondAttribute="leading" constant="8" id="EqA-7n-Gvi"/>
                                         <constraint firstAttribute="trailing" secondItem="VML-am-KSQ" secondAttribute="trailing" constant="10" id="Gel-5M-fx5"/>
+                                        <constraint firstAttribute="trailing" secondItem="8ng-kD-rI1" secondAttribute="trailing" constant="8" id="M21-wh-8W0"/>
                                         <constraint firstItem="eos-Ff-eZi" firstAttribute="top" secondItem="MAX-4E-XXP" secondAttribute="bottom" constant="5" id="MFf-lA-v2r"/>
                                         <constraint firstItem="MAX-4E-XXP" firstAttribute="leading" secondItem="4EB-Hc-tDG" secondAttribute="leading" constant="8" id="MGs-e3-voq"/>
+                                        <constraint firstItem="8ng-kD-rI1" firstAttribute="leading" secondItem="4EB-Hc-tDG" secondAttribute="leading" constant="8" id="N3S-sJ-WeU"/>
                                         <constraint firstAttribute="trailing" secondItem="eos-Ff-eZi" secondAttribute="trailing" constant="8" id="PCw-rD-2AJ"/>
+                                        <constraint firstItem="VML-am-KSQ" firstAttribute="top" secondItem="8ng-kD-rI1" secondAttribute="bottom" constant="10" id="SLp-Va-G4W"/>
                                         <constraint firstAttribute="trailing" secondItem="MAX-4E-XXP" secondAttribute="trailing" constant="8" id="VFd-gS-EsE"/>
                                         <constraint firstItem="WVm-yu-uBn" firstAttribute="leading" secondItem="4EB-Hc-tDG" secondAttribute="leading" constant="8" id="VHo-x0-YJB"/>
                                         <constraint firstItem="VML-am-KSQ" firstAttribute="leading" secondItem="4EB-Hc-tDG" secondAttribute="leading" constant="10" id="ebm-oA-fee"/>
                                         <constraint firstItem="dBi-dh-f14" firstAttribute="centerX" secondItem="4EB-Hc-tDG" secondAttribute="centerX" id="evK-9q-bZl"/>
-                                        <constraint firstItem="VML-am-KSQ" firstAttribute="top" secondItem="eos-Ff-eZi" secondAttribute="bottom" constant="30" id="lkU-Cf-E6a"/>
                                         <constraint firstItem="WVm-yu-uBn" firstAttribute="top" secondItem="VML-am-KSQ" secondAttribute="bottom" constant="10" id="x9P-vs-ZxH"/>
                                     </constraints>
                                 </view>

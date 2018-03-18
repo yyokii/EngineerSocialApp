@@ -25,14 +25,34 @@ class ProfilehHeaderView: UIView {
     @IBOutlet weak var userImageView: CircleView!
     @IBOutlet weak var userNameLabel: UILabel!
     @IBOutlet weak var userDescription: UITextView!
+    @IBOutlet weak var settingBtn: UIButton!
+    @IBOutlet weak var gitBtn: FancyBtn!
+    @IBOutlet weak var twitterBtn: FancyBtn!
+    
     @IBOutlet weak var followBtn: UIButton!
     @IBOutlet weak var followLabel: UILabel!
     @IBOutlet weak var followerLabel: UILabel!
     @IBOutlet weak var dataLabel: UILabel!
     @IBOutlet weak var postLabel: UILabel!
     
-    var twitter = ""
-    var git = ""
+    var twitter: String = "" {
+        didSet{
+            if twitter != "" {
+                twitterBtn.applyEnableBtn()
+            }else {
+                twitterBtn.applyUnEnableBtn()
+            }
+        }
+    }
+    var git: String = "" {
+        didSet{
+            if git != "" {
+                gitBtn.applyEnableBtn()
+            }else {
+                gitBtn.applyUnEnableBtn()
+            }
+        }
+    }
     
     weak var profilehHeaderViewDelegate: ProfilehHeaderViewDelegate?    
     
@@ -60,12 +80,12 @@ class ProfilehHeaderView: UIView {
     }
     
     func applyFollowBtn(){
-        followBtn.setTitle("フォローする", for: .normal)
+        followBtn.setTitle(" ➕ お気に入りに追加　", for: .normal)
         followBtn.isEnabled = true
     }
     
     func applyUnFollowBtn(){
-        followBtn.setTitle("フォローをはずす", for: .normal)
+        followBtn.setTitle(" ➖ お気に入りからはずす　", for: .normal)
         followBtn.isEnabled = true
     }
     
@@ -73,17 +93,17 @@ class ProfilehHeaderView: UIView {
         let followTap = UITapGestureRecognizer(target: self, action: #selector(followTapped(sender:)))
         followLabel.addGestureRecognizer(followTap)
         
-        followLabel.text = "FOLLOW:\(followCount)"
+        followLabel.text = "🌟Users"
         followLabel.isUserInteractionEnabled = true
     }
     
-    func initFollowerLabel(followerCount: Int){
-        let followerTap = UITapGestureRecognizer(target: self, action: #selector(followerTapped(sender:)))
-        followerLabel.addGestureRecognizer(followerTap)
-        
-        followerLabel.text = "FOLLOWER:\(followerCount)/"
-        followerLabel.isUserInteractionEnabled = true
-    }
+//    func initFollowerLabel(followerCount: Int){
+//        let followerTap = UITapGestureRecognizer(target: self, action: #selector(followerTapped(sender:)))
+//        followerLabel.addGestureRecognizer(followerTap)
+//
+//        followerLabel.text = "FOLLOWER:\(followerCount)"
+//        followerLabel.isUserInteractionEnabled = true
+//    }
     
     func initContentLabel() {
         // 「DATA」、「POST」ボタンタップ時の処理を設定
@@ -107,6 +127,21 @@ class ProfilehHeaderView: UIView {
         dataLabel.textColor = UIColor(hex: TERMINAL_TEXT_GRAY)
         postLabel.textColor = UIColor(hex: TERMINAL_TEXT_WHITE)
     }
+    
+    @IBAction func gitTapped(_ sender: Any) {
+        let url = URL(string: "https://github.com/\(git)")!
+        if UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url)
+        }
+    }
+    
+    @IBAction func twitterTapped(_ sender: Any) {
+        let url = URL(string: "https://twitter.com/\(twitter)")!
+        if UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url)
+        }
+    }
+    
     @IBAction func settingTapped(_ sender: Any) {
         profilehHeaderViewDelegate?.settingButtonTapped()
     }
@@ -116,10 +151,9 @@ class ProfilehHeaderView: UIView {
         profilehHeaderViewDelegate?.followLabelTapped()
     }
     
-    @objc func followerTapped (sender: UITapGestureRecognizer) {
-        profilehHeaderViewDelegate?.followerLabelTapped()
-        
-    }
+//    @objc func followerTapped (sender: UITapGestureRecognizer) {
+//        profilehHeaderViewDelegate?.followerLabelTapped()
+//    }
     
     @objc func dataLblTapped (sender: UITapGestureRecognizer) {
         profilehHeaderViewDelegate?.dataLblTapped()

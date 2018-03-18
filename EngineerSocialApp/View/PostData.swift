@@ -110,7 +110,7 @@ class PostDataView: UIView {
         data.setValueFormatter(DefaultValueFormatter(formatter: pFormatter))
         
         data.setValueFont(.systemFont(ofSize: 15, weight: .heavy))
-        data.setValueTextColor(.white)
+        data.setValueTextColor(UIColor(hex: TERMINAL_TEXT_GRAY, alpha: 1))
         
         useLanguageChart.centerText = "Use Language"
         useLanguageChart.legend.enabled = false
@@ -164,9 +164,9 @@ class PostDataView: UIView {
         data.setValueFormatter(DefaultValueFormatter(formatter: pFormatter))
         
         data.setValueFont(.systemFont(ofSize: 15, weight: .heavy))
-        data.setValueTextColor(.white)
-        
-        developThingsChart.centerText = "Do"
+        data.setValueTextColor(UIColor(hex: TERMINAL_TEXT_GRAY, alpha: 1))
+
+        developThingsChart.centerText = "Develop"
         developThingsChart.legend.enabled = false
         developThingsChart.chartDescription?.enabled = false
         developThingsChart.rotationEnabled = false

@@ -68,23 +68,19 @@ class ProfileVC: UIViewController{
     
     // 過去の投稿を表示するために使用
     var postTableView: PostTableView!
-    var myPosts = [Post]()
+    //var myPosts = [Post]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        /// 自分の？それとも他の人の？を判断
-        initProfileViewType()
+        self.navigationItem.title = " Profile "
+        /// 自分の？それとも他の人の？を判断（ここでuidを設定する）
+        applyProfileViewType()
         
         setBaseTableView()
         /// ユーザー情報を表示するヘッダーviewを設定
         setHeaderView()
-        // ヘッダーviewの設定（ユーザ情報表示、フォローボタンの状態）
-        FirebaseLogic.fetchUserName(uid: uid, completion: {[weak self] (name) in self?.headerView.userNameLabel.text = name})
-        FirebaseLogic.fetchUserImage(uid: uid, completion: {[weak self] (img) in self?.headerView.userImageView.image = img})
+        // ヘッダーviewの設定（フォローボタンの状態）
         initSettingBtn()
-        // フォロー、フォロワーラベルの設定
-        applyFollowLabel()
-        applyFollowerLabel()
         // コンテンツの表示
         getMyPostData()
         setActionsData()
@@ -93,8 +89,19 @@ class ProfileVC: UIViewController{
     
     override func viewWillAppear(_ animated: Bool) {
         if headerView != nil {
+            // フォロー、フォロワーラベルの設定
+            applyFollowLabel()
+            //applyFollowerLabel()
+            
+            // FIXME: 違ってたら更新するみたいな感じがよくね　→ それやるならfirebaseのオブザーブ方法変えた方がいいかも
             FirebaseLogic.fetchUserName(uid: uid, completion: {[weak self] (name) in self?.headerView.userNameLabel.text = name})
             FirebaseLogic.fetchUserImage(uid: uid, completion: {[weak self] (img) in self?.headerView.userImageView.image = img})
+            FirebaseLogic.fetchTwitterAccount(uid: uid) { [weak self] (twitterId) in
+                self?.headerView.twitter = twitterId
+            }
+            FirebaseLogic.fetcGitAccount (uid: uid) { [weak self] (gitId) in
+                self?.headerView.git = gitId
+            }
         }
         
         if postDataView != nil {
@@ -102,22 +109,23 @@ class ProfileVC: UIViewController{
             getMyPostData()
             setActionsData()
         }
+        
+        if postTableView != nil {
+            // 投稿データを取得してviewの更新
+            getMyPosts()
+        }
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
-    /// 自分のプロフィール画面か他の人の画面かでviewの位置や機能を分ける。フォロー非表示、設定表示、
-    func initProfileViewType(){
+    /// FIXME: 自分のプロフィール画面か他の人の画面かでviewの位置や機能を分ける。フォロー非表示、設定表示　→ まとめてやりたかったけど個別でやってる
+    func applyProfileViewType(){
         baseTableViewHeight = (self.navigationController?.navigationBar.frame.height)! + UIApplication.shared.statusBarFrame.height
 
         if profileType == ProfileType.myProfile {
             uid = KeychainWrapper.standard.string(forKey: KEY_UID)!
-            // FIXME:後でリファクタしたい。自分のプロフィール画面でもナビゲーションバーをつける仕様にしたので, baseTableViewHeightは共通
-            //baseTableViewHeight = UIApplication.shared.statusBarFrame.height
-        } else if profileType == ProfileType.others {
-            //baseTableViewHeight = (self.navigationController?.navigationBar.frame.height)! + UIApplication.shared.statusBarFrame.height
         }
     }
     
@@ -127,14 +135,14 @@ class ProfileVC: UIViewController{
             // 設定ボタンをフォローボタンを代わりに表示
         } else if profileType == ProfileType.others {
             // フォロー状態を取得してヘッダーのボタンに反映
-            FirebaseLogic.fetchFollowState(uid: uid, completion: { (isFollowState) in
+            FirebaseLogic.fetchFollowState(uid: uid, completion: { [weak self] (isFollowState) in
                 if isFollowState {
                     // フォロー済みの場合
-                    self.isFollowState = true
-                    self.headerView.applyUnFollowBtn()
+                    self?.isFollowState = true
+                    self?.headerView.applyUnFollowBtn()
                 } else {
                     // 未フォローの場合
-                    self.headerView.applyFollowBtn()
+                    self?.headerView.applyFollowBtn()
                 }
             })
         }
@@ -143,101 +151,64 @@ class ProfileVC: UIViewController{
     func applyFollowLabel(){
         FirebaseLogic.fetchFollowUser(uid: uid) {[weak  self] (followUidArray) in
             self?.followUidArray = followUidArray
-            // ヘッダービューのラベルテキスト更新、タップ可能にさせる、タップ処理はプロトコルをきって専用のテーブルに情報を渡して表示させる
             self?.headerView.initFollowLabel(followCount: followUidArray.count)
         }
     }
     
-    func applyFollowerLabel(){
-        FirebaseLogic.fetchFollowerUser(uid: uid) {[weak  self] (followerUidArray) in
-            self?.followerUidArray = followerUidArray
-            self?.headerView.initFollowerLabel(followerCount: followerUidArray.count)
-        }
-    }
+//    func applyFollowerLabel(){
+//        FirebaseLogic.fetchFollowerUser(uid: uid) {[weak  self] (followerUidArray) in
+//            self?.followerUidArray = followerUidArray
+//            self?.headerView.initFollowerLabel(followerCount: followerUidArray.count)
+//        }
+//    }
     
     func setActionsData(){
-        FirebaseLogic.getGetActionsData(uid: uid) { (dict) in
-            self.postDataView.setGetActionsCountLabel(smileCount: String(describing: dict[SMILES]!), heartCount: String(describing: dict[HEARTS]!), cryCount: String(describing: dict[CRIES]!), clapCount: String(describing: dict[CLAPS]!), okCount: String(describing: dict[OKS]!))
+        FirebaseLogic.getGetActionsData(uid: uid) { [weak self] (dict) in
+            self?.postDataView.setGetActionsCountLabel(smileCount: String(describing: dict[SMILES]!), heartCount: String(describing: dict[HEARTS]!), cryCount: String(describing: dict[CRIES]!), clapCount: String(describing: dict[CLAPS]!), okCount: String(describing: dict[OKS]!))
         }
     }
     
-    //FIXME: カレントユーザーではなく、uidを指定して取得する
     /// 開発言語と開発項目のデータを取得して配列に保存
     func getMyPostData() {
+        
         // 開発言語のデータ取得
-        DataService.ds.REF_USER_CURRENT.child(PROGRAMMING_LANGUAGE).queryOrderedByValue().observeSingleEvent(of: .value) { (snapshot) in
-            if let devLanguages = snapshot.children.allObjects as? [FIRDataSnapshot]{
-                // 前回取得したデータが残らないように一度空にする
-                self.devLanguagesArray = []
-                for devLanguage in devLanguages{
+        FirebaseLogic.fetchDevLangData(uid: uid) { [weak self] (devLanguages) in
+            self?.devLanguagesArray = []
+            if let devLangs = devLanguages{
+                for devLanguage in devLangs{
                     let devLanguageData = DevelopData(devLanguage: devLanguage.key, count: devLanguage.value as! Int)
-                    self.devLanguagesArray.insert(devLanguageData, at: 0)
+                    self?.devLanguagesArray.insert(devLanguageData, at: 0)
                 }
             }
-            // FIXME: 投稿がない時、引数の配列要素が0になって、サンプルのチャートが表示されているかの確認必要
-            self.postDataView.setupDevLangsPieChartView(developDataArray: self.devLanguagesArray)
-            self.postDataView.animationDevLangsChart()
+            self?.postDataView.setupDevLangsPieChartView(developDataArray: (self?.devLanguagesArray)!)
+            self?.postDataView.animationDevLangsChart()
         }
         
         // 開発項目のデータ取得
-        DataService.ds.REF_USER_CURRENT.child(DEVELOP).queryOrderedByValue().observeSingleEvent(of: .value) { (snapshot) in
-            if let toDos = snapshot.children.allObjects as? [FIRDataSnapshot]{
-                self.devThingsArray = []
-                for todo in toDos{
-                    let toDoData = DevelopData(toDo: todo.key, count: todo.value as! Int)
-                    self.devThingsArray.insert(toDoData, at: 0)
+        FirebaseLogic.fetchDevelopData(uid: uid) { [weak self] (develops) in
+            self?.devThingsArray = []
+            if let devs = develops{
+                for dev in devs{
+                    let devData = DevelopData(toDo: dev.key, count: dev.value as! Int)
+                    self?.devThingsArray.insert(devData, at: 0)
                 }
             }
-            self.postDataView.setupDevThingsPieChartView(developDataArray: self.devThingsArray)
-            self.postDataView.animationDevThingsChart()
+            self?.postDataView.setupDevThingsPieChartView(developDataArray: (self?.devThingsArray)!)
+            self?.postDataView.animationDevThingsChart()
         }
     }
     
-    
-    /// 過去の投稿を取得
+    // FIXME: uidを修正
+    /// 過去の「自分の」投稿を取得
     func getMyPosts() {
-        DataService.ds.REF_USER_CURRENT.child(POSTS).observeSingleEvent(of: .value) { (snapshot) in
-            print("取得したデータ：\(snapshot)")
-            
-            var myPostsKey = [String]()
-            
-            
-            if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
-                for snap in snapshot {
-                    let postKey = snap.key
-                    myPostsKey.insert(postKey, at: 0)
-                }
-                
-                print("取得した投稿キー配列:\(myPostsKey)")
-                
-                // 投稿全てのkeyが取得できたらそのkeyに該当するpostを取得する
-                if !myPostsKey.isEmpty {
-                    self.myPosts = []
-                    for key in myPostsKey {
-                        DataService.ds.REF_POSTS.child(key).observeSingleEvent(of: .value) { (snapshot) in
-                            print("過去の投稿情報:\(snapshot)")
-                            // 投稿情報を取得
-                            if let postDict = snapshot.value as? Dictionary<String, AnyObject> {
-                                
-                                let key = snapshot.key
-                                let post = Post(postKey: key, postData: postDict)
-                                self.myPosts.append(post)
-                                
-                                // 投稿データが１つずつ追加されているのがわかる
-                                print("過去の投稿データ：\(self.myPosts)")
-                            }
-                            self.postTableView.posts = self.myPosts
-                            if let _ = self.postTableView {
-                                // 多分ないが（描画よりデータ取得の方が時間かかるのでデータ取れたころにはviewはあるはず）、nilをケア
-                                self.postTableView.reloadData()
-                            }
-                        }
-                    }
-                } else {
-                    print("Error: 過去の投稿がないよー")
-                }
+        FirebaseLogic.fetchMyPostsData(uid: uid) { [weak self] (posts) in
+            self?.postTableView.posts = posts
+            if let _ = self?.postTableView {
+                // 多分ないが（描画よりデータ取得の方が時間かかるのでデータ取れたころにはviewはあるはず）、nilをケア
+                self?.postTableView.reloadData()
             }
         }
+        
     }
     
     func setBaseTableView() {
@@ -262,19 +233,28 @@ class ProfileVC: UIViewController{
         headerView.backgroundColor = UIColor.green
         headerView.profilehHeaderViewDelegate = self
         baseTableView.addSubview(headerView)
-    }
-
-    // 暫時的にサインアウトボタンと投稿ボタンを設置
-    @IBAction func signOutTapped(_ sender: Any) {
         
-        let keychainResult = KeychainWrapper.standard.removeObject(forKey: KEY_UID)
-        print("JESS: ID removed from keychain \(keychainResult)")
-        try! FIRAuth.auth()?.signOut()
-        performSegue(withIdentifier: "goToSignIn", sender: nil)
-    }
-    
-    @IBAction func postTapped(_ sender: Any) {
-        performSegue(withIdentifier: "toPost", sender: nil)
+        // 自分のプロフィール画面ではフォローボタン非表示、他の人のプロフィール画面では設定ボタン非表示
+        if profileType == ProfileType.myProfile{
+            headerView.settingBtn.isHidden = false
+            headerView.followBtn.isHidden = true
+        }else if profileType == ProfileType.others {
+            headerView.settingBtn.isHidden = true
+            headerView.followBtn.isHidden = false
+        }
+        
+        // ユーザー情報を設定
+        FirebaseLogic.fetchUserImage(uid: uid) {[weak self] (img) in self?.headerView.userImageView.image = img}
+        FirebaseLogic.fetchUserName(uid: uid) {[weak self] (name) in self?.headerView.userNameLabel.text = name}
+        FirebaseLogic.fetchUserProfile(uid: uid) { [weak self] (profile) in self?.headerView.userDescription.text = profile}
+        
+        // twitter、git ボタンの設定をする
+        FirebaseLogic.fetchTwitterAccount(uid: uid) { [weak self] (twitterId) in
+            self?.headerView.twitter = twitterId
+        }
+        FirebaseLogic.fetcGitAccount (uid: uid) { [weak self] (gitId) in
+            self?.headerView.git = gitId
+        }
     }
 }
 
@@ -408,13 +388,13 @@ extension ProfileVC: ProfilehHeaderViewDelegate{
     func followButtonTapped() {
         if (isFollowState){
             // 「フォローをはずす」場合
-            FirebaseLogic.unfollowAction(uid: uid, completion: { [weak self] in
+            FirebaseLogic.unfollowAction(vc: self, uid: uid, completion: { [weak self] in
                 self?.isFollowState  = false
                 self?.headerView.applyFollowBtn()
             })
         } else {
             // 「フォローする」場合
-            FirebaseLogic.followAction(uid: uid, completion: { [weak self] in
+            FirebaseLogic.followAction(vc: self, uid: uid, completion: { [weak self] in
                 self?.isFollowState  = true
                 self?.headerView.applyUnFollowBtn()
             })

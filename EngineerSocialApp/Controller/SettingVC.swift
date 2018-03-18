@@ -22,14 +22,13 @@ class SettingVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initUserImageView()
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
         profileImageView.image = currentUser?.profileImage
     }
     
     override func viewDidLayoutSubviews() {
-        initSettingTableView()
+        if settingTableView == nil {
+            initSettingTableView()
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -73,21 +72,27 @@ class SettingVC: UIViewController {
         let gitCell = settingTableView.cellForRow(at: IndexPath(row: 3, section: 0)) as! TextFieldTableViewCell
         let git = gitCell.textField.text!
         
-        FirebaseLogic.updateUserInfo(name: name, profile: profile, twitter: twitter, git: git) {
+        FirebaseLogic.updateUserInfo(vc: self, name: name, profile: profile, twitter: twitter, git: git) {
             [weak self] in self?.dismiss(animated: true, completion: nil)
         }
     }
-    
-    // FIXME: 遷移処理を書くこと
-    @IBAction func logoutTapped(_ sender: Any) {
-        _ = KeychainWrapper.standard.removeObject(forKey: KEY_UID)
-        do {
-            try FIRAuth.auth()?.signOut()
-        } catch let signOutError as NSError {
-            print ("Error サインアウト: %@", signOutError)
-        }
+    @IBAction func inquiryTapped(_ sender: Any) {
+        Util.presentMailView(vc: self, subject: "お問い合わせ", message: "アプリのこと、開発について、などなどなんでもお問い合わせください！")
     }
     
+    @IBAction func logoutTapped(_ sender: Any) {
+        Alert.presentAlert(vc: self, title: "ログアウトしますか？🚪", message: "同じアカウントでログインするとデータは復元されます💮", positiveTitle: "ログアウト", negativeTitle: "キャンセル") {
+            _ = KeychainWrapper.standard.removeObject(forKey: KEY_UID)
+            do {
+                try FIRAuth.auth()?.signOut()
+            } catch let signOutError as NSError {
+                print ("Error サインアウト: %@", signOutError)
+                return;
+            }
+            
+            UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
+        }
+    }
 }
 
 extension SettingVC: UINavigationControllerDelegate ,UIImagePickerControllerDelegate{
@@ -95,7 +100,7 @@ extension SettingVC: UINavigationControllerDelegate ,UIImagePickerControllerDele
         
         if let image = info[UIImagePickerControllerEditedImage] as? UIImage {
             profileImageView.image = image
-            FirebaseLogic.uploadImage(image: image, completion: nil)
+            FirebaseLogic.uploadImage(image: image, completion: {})
         } else {
             print("Error: 適切な画像が選択されなかったよん")
         }

@@ -28,11 +28,13 @@ class TextFieldTableViewCell: UITableViewCell {
     
     func initTwitterCell(twitter: String) {
         titleLabel.text = "Twitter"
+        textField.placeholder = "アカウント名（@は不要です）"
         textField.text = twitter
     }
     
     func initGitCell(git: String) {
         titleLabel.text = "Git"
+        textField.placeholder = "アカウント名"
         textField.text = git
     }
 }

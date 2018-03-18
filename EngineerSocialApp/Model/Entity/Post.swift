@@ -13,7 +13,6 @@ class Post {
     
     private var _date: String!
     private var _caption: String!
-    private var _imageUrl: String! = "" // FIXME: 後で消す。投稿内容にimageを持たないけど、雛形ではimageをもっている。落ちないように空の文字列を入れとく
     
     private var _likes: Int!
     // ユーザーのアクション
@@ -45,10 +44,6 @@ class Post {
     
     var develop: String {
         return _develop
-    }
-    
-    var imageUrl: String {
-        return _imageUrl
     }
     
     var likes: Int {
@@ -90,8 +85,7 @@ class Post {
         if let date = postData[DATE] as? String {
             self._date = date
         } else{
-            // FIXME:後で消す。post内容にdateをいれていないものがあるのでそのケア用。
-            self._date = "1111/22/33"
+            self._date = "hello! bug!"
         }
         
         if let caption = postData[CAPTION] as? String {

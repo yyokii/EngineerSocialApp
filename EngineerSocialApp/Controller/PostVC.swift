@@ -13,9 +13,10 @@ class PostVC: UIViewController, UIPopoverPresentationControllerDelegate, PopOver
     @IBOutlet weak var languageLabel: UILabel!
     @IBOutlet weak var doingLabel: UILabel!
     @IBOutlet weak var captionTextView: UITextView!
+    @IBOutlet weak var postBtn: FancyBtn!
     
-    let programLang = ["swift","kotlin","ruby","python","go", "その他"]
-    let doing = ["iOSアプリ開発","Androidアプリ開発","サーバー開発","インフラ構築","その他"]
+    let programLang = ["Assembly","C","C#","C++","Go","HTML","Java","JavaScript","Kotlin","Objective-C","Perl","PHP","Python","R","Ruby","Scala","Shell","SQL","Swift","Visual Basic","その他"]
+    let doing = ["iOSアプリ","Androidアプリ","インフラ構築","組み込み系","業務効率化","ゲーム","サーバー","WEBアプリ","記事作成","資料作成","バグ修正","その他"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,38 +34,41 @@ class PostVC: UIViewController, UIPopoverPresentationControllerDelegate, PopOver
     // FIXME: 入力内容が不十分の場合は投稿ボタンにalphaをかけておく
     @IBAction func postTapped(_ sender: Any) {
         
-//        guard let language = languageLabel.text, language != "" else {
-//            print("Error: 言語が設定されてませんよっ")
-//            return
-//        }
-//
-//        guard let doing = doingLabel.text, doing != "" else {
-//            print("Error: やることが設定されてませんよっ")
-//            return
-//        }
-//
-//        guard let caption = captionTextView.text, caption != "" else {
-//            print("Error: キャプションなし！？")
-//            return
-//        }
+        guard let language = languageLabel.text, language != "" else {
+            print("Error: 言語が設定されてませんよっ")
+            return
+        }
+
+        guard let doing = doingLabel.text, doing != "" else {
+            print("Error: やることが設定されてませんよっ")
+            return
+        }
+
+        guard let caption = captionTextView.text, caption != "" else {
+            print("Error: キャプションなし！？")
+            return
+        }
         
-        // 遷移させない方が自然かも
-        //self.tabBarController?.selectedIndex = 0
-        PopupView.sharedManager.show()
-        // FIXME: デバッグ用にコメントアウト
-        //postToFirebase()
+        Alert.presentAlert(vc: self, title: "func confirm()", message: "//投稿してもいいですか？", positiveTitle: "OK🙆‍♂️", negativeTitle: "CANCEL🙅") { [weak self] in
+            FirebaseLogic.postToFirebase(vc: self!, language: (self?.languageLabel.text)!, develop: (self?.doingLabel.text!)!, caption: (self?.captionTextView.text)!, completion: {
+                self?.languageLabel.text = ""
+                self?.doingLabel.text = ""
+                self?.captionTextView.text = ""
+                
+                PopupView.sharedManager.show()
+                self?.dismiss(animated: true, completion: nil)
+            })
+        }
     }
     
-    // FIXME: ここでdbに書き込む際にユーザーのツリーの中にlanguageとdoing要素のカウントを増やす。
-    // 投稿内容の確認　→ ref → データがあるかないかで分岐　→ 書き込み　（サインインで各要素0で設定しておくと使用しないツリーが出てくるので、1以上のみを保存する。データがない時のui必要）
+    // 投稿情報を送信　→ ユーザー情報を書き換え → ユーザーの投稿情報に一件のKeyを追加
     
     /// firebaseのデータストアに投稿情報を書き込む（postに追加）
     ///
-    /// - Parameter imgUrl: 画像のurl
     func postToFirebase () {
         let action: Dictionary<String, AnyObject> = [SMILES: 0 as AnyObject, HEARTS: 0 as AnyObject, CRIES: 0 as AnyObject, CLAPS: 0 as AnyObject, OKS: 0 as AnyObject]
         let post: Dictionary<String, AnyObject> = [
-            DATE: getTodayDateString() as AnyObject,
+            DATE: Util.getTodayDateString() as AnyObject,
             PROGRAMMING_LANGUAGE: languageLabel.text! as AnyObject,
             DEVELOP: doingLabel.text! as AnyObject,
             CAPTION: captionTextView.text! as AnyObject,
@@ -79,15 +83,6 @@ class PostVC: UIViewController, UIPopoverPresentationControllerDelegate, PopOver
         setUserDevelopData(devLanguage: languageLabel.text!, develop: doingLabel.text!)
         setUserPost(myPostKey: firebasePost.key)
         captionTextView.text = ""
-        
-        self.dismiss(animated: true, completion: nil)
-    }
-    
-    func getTodayDateString() -> String {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy/MM/dd"
-        let now = Date()
-        return formatter.string(from: now)
     }
     
     /// 投稿時にユーザーの使用言語とやることをユーザー情報としてdbに保存する（チャートで表示するため）

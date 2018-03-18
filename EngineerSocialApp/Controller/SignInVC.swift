@@ -14,12 +14,13 @@ import Firebase
 import SwiftKeychainWrapper
 
 class SignInVC: UIViewController {
-    @IBOutlet weak var emailField: FancyField!
-    @IBOutlet weak var pwdField: FancyField!
     
+    @IBOutlet weak var privacyPolicyLabel: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        twitterLogin()
+        initPrivacyPolicyLabel()
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -27,9 +28,6 @@ class SignInVC: UIViewController {
         if let _ = KeychainWrapper.standard.string(forKey: KEY_UID) {
             performSegue(withIdentifier: "goToFeed", sender: nil)
         }
-        
-        // FIXME: 場所変えるか、facebookみたいにするか
-        self.twitterLogin()
     }
     
     // facebookログイン
@@ -63,7 +61,7 @@ class SignInVC: UIViewController {
             }
         })
         
-        logInButton.center = view.center
+        logInButton.center = CGPoint(x: view.center.x, y: view.center.y + 50.0)
         self.view.addSubview(logInButton)
     }
     
@@ -95,35 +93,35 @@ class SignInVC: UIViewController {
         })
     }
     
-    // メールログイン
-    @IBAction func signInTapped(_ sender: Any) {
-        
-        if let email = emailField.text, let pwd = pwdField.text {
-            FIRAuth.auth()?.signIn(withEmail: email, password: pwd, completion: { (user, error) in
-                if error == nil {
-                    //exsisting user
-                    print("OK: Email user authenticated with Firebase")
-                    if let user = user {
-                        let userData = ["provider": user.providerID ]
-                        self.completeSignIn(id: user.uid, userData: userData)
-                    }
-                } else {
-                    FIRAuth.auth()?.createUser(withEmail: email, password: pwd, completion: { (user, error) in
-                        if error != nil {
-                            print("Error: Unable to authenticate with Firebase using email")
-                        } else {
-                            //new user
-                            print("OK: Successfully authenticated with Firebase")
-                            if let user = user {
-                                let userData = ["provider": user.providerID ]
-                                self.completeSignIn(id: user.uid, userData: userData)
-                            }
-                        }
-                    })
-                }
-            })
-        }
-    }
+//    // メールログイン
+//    @IBAction func signInTapped(_ sender: Any) {
+//
+//        if let email = emailField.text, let pwd = pwdField.text {
+//            FIRAuth.auth()?.signIn(withEmail: email, password: pwd, completion: { (user, error) in
+//                if error == nil {
+//                    //exsisting user
+//                    print("OK: Email user authenticated with Firebase")
+//                    if let user = user {
+//                        let userData = ["provider": user.providerID ]
+//                        self.completeSignIn(id: user.uid, userData: userData)
+//                    }
+//                } else {
+//                    FIRAuth.auth()?.createUser(withEmail: email, password: pwd, completion: { (user, error) in
+//                        if error != nil {
+//                            print("Error: Unable to authenticate with Firebase using email")
+//                        } else {
+//                            //new user
+//                            print("OK: Successfully authenticated with Firebase")
+//                            if let user = user {
+//                                let userData = ["provider": user.providerID ]
+//                                self.completeSignIn(id: user.uid, userData: userData)
+//                            }
+//                        }
+//                    })
+//                }
+//            })
+//        }
+//    }
     
     func uploadImage(user: FIRUser) {
         var imageData: Data?
@@ -137,6 +135,8 @@ class SignInVC: UIViewController {
         guard let _ = imageData else {
             return
         }
+        
+        // FIXME: 置き換えれたら置き換える
         // ログイン時にユーザーのアイコンイメージをストレージに保存する
         if let imgData = UIImageJPEGRepresentation(UIImage(data: imageData!)!, 0.5) {
             let imgUid = user.uid
@@ -160,5 +160,19 @@ class SignInVC: UIViewController {
         print("JESS: Data saved to keychain \(keychainResult)")
         performSegue(withIdentifier: "goToFeed", sender: nil)
     }
+    
+    func initPrivacyPolicyLabel(){
+        let labelTap = UITapGestureRecognizer(target: self, action: #selector(labelTapped(sender:)))
+        privacyPolicyLabel.isUserInteractionEnabled = true
+        privacyPolicyLabel.addGestureRecognizer(labelTap)
+    }
+    
+    @objc func labelTapped(sender: UITapGestureRecognizer) {
+        let url = URL(string: "https://peraichi.com/landing_pages/view/timetohack")!
+        if UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url)
+        }
+    }
+    
 }
 
