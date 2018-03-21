@@ -77,17 +77,27 @@ class SignInVC: UIViewController {
                 
                 print("OK: Successfully authenticated with Firebase")
                 if let user = user {
-                    // ユーザー名を保存
-                    var name = "anonymous"
-                    if let displayName = user.displayName{
-                        name = displayName
-                    }
-                    // 初回ログイン時に、獲得アクション数を0にしてdbに登録する
-                    let getActions: Dictionary<String, AnyObject> = [SMILES: 0 as AnyObject, HEARTS: 0 as AnyObject, CRIES: 0 as AnyObject, CLAPS: 0 as AnyObject, OKS: 0 as AnyObject]
-                    let userData: Dictionary<String,Any> = ["provider": credential.provider, GET_ACTIONS: getActions, NAME: name]
+                    print("ユーザーのid：" + user.uid)
                     
-                    self.uploadImage(user: user)
-                    self.completeSignIn(id: user.uid, userData: userData)
+                    FirebaseLogic.existUser(uid: user.uid, newUser: {
+                        [weak self] in
+                        // ユーザー名を保存
+                        var name = "anonymous"
+                        if let displayName = user.displayName{
+                            name = displayName
+                        }
+                        // 初回ログイン時に、獲得アクション数を0にしてdbに登録する
+                        let getActions: Dictionary<String, AnyObject> = [SMILES: 0 as AnyObject, HEARTS: 0 as AnyObject, CRIES: 0 as AnyObject, CLAPS: 0 as AnyObject, OKS: 0 as AnyObject]
+                        let userData: Dictionary<String,Any> = ["provider": credential.provider, GET_ACTIONS: getActions, NAME: name]
+                        
+                        self?.uploadImage(user: user)
+                        self?.completeSignIn(id: user.uid, userData: userData)
+                    }, loginUser: {
+                        [weak self] in
+                        let keychainResult = KeychainWrapper.standard.set(user.uid, forKey: KEY_UID)
+                        print("OK: Data saved to keychain \(keychainResult)")
+                        self?.performSegue(withIdentifier: "goToFeed", sender: nil)
+                    })
                 }
             }
         })
@@ -157,7 +167,7 @@ class SignInVC: UIViewController {
     func completeSignIn (id: String, userData: Dictionary<String,Any>){
         DataService.ds.createFirebaseDBUser(uid: id, userData: userData)
         let keychainResult = KeychainWrapper.standard.set(id, forKey: KEY_UID)
-        print("JESS: Data saved to keychain \(keychainResult)")
+        print("OK: Data saved to keychain \(keychainResult)")
         performSegue(withIdentifier: "goToFeed", sender: nil)
     }
     

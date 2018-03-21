@@ -64,7 +64,7 @@ class PostTableViewCell: UITableViewCell {
     
     @objc func showActionSheet(sender: UITapGestureRecognizer){
         let center = NotificationCenter.default
-        center.post(name: Notification.Name.PostCell.arrowDownNotification, object: nil, userInfo: ["postUserId": post.postUserId])
+        center.post(name: Notification.Name.PostCell.arrowDownNotification, object: nil, userInfo: ["postKey": post.postKey])
     }
     
     /// ユーザーが投稿にアクションする用のラベルをタップできるように設定する
@@ -374,7 +374,8 @@ class PostTableViewCell: UITableViewCell {
         }
         
         if let _ = actionTypeString {
-            let getActionsTotalRef = DataService.ds.REF_USER_CURRENT.child("getActions").child(actionTypeString!)
+            // id おかかった
+            let getActionsTotalRef = DataService.ds.REF_USERS.child(post.postUserId).child("getActions").child(actionTypeString!)
             getActionsTotalRef.observeSingleEvent(of: .value, with: { (snapshot) in
                 if let getActions = snapshot.value as? Int {
                     if isAdd {

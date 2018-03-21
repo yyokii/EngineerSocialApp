@@ -78,13 +78,9 @@ class PostDataView: UIView {
                 
             }
         } else {
-            // FIXME: 上にブラーをかけたい（あと、開発言語・項目どちらの場合でも言語要素を表示しているので余裕あれば修正）。ユーザーが投稿していない場合はサンプルデータを表示する
-            let sampleLanguageArray = ["Ruby","Swift","Kotlin","Phython"]
-            for index in (1...4).reversed() {
-                dataEntries.append(PieChartDataEntry(value: Double(index) * 10.0,
-                                                     label: sampleLanguageArray[index-1],
+            dataEntries.append(PieChartDataEntry(value: 100,
+                                                 label: "まだPostしてないよ:)",
                                                      icon: nil))
-            }
         }
         
         let set = PieChartDataSet(values: dataEntries, label: "")
@@ -133,13 +129,9 @@ class PostDataView: UIView {
                                                      icon: nil))
             }
         } else {
-            // FIXME: 上にブラーをかけたい（あと、開発言語・項目どちらの場合でも言語要素を表示しているので余裕あれば修正）。ユーザーが投稿していない場合はサンプルデータを表示する
-            let sampleLanguageArray = ["アプリ","サーバー","インフラ","FIX"]
-            for index in (1...4).reversed() {
-                dataEntries.append(PieChartDataEntry(value: Double(index) * 10.0,
-                                                     label: sampleLanguageArray[index-1],
-                                                     icon: nil))
-            }
+            dataEntries.append(PieChartDataEntry(value: 100,
+                                                 label: "まだPostしてないよ:)",
+                                                 icon: nil))
         }
         
         let set = PieChartDataSet(values: dataEntries, label: "")

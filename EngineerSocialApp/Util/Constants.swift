@@ -16,6 +16,10 @@ let TO_POST = "toPost"
 let TO_POST_USER_PROFILE = "toPostUserProfile"
 let TO_FOLLOW_FOLLOWER = "toFollow_er"
 
+// UserDefaults
+// 非表示に設定した投稿情報はUDで管理する
+let HIDE_POSTS = "hidePosts"
+
 // Color
 let SHADOW_GRAY: CGFloat = 120.0 / 255.0
 

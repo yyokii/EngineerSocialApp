@@ -30,6 +30,14 @@ class SettingVC: UIViewController {
             initSettingTableView()
         }
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        configureObserver()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        removeObserver()
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -48,6 +56,7 @@ class SettingVC: UIViewController {
     func initSettingTableView(){
         settingTableView = SettingTableView(frame: CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.baseView.frame.height))
         settingTableView.currentUser = currentUser
+        settingTableView.vc = self
         self.baseView.addSubview(settingTableView)
     }
     
@@ -93,6 +102,70 @@ class SettingVC: UIViewController {
             UIApplication.shared.keyWindow?.rootViewController?.dismiss(animated: true, completion: nil)
         }
     }
+    
+    // キーボード以外のところタップしたらキーボード隠す　FIXME: テーブルビュー内のタップには反応しないので修正したい
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        
+        let nameCell = settingTableView.cellForRow(at: IndexPath(row: 0, section: 0)) as! TextFieldTableViewCell
+        let nameTextField = nameCell.textField!
+        
+        let profileCell = settingTableView.cellForRow(at: IndexPath(row: 1, section: 0)) as! TextViewTableViewCell
+        let profileTextView = profileCell.textView!
+        
+        let twitterCell = settingTableView.cellForRow(at: IndexPath(row: 2, section: 0)) as! TextFieldTableViewCell
+        let twitterTextField = twitterCell.textField!
+        
+        let gitCell = settingTableView.cellForRow(at: IndexPath(row: 3, section: 0)) as! TextFieldTableViewCell
+        let gitTextField = gitCell.textField!
+        
+        if nameTextField.isFirstResponder{
+            nameTextField.resignFirstResponder()
+        }
+        
+        if profileTextView.isFirstResponder{
+            profileTextView.resignFirstResponder()
+        }
+        
+        if twitterTextField.isFirstResponder{
+            twitterTextField.resignFirstResponder()
+        }
+        
+        if gitTextField.isFirstResponder{
+            gitTextField.resignFirstResponder()
+        }
+    }
+    
+    // キーボードのNotificationを設定
+    func configureObserver() {
+        let notification = NotificationCenter.default
+        notification.addObserver(self, selector: #selector(keyboardWillShow(notification:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
+        notification.addObserver(self, selector: #selector(keyboardWillHide(notification:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
+    }
+    
+    // キーボードのNotificationを削除
+    func removeObserver() {
+        let notification = NotificationCenter.default
+        notification.removeObserver(self)
+    }
+    
+    // キーボードが現れた時に、画面全体をずらす。
+    @objc func keyboardWillShow(notification: Notification?) {
+        let rect = (notification?.userInfo?[UIKeyboardFrameBeginUserInfoKey] as? NSValue)?.cgRectValue
+        let duration: TimeInterval? = notification?.userInfo?[UIKeyboardAnimationDurationUserInfoKey] as? Double
+        UIView.animate(withDuration: duration!, animations: { () in
+            let transform = CGAffineTransform(translationX: 0, y: -(rect?.size.height)!/2)
+            self.view.transform = transform
+            
+        })
+    }
+    
+    // キーボードが消えたときに、画面を戻す
+    @objc func keyboardWillHide(notification: Notification?) {
+        let duration: TimeInterval? = notification?.userInfo?[UIKeyboardAnimationCurveUserInfoKey] as? Double
+        UIView.animate(withDuration: duration!, animations: { () in
+            self.view.transform = CGAffineTransform.identity
+        })
+    }
 }
 
 extension SettingVC: UINavigationControllerDelegate ,UIImagePickerControllerDelegate{
@@ -105,5 +178,20 @@ extension SettingVC: UINavigationControllerDelegate ,UIImagePickerControllerDele
             print("Error: 適切な画像が選択されなかったよん")
         }
         imagePicker.dismiss(animated: true, completion: nil)
+    }
+}
+
+extension SettingVC: UITextViewDelegate, UITextFieldDelegate {
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if(text == "\n") {
+            textView.resignFirstResponder()
+            return false
+        }
+        return true
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }

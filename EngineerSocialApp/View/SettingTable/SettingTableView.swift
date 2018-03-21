@@ -10,6 +10,7 @@ import UIKit
 class SettingTableView: UITableView {
     
     var currentUser: User!
+    weak var vc: UIViewController!
     
     override init(frame: CGRect,style: UITableViewStyle){
         super.init(frame: frame, style: style)
@@ -43,21 +44,25 @@ extension SettingTableView: UITableViewDataSource {
         case 0:
             let cell = tableView.dequeueReusableCell(withIdentifier: "TextFieldTableViewCell", for: indexPath) as! TextFieldTableViewCell
             cell.initNameCell(name: currentUser.name!)
+            cell.textField.delegate = (vc as! UITextFieldDelegate)
             cell.selectionStyle = .none
             return cell
         case 1:
             let cell = tableView.dequeueReusableCell(withIdentifier: "TextViewTableViewCell", for: indexPath) as! TextViewTableViewCell
             cell.initProfileCell(profile: currentUser.profile!)
+            cell.textView.delegate = (vc as! UITextViewDelegate)
             cell.selectionStyle = .none
             return cell
         case 2:
             let cell = tableView.dequeueReusableCell(withIdentifier: "TextFieldTableViewCell", for: indexPath) as! TextFieldTableViewCell
             cell.initTwitterCell(twitter: currentUser.twitter!)
+            cell.textField.delegate = (vc as! UITextFieldDelegate)
             cell.selectionStyle = .none
             return cell
         case 3:
             let cell = tableView.dequeueReusableCell(withIdentifier: "TextFieldTableViewCell", for: indexPath) as! TextFieldTableViewCell
             cell.initGitCell(git: currentUser.git!)
+            cell.textField.delegate = (vc as! UITextFieldDelegate)
             cell.selectionStyle = .none
             return cell
         default:
@@ -77,7 +82,5 @@ extension SettingTableView: UITableViewDataSource {
 }
 
 extension SettingTableView: UITableViewDelegate {
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {}
 }

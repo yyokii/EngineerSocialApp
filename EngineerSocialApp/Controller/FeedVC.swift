@@ -51,14 +51,21 @@ class FeedVC: UIViewController, MFMailComposeViewControllerDelegate{
     
     @objc func showActionSheet(notification: NSNotification){
         guard let userInfo = notification.userInfo,
-            let postUserId  = userInfo["postUserId"] as? String else {
+              let postKey  = userInfo["postKey"] as? String else {
                 print("エラー：　No userInfo found in notification")
                 return
         }
-        print(postUserId)
-        Alert.presentReportActionSheet(vc: self, postUserId: postUserId) { [weak self] in
-            Util.presentMailView(vc: self!, subject: "お問い合わせ", message: "不適切な投稿をした次のユーザーを通報します。\n " + postUserId)
-        }
+        print(postKey)
+        
+        Alert.presentPostReportActionSheet(vc: self, uid: postKey, hideAction: {
+            [weak self] in
+            // 非表示にする
+            Util.saveHidePosts(postKey: postKey)
+            self?.getPostsFromFireBase()
+        }, reportAction: {
+            [weak self] in
+            Util.presentMailView(vc: self!, subject: "お問い合わせ（不適切な投稿）", message: "不適切な投稿を通報します。\n " + "Key: " + postKey + "\nこのまま（もしくは開発者へのエールを添えて）ご送信ください:)。運営にて投稿内容を確認し、24時間以内に対応いたします。")
+        })
     }
     
     /// データベースから投稿情報を取得
@@ -66,11 +73,16 @@ class FeedVC: UIViewController, MFMailComposeViewControllerDelegate{
         FirebaseLogic.fetchLatestPostsData { [weak self] (snapshot) in
             self?.posts = []
             for snap in snapshot {
+                
+                if Util.isNotShowPost(postKey: snap.key) {
+                    // 非表示設定してるものはpostsの配列に保存しない
+                    continue
+                }
+                
                 if let postDict = snap.value as? Dictionary<String, AnyObject> {
                     let key = snap.key
                     let post = Post(postKey: key, postData: postDict)
                     self?.posts.insert(post, at: 0)
-                    
                 }
             }
             self?.postTableView.posts = (self?.posts)!

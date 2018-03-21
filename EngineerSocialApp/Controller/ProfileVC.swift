@@ -73,11 +73,11 @@ class ProfileVC: UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         self.navigationItem.title = " Profile "
-        /// 自分の？それとも他の人の？を判断（ここでuidを設定する）
+        // 自分の？それとも他の人の？を判断（ここでuidを設定する）
         applyProfileViewType()
         
         setBaseTableView()
-        /// ユーザー情報を表示するヘッダーviewを設定
+        // ユーザー情報を表示するヘッダーviewを設定
         setHeaderView()
         // ヘッダーviewの設定（フォローボタンの状態）
         initSettingBtn()
@@ -198,7 +198,6 @@ class ProfileVC: UIViewController{
         }
     }
     
-    // FIXME: uidを修正
     /// 過去の「自分の」投稿を取得
     func getMyPosts() {
         FirebaseLogic.fetchMyPostsData(uid: uid) { [weak self] (posts) in
@@ -234,13 +233,22 @@ class ProfileVC: UIViewController{
         headerView.profilehHeaderViewDelegate = self
         baseTableView.addSubview(headerView)
         
-        // 自分のプロフィール画面ではフォローボタン非表示、他の人のプロフィール画面では設定ボタン非表示
+        // 自分のプロフィール画面ではフォローボタン非表示
         if profileType == ProfileType.myProfile{
-            headerView.settingBtn.isHidden = false
             headerView.followBtn.isHidden = true
         }else if profileType == ProfileType.others {
-            headerView.settingBtn.isHidden = true
             headerView.followBtn.isHidden = false
+            // フォロー状態を取得してヘッダーのボタンに反映
+            FirebaseLogic.fetchFollowState(uid: uid, completion: { [weak self] (isFollowState) in
+                if isFollowState {
+                    // フォロー済みの場合
+                    self?.isFollowState = true
+                    self?.headerView.applyUnFollowBtn()
+                } else {
+                    // 未フォローの場合
+                    self?.headerView.applyFollowBtn()
+                }
+            })
         }
         
         // ユーザー情報を設定
@@ -363,18 +371,27 @@ extension ProfileVC: PostTableViewDelegate{
 
 extension ProfileVC: ProfilehHeaderViewDelegate{
     func settingButtonTapped() {
-        let settingStoryBoard = UIStoryboard(name: "Setting", bundle: nil)
-        let settingVC = settingStoryBoard.instantiateInitialViewController() as! SettingVC
         
-        var currentUser = User()
-        currentUser.profileImage = headerView.userImageView.image
-        currentUser.name = headerView.userNameLabel.text
-        currentUser.profile = headerView.userDescription.text
-        currentUser.twitter = headerView.twitter
-        currentUser.git = headerView.git
-        settingVC.currentUser = currentUser
-        
-        self.present(settingVC, animated: true, completion: nil)
+        if profileType == ProfileType.myProfile{
+            // 自分のプロフィール画面の場合は設定画面に遷移
+            let settingStoryBoard = UIStoryboard(name: "Setting", bundle: nil)
+            let settingVC = settingStoryBoard.instantiateInitialViewController() as! SettingVC
+            
+            var currentUser = User()
+            currentUser.profileImage = headerView.userImageView.image
+            currentUser.name = headerView.userNameLabel.text
+            currentUser.profile = headerView.userDescription.text
+            currentUser.twitter = headerView.twitter
+            currentUser.git = headerView.git
+            settingVC.currentUser = currentUser
+            
+            self.present(settingVC, animated: true, completion: nil)
+        }else if profileType == ProfileType.others {
+            // 他の人のプロフィール画面の場合は通報用のアクションシートを表示する
+            Alert.presentReportActionSheet(vc: self, uid: uid) { [weak self] in
+                Util.presentMailView(vc: self!, subject: "お問い合わせ（不適切なユーザー）", message: "不適切な投稿をした次のユーザーを通報します。\n " + "ID: " + self!.uid + "\nこのまま（もしくは開発者へのエールを添えて）ご送信ください:)。運営にて投稿内容を確認し、24時間以内に対応いたします。")
+            }
+        }
     }
     
     func followLabelTapped() {

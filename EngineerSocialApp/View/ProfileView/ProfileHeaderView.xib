@@ -51,7 +51,7 @@
                             <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             <nil key="highlightedColor"/>
                         </label>
-                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="いやはや、エンジニアは最高ですよ。そう、プログラムになりたい。" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cd8-Zg-qn4">
+                        <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="エンジニア最高。プログラミング楽しい！！" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cd8-Zg-qn4">
                             <rect key="frame" x="20" y="110" width="335" height="70"/>
                             <constraints>
                                 <constraint firstAttribute="height" constant="70" id="UFt-qL-1EJ"/>

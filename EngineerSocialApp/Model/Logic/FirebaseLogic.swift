@@ -77,6 +77,25 @@ class FirebaseLogic {
         })
     }
     
+    /// 引数で受け取ったidをキーとするユーザーが存在するかどうかで処理を分けるメソッド
+    ///
+    /// - Parameters:
+    ///   - uid: 検索するユーザーid
+    ///   - newUser: 新規ユーザー登録処理を行う
+    ///   - loginUser: 画面遷移を行う
+    static func existUser (uid: String, newUser: @escaping (() -> Void), loginUser: @escaping (() -> Void)){
+        let ref = DataService.ds.REF_USERS.child(uid)
+        ref.observeSingleEvent(of: .value, with: { (snapshot) in
+            if let _ = snapshot.value as? NSNull {
+                newUser()
+            }else {
+                loginUser()
+            }
+        }) { (error) in
+            print(error.localizedDescription)
+        }
+    }
+    
     /// 画像をストレージにアップロードする
     ///
     /// - Parameters:
