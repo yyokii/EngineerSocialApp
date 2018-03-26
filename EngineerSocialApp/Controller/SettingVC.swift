@@ -8,6 +8,7 @@
 import UIKit
 import Firebase
 import SwiftKeychainWrapper
+import MessageUI
 
 class SettingVC: UIViewController {
     @IBOutlet weak var baseView: UIView!
@@ -90,7 +91,7 @@ class SettingVC: UIViewController {
     }
     
     @IBAction func logoutTapped(_ sender: Any) {
-        Alert.presentAlert(vc: self, title: "ログアウトしますか？🚪", message: "同じアカウントでログインするとデータは復元されます💮", positiveTitle: "ログアウト", negativeTitle: "キャンセル") {
+        Alert.presentTwoBtnAlert(vc: self, title: "ログアウトしますか？🚪", message: "同じアカウントでログインするとデータは復元されます💮", positiveTitle: "ログアウト", negativeTitle: "キャンセル") {
             _ = KeychainWrapper.standard.removeObject(forKey: KEY_UID)
             do {
                 try FIRAuth.auth()?.signOut()
@@ -165,6 +166,12 @@ class SettingVC: UIViewController {
         UIView.animate(withDuration: duration!, animations: { () in
             self.view.transform = CGAffineTransform.identity
         })
+    }
+}
+
+extension SettingVC: MFMailComposeViewControllerDelegate {
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true, completion: nil)
     }
 }
 

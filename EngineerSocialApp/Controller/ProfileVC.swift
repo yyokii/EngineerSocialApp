@@ -8,6 +8,7 @@
 import UIKit
 import Firebase
 import SwiftKeychainWrapper
+import MessageUI
 
 //メモ：　コンテンツオフセット、ヘッダーの下部のy座標が0、トップが-200とか-300（ヘッダーの高さ）。
 
@@ -219,6 +220,7 @@ class ProfileVC: UIViewController{
         baseTableView.register(UINib(nibName: "BaseTableViewCell",bundle: nil), forCellReuseIdentifier: "BaseTableViewCell")
         baseTableView.dataSource = self
         baseTableView.delegate = self
+        baseTableView.bounces = false
         // コンテンツをヘッダーの高さ分だけ下げる
         baseTableView.contentInset.top = CGFloat(hederViewHeight)
         baseTableView.rowHeight = self.view.frame.height
@@ -263,6 +265,12 @@ class ProfileVC: UIViewController{
         FirebaseLogic.fetcGitAccount (uid: uid) { [weak self] (gitId) in
             self?.headerView.git = gitId
         }
+    }
+}
+
+extension ProfileVC: MFMailComposeViewControllerDelegate {
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true, completion: nil)
     }
 }
 
@@ -388,9 +396,10 @@ extension ProfileVC: ProfilehHeaderViewDelegate{
             self.present(settingVC, animated: true, completion: nil)
         }else if profileType == ProfileType.others {
             // 他の人のプロフィール画面の場合は通報用のアクションシートを表示する
-            Alert.presentReportActionSheet(vc: self, uid: uid) { [weak self] in
+            Alert.showUserReportView(vc: self, title: "不適切なユーザー？", message: "不適切なユーザーを通報することができます", firstTitle: "通報する⚠️", secondTitle: "キャンセル🙅‍♂️", firstAction: {
+                [weak self] in
                 Util.presentMailView(vc: self!, subject: "お問い合わせ（不適切なユーザー）", message: "不適切な投稿をした次のユーザーを通報します。\n " + "ID: " + self!.uid + "\nこのまま（もしくは開発者へのエールを添えて）ご送信ください:)。運営にて投稿内容を確認し、24時間以内に対応いたします。")
-            }
+            })
         }
     }
     

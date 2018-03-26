@@ -58,7 +58,7 @@ class PostVC: UIViewController, UIPopoverPresentationControllerDelegate, PopOver
             return
         }
         
-        Alert.presentAlert(vc: self, title: "func confirm()", message: "投稿しても良いですか:)？", positiveTitle: "OK🙆‍♂️", negativeTitle: "CANCEL🙅") { [weak self] in
+        Alert.presentTwoBtnAlert(vc: self, title: "func confirm()", message: "投稿しても良いですか:)？", positiveTitle: "OK🙆‍♂️", negativeTitle: "CANCEL🙅") { [weak self] in
             FirebaseLogic.postToFirebase(vc: self!, language: (self?.languageLabel.text)!, develop: (self?.doingLabel.text!)!, caption: (self?.captionTextView.text)!, completion: {
                 self?.languageLabel.text = ""
                 self?.doingLabel.text = ""

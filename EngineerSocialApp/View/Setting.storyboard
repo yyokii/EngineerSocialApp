@@ -1492,25 +1492,30 @@ Cg
                                             </fragment>
                                         </attributedString>
                                         <nil key="highlightedColor"/>
-                                        <mutableString key="userLabel">ffunc getPostsFromFireBase() {         //.value means  Any new posts or changes to a post         DataService.ds.REF_POSTS.observeSingleEvent(of: .value , with: { (snapshot) in             self.posts = []             if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {                 for snap in snapshot {                     if let postDict = snap.value as? Dictionary&lt;String, AnyObject&gt; {                                                  let key = snap.key                         let post = Post(postKey: key, postData: postDict)                         //self.posts.append(post)                         self.posts.insert(post, at: 0)                                              }                 }                 self.postTableView.posts = self.posts                 self.postTableView.reloadData()             }         })     }</mutableString>
+                                        <string key="userLabel">ffunc getPostsFromFireBase() {         //.value means  Any new posts or changes to a post         DataService.ds.REF_POSTS.observeSingleEvent(of: .value , with: { (snapshot) in             self.posts = []             if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {                 for snap in snapshot {                     if let postDict = snap.value as? Dictionary&lt;String, AnyObject&gt; {                                                  let key = snap.key                         let post = Post(postKey: key, postData: postDict)                         //self.posts.append(post)                         self.posts.insert(post, at: 0)                                              }                 }                 self.postTableView.posts = self.posts                 self.postTableView.reloadData()             }         })     }</string>
                                     </label>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="iGN-SU-T9q" customClass="CircleView" customModule="EngineerSocialApp" customModuleProvider="target">
+                                    <imageView userInteractionEnabled="NO" alpha="0.69999999999999996" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="iGN-SU-T9q" customClass="CircleView" customModule="EngineerSocialApp" customModuleProvider="target">
                                         <rect key="frame" x="147" y="20" width="80" height="80"/>
                                         <constraints>
                                             <constraint firstAttribute="width" secondItem="iGN-SU-T9q" secondAttribute="height" multiplier="1:1" id="ZZg-MQ-Tvn"/>
                                         </constraints>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="addd" translatesAutoresizingMaskIntoConstraints="NO" id="Fs1-1B-ZJz">
+                                        <rect key="frame" x="172.5" y="45" width="30" height="30"/>
                                     </imageView>
                                 </subviews>
                                 <color key="backgroundColor" red="0.01176470588" green="0.14117647059999999" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
                                     <constraint firstItem="hB2-Hr-YL4" firstAttribute="top" secondItem="AtE-lk-1Yn" secondAttribute="top" id="968-JT-LjA"/>
                                     <constraint firstItem="iGN-SU-T9q" firstAttribute="centerY" secondItem="AtE-lk-1Yn" secondAttribute="centerY" id="9WH-JP-dBw"/>
+                                    <constraint firstItem="Fs1-1B-ZJz" firstAttribute="centerY" secondItem="AtE-lk-1Yn" secondAttribute="centerY" id="O1M-qY-2Xo"/>
                                     <constraint firstAttribute="trailing" secondItem="hB2-Hr-YL4" secondAttribute="trailing" constant="8" id="PcR-YI-cR9"/>
                                     <constraint firstItem="iGN-SU-T9q" firstAttribute="top" secondItem="AtE-lk-1Yn" secondAttribute="top" constant="20" id="UZC-Ol-dYI"/>
                                     <constraint firstAttribute="bottom" secondItem="iGN-SU-T9q" secondAttribute="bottom" constant="20" id="cXJ-cy-Tay"/>
                                     <constraint firstAttribute="bottom" secondItem="hB2-Hr-YL4" secondAttribute="bottom" id="fcI-l2-eHV"/>
                                     <constraint firstAttribute="height" constant="120" id="gPX-Bb-czf"/>
                                     <constraint firstItem="hB2-Hr-YL4" firstAttribute="leading" secondItem="AtE-lk-1Yn" secondAttribute="leading" constant="8" id="glv-Ns-G2q"/>
+                                    <constraint firstItem="Fs1-1B-ZJz" firstAttribute="centerX" secondItem="AtE-lk-1Yn" secondAttribute="centerX" id="qk0-Rd-ZQz"/>
                                     <constraint firstItem="iGN-SU-T9q" firstAttribute="centerX" secondItem="AtE-lk-1Yn" secondAttribute="centerX" id="yVl-Wb-iSP"/>
                                 </constraints>
                             </view>
@@ -1614,4 +1619,7 @@ Cg
             <point key="canvasLocation" x="-39.200000000000003" y="-246.02698650674665"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="addd" width="30" height="30"/>
+    </resources>
 </document>

@@ -11,7 +11,7 @@ import Firebase
 import SwiftKeychainWrapper
 import MessageUI
 
-class FeedVC: UIViewController, MFMailComposeViewControllerDelegate{
+class FeedVC: UIViewController {
 
     @IBOutlet weak var mainView: UIView!
     
@@ -57,15 +57,15 @@ class FeedVC: UIViewController, MFMailComposeViewControllerDelegate{
         }
         print(postKey)
         
-        Alert.presentPostReportActionSheet(vc: self, uid: postKey, hideAction: {
+        Alert.showPostReportView(vc: self, title: "不適切なコンテンツ？", message: "不適切なコンテンツは非表示にしたり通報したりすることができます", firstTitle: "この投稿を非表示にする✨", secondTitle: "通報する⚠️", thirdTitle: "キャンセル🙅‍♂️", firstAction: {
             [weak self] in
             // 非表示にする
             Util.saveHidePosts(postKey: postKey)
             self?.getPostsFromFireBase()
-        }, reportAction: {
+        }) {
             [weak self] in
             Util.presentMailView(vc: self!, subject: "お問い合わせ（不適切な投稿）", message: "不適切な投稿を通報します。\n " + "Key: " + postKey + "\nこのまま（もしくは開発者へのエールを添えて）ご送信ください:)。運営にて投稿内容を確認し、24時間以内に対応いたします。")
-        })
+        }
     }
     
     /// データベースから投稿情報を取得
@@ -130,6 +130,12 @@ class FeedVC: UIViewController, MFMailComposeViewControllerDelegate{
 //                self.postTableView.reloadData()
 //            }
 //        })
+    }
+}
+
+extension FeedVC: MFMailComposeViewControllerDelegate {
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true, completion: nil)
     }
 }
 

@@ -150,18 +150,23 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="2000/01/01" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Tl3-WY-ua2">
-                                <rect key="frame" x="311.5" y="0.0" width="73.5" height="17"/>
+                                <rect key="frame" x="306.5" y="0.0" width="73.5" height="17"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <imageView alpha="0.59999999999999998" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow_down" translatesAutoresizingMaskIntoConstraints="NO" id="gMg-sf-ymm">
-                                <rect key="frame" x="400" y="0.0" width="20" height="20"/>
+                            <imageView alpha="0.40000000000000002" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="arrow_down" translatesAutoresizingMaskIntoConstraints="NO" id="gMg-sf-ymm">
+                                <rect key="frame" x="395" y="0.0" width="30" height="20"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="20" id="2zv-n3-vGa"/>
-                                    <constraint firstAttribute="width" constant="20" id="q4P-Cb-Ihv"/>
+                                    <constraint firstAttribute="width" constant="30" id="q4P-Cb-Ihv"/>
                                 </constraints>
                             </imageView>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6DO-cY-jG3">
+                                <rect key="frame" x="376" y="76" width="62" height="69"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
@@ -169,7 +174,7 @@
                             <constraint firstItem="Tl3-WY-ua2" firstAttribute="top" secondItem="NEH-Zx-Lf8" secondAttribute="top" id="4ar-4Y-68U"/>
                             <constraint firstItem="uQn-2d-Aw9" firstAttribute="top" secondItem="d5O-o8-IG1" secondAttribute="bottom" constant="8" id="54w-Jy-zLD"/>
                             <constraint firstItem="c9y-sJ-ToK" firstAttribute="top" secondItem="d5O-o8-IG1" secondAttribute="bottom" constant="8" id="5H4-Ho-fKr"/>
-                            <constraint firstAttribute="trailing" secondItem="gMg-sf-ymm" secondAttribute="trailing" constant="10" id="7Ql-LE-dnG"/>
+                            <constraint firstAttribute="trailing" secondItem="gMg-sf-ymm" secondAttribute="trailing" constant="5" id="7Ql-LE-dnG"/>
                             <constraint firstItem="4OU-sH-MvP" firstAttribute="top" secondItem="c9y-sJ-ToK" secondAttribute="bottom" constant="8" id="Bod-xy-TYm"/>
                             <constraint firstItem="4OU-sH-MvP" firstAttribute="top" secondItem="awS-t7-j9n" secondAttribute="bottom" constant="8" id="CzW-5D-tTp"/>
                             <constraint firstItem="pdf-Jn-Uch" firstAttribute="top" secondItem="FK1-RA-Hoe" secondAttribute="bottom" constant="10" id="DjQ-ZC-ciF"/>

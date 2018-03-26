@@ -24,6 +24,8 @@ class Util {
         }
         
         let mailViewController = MFMailComposeViewController()
+        mailViewController.delegate = vc as? UINavigationControllerDelegate
+        
         let toRecipients = ["timetohackapp@gmail.com"]
         
         mailViewController.mailComposeDelegate = vc as? MFMailComposeViewControllerDelegate
