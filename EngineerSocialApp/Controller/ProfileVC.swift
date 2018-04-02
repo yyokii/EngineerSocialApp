@@ -48,7 +48,7 @@ class ProfileVC: UIViewController{
     let hederViewHeight = 300
     let headerViewHeightDouble: Double = 300.0
     
-    // ヘッダービューの下部のどれくらいを固定させるか（ex: 2.5 → x/2.5 → 40%）
+    // ヘッダービューの下部のどれくらいを固定させるか（ex: 2.5 → x/2.5 → 40%） FIXME わかりづらすぎ
     let stickHeaderRation = 2.5
     
     // 獲得した総アクション数を保持
@@ -220,7 +220,7 @@ class ProfileVC: UIViewController{
         baseTableView.register(UINib(nibName: "BaseTableViewCell",bundle: nil), forCellReuseIdentifier: "BaseTableViewCell")
         baseTableView.dataSource = self
         baseTableView.delegate = self
-        baseTableView.bounces = false
+        //baseTableView.bounces = false
         // コンテンツをヘッダーの高さ分だけ下げる
         baseTableView.contentInset.top = CGFloat(hederViewHeight)
         baseTableView.rowHeight = self.view.frame.height
@@ -266,6 +266,15 @@ class ProfileVC: UIViewController{
             self?.headerView.git = gitId
         }
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == TO_FOLLOW_FOLLOWER {
+            // ユーザーリストに表示するuidの配列を遷移時に渡す
+            let  userListVC = segue.destination as! UserListVC
+            userListVC.followUidArray = followUidArray
+            userListVC.followerUidArray = followerUidArray
+        }
+    }
 }
 
 extension ProfileVC: MFMailComposeViewControllerDelegate {
@@ -288,8 +297,10 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
         
         // ①投稿データviewの生成
         postDataView = PostDataView(frame:  CGRect(x: 0, y: 0, width: self.view.frame.width, height: contentHeight))
-        postDataView.scrollView.isScrollEnabled = false
         postDataView.delegate = self
+        // バウンスの設定どうしましょ
+        postDataView.scrollView.bounces = false
+        postDataView.scrollView.isScrollEnabled = false
 
         // ②過去の投稿を表示するviewの生成
         let frame = CGRect(x: self.view.frame.width, y: 0, width: self.view.frame.width, height: contentHeight)
@@ -297,8 +308,8 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
         // セルの高さを可変にする
         postTableView.estimatedRowHeight = 200
         postTableView.rowHeight = UITableViewAutomaticDimension
-        postTableView.isScrollEnabled = false
         postTableView.postTableViewDelegate = self
+        postTableView.isScrollEnabled = false
         
         baseTableViewCell.scrollView.addSubview(postDataView)
         baseTableViewCell.scrollView.addSubview(postTableView)
@@ -306,38 +317,89 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        // 下に引っ張ったときは、ヘッダー位置を計算して動かないようにする
-        if scrollView.contentOffset.y < -CGFloat(hederViewHeight) {
-            self.headerView.frame = CGRect(x: 0, y: scrollView.contentOffset.y, width: self.view.frame.width, height: CGFloat(hederViewHeight))
-        }
         
         guard let _ = postDataView else {
             return
         }
         
-        if scrollView.contentOffset.y > -CGFloat(headerViewHeightDouble/stickHeaderRation){
-            // cell内のコンテンツだけを動かせる
-            baseTableView.contentOffset = CGPoint(x: 0, y: -CGFloat(headerViewHeightDouble/stickHeaderRation))
-            baseTableView.isScrollEnabled = false
-            // 下部のコンテンツのスクロールを有効にする
-            postDataView.scrollView.isScrollEnabled = true
-            postTableView.isScrollEnabled = true
-        }else {
-            baseTableView.isScrollEnabled = true
-            postDataView.scrollView.isScrollEnabled = false
-            postTableView.isScrollEnabled = false
+        guard let _ = postTableView else {
+            return
+        }
+        
+        // 下に引っ張ったときは、ヘッダー位置を計算して動かないようにする
+        if scrollView.contentOffset.y < -CGFloat(hederViewHeight) {
+            self.headerView.frame = CGRect(x: 0, y: scrollView.contentOffset.y, width: self.view.frame.width, height: CGFloat(hederViewHeight))
+        }
+        
+        conteScrollProccess(scrollView: scrollView)
+        
+        if scrollView.contentOffset.y == -CGFloat(hederViewHeight)  {
+            postDataView.scrollView.contentOffset.y = 0
+            postTableView.contentOffset.y = 0
         }
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == TO_FOLLOW_FOLLOWER {
-            // ユーザーリストに表示するuidの配列を遷移時に渡す
-            let  userListVC = segue.destination as! UserListVC
-            userListVC.followUidArray = followUidArray
-            userListVC.followerUidArray = followerUidArray
+    // FIXME: リファクタ
+    func conteScrollProccess(scrollView: UIScrollView) {
+        guard let _ = baseTableViewCell else {
+            return
+        }
+        
+        if baseTableViewCell.scrollView.contentOffset.x == 0{
+            // 開発データを表示する画面を表示している場合
+            
+            if scrollView.contentOffset.y >= -CGFloat(headerViewHeightDouble/stickHeaderRation){
+                // ヘッダーの下部が固定され、コンテンツ内がスクロールされる状態
+                
+                if postDataView.scrollView.contentOffset.y < postDataView.scrollView.frame.maxY {
+                    // コンテンツが下まで行ってない時は下にずらす
+                    let delta = CGFloat(headerViewHeightDouble/stickHeaderRation) + scrollView.contentOffset.y
+                    // 固定ヘッダーを設定
+                    baseTableView.contentOffset = CGPoint(x: 0, y: -CGFloat(headerViewHeightDouble/stickHeaderRation))
+                    // 下部のコンテンツのスクロールを動かす
+                    postDataView.setScrollContentOffsetY(y: delta)
+                }else {
+                    // 固定ヘッダーを設定
+                    baseTableView.contentOffset = CGPoint(x: 0, y: -CGFloat(headerViewHeightDouble/stickHeaderRation))
+                }
+            }else {
+                if postDataView.scrollView.contentOffset.y > 0 {
+                    let delta = -scrollView.contentOffset.y - CGFloat(headerViewHeightDouble/stickHeaderRation)
+                    // 固定ヘッダーを動かさずに、コンテンツビューのみを動かす
+                    baseTableView.contentOffset = CGPoint(x: 0, y: -CGFloat(headerViewHeightDouble/stickHeaderRation))
+                    // 下部のコンテンツのスクロールを動かす
+                    postDataView.setScrollContentOffsetY(y: -delta)
+                }
+            }
+            
+        } else if baseTableViewCell.scrollView.contentOffset.x == self.baseTableView.frame.width {
+            // 過去の投稿データを表示する画面を表示している場合
+            
+            if scrollView.contentOffset.y >= -CGFloat(headerViewHeightDouble/stickHeaderRation){
+                // ヘッダーの下部が固定され、コンテンツ内がスクロールされる状態
+                
+                if postTableView.contentOffset.y < postTableView.contentSize.height {
+                    // コンテンツが下まで行ってない時は下にずらす
+                    let delta = CGFloat(headerViewHeightDouble/stickHeaderRation) + scrollView.contentOffset.y
+                    // 固定ヘッダーを設定
+                    baseTableView.contentOffset = CGPoint(x: 0, y: -CGFloat(headerViewHeightDouble/stickHeaderRation))
+                    // 下部のコンテンツのスクロールを動かす
+                    postTableView.setScrollContentOffsetY(y: delta)
+                }else {
+                    // 固定ヘッダーを設定
+                    baseTableView.contentOffset = CGPoint(x: 0, y: -CGFloat(headerViewHeightDouble/stickHeaderRation))
+                }
+            }else {
+                if postTableView.contentOffset.y > 0 {
+                    let delta = -scrollView.contentOffset.y - CGFloat(headerViewHeightDouble/stickHeaderRation)
+                    // 固定ヘッダーを動かさずに、コンテンツビューのみを動かす
+                    baseTableView.contentOffset = CGPoint(x: 0, y: -CGFloat(headerViewHeightDouble/stickHeaderRation))
+                    // 下部のコンテンツのスクロールを動かす
+                    postTableView.setScrollContentOffsetY(y: -delta)
+                }
+            }
         }
     }
-    
 }
 
 extension ProfileVC: PostDataViewDelegate{
@@ -345,14 +407,6 @@ extension ProfileVC: PostDataViewDelegate{
     }
     
     func didScrollToTop(y: CGFloat) {
-        if baseTableView.contentOffset.y <= 0 {
-            baseTableView.isScrollEnabled = true
-            postDataView.scrollView.isScrollEnabled = false
-            // -100（固定させるヘッダーの高さ）の設定をすることで挙動のカクツキが改善。ないとスクロールが2タップぐらい反応しない
-            baseTableView.contentOffset = CGPoint(x: 0, y: -CGFloat(headerViewHeightDouble/stickHeaderRation))
-            // ヘッダー全体を表示時はコンテンツのスクロールをリセットする（他のコンテンツも）。そうしないとコンテンツが見切れる場合が生じる。
-            postTableView.contentOffset = CGPoint(x: 0, y: 0)
-        }
     }
 }
 
@@ -366,14 +420,6 @@ extension ProfileVC: PostTableViewDelegate{
     }
     
     func didTableScrollToTop(y: CGFloat) {
-        if baseTableView.contentOffset.y <= 0 {
-            baseTableView.isScrollEnabled = true
-            postTableView.isScrollEnabled = false
-            // -100（固定させるヘッダーの高さ）の設定をすることで挙動のカクツキが改善。ないとスクロールが2タップぐらい反応しない
-            baseTableView.contentOffset = CGPoint(x: 0, y: -CGFloat(headerViewHeightDouble/stickHeaderRation))
-            // ヘッダー全体を表示時はコンテンツのスクロールをリセットする（他のコンテンツも）。そうしないとコンテンツが見切れる場合が生じる。
-            postDataView.scrollView.contentOffset = CGPoint(x: 0, y: 0)
-        }
     }
 }
 
@@ -398,7 +444,7 @@ extension ProfileVC: ProfilehHeaderViewDelegate{
             // 他の人のプロフィール画面の場合は通報用のアクションシートを表示する
             Alert.showUserReportView(vc: self, title: "不適切なユーザー？", message: "不適切なユーザーを通報することができます", firstTitle: "通報する⚠️", secondTitle: "キャンセル🙅‍♂️", firstAction: {
                 [weak self] in
-                Util.presentMailView(vc: self!, subject: "お問い合わせ（不適切なユーザー）", message: "不適切な投稿をした次のユーザーを通報します。\n " + "ID: " + self!.uid + "\nこのまま（もしくは開発者へのエールを添えて）ご送信ください:)。運営にて投稿内容を確認し、24時間以内に対応いたします。")
+                Util.presentMailView(vc: self!, subject: "お問い合わせ（不適切なユーザー）", message: "不適切な投稿をした次のユーザーを通報します。\n " + "ID: " + self!.uid + "\nこのまま（もしくは開発者へのエールを添えて）ご送信ください！\n運営にて投稿内容を確認し、24時間以内に対応いたします。")
             })
         }
     }

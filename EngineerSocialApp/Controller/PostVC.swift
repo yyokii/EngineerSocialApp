@@ -16,7 +16,7 @@ class PostVC: UIViewController, UIPopoverPresentationControllerDelegate, PopOver
     @IBOutlet weak var postBtn: FancyBtn!
     
     let programLang = ["Assembly","C","C#","C++","Go","HTML","Java","JavaScript","Kotlin","Objective-C","Perl","PHP","Python","R","Ruby","Scala","Shell","SQL","Swift","Visual Basic","その他"]
-    let doing = ["iOSアプリ","Androidアプリ","インフラ構築","組み込み系","業務効率化","ゲーム","サーバー","WEBアプリ","記事作成","資料作成","バグ修正","その他"]
+    let doing = ["iOSアプリ","Androidアプリ","インフラ構築","組み込み系","業務効率化","ゲーム","サーバー","WEBアプリ","記事作成","資料作成","バグ修正","Progate","Aidemy","Udemy","その他"]
     
     override func viewDidLoad() {
         super.viewDidLoad()

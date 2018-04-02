@@ -65,7 +65,6 @@ class FirebaseLogic {
             if error != nil {
                 print("Error: Firebase storageからアイコン画像の取得失敗")
             } else {
-                print("OK: Firebase storageからアイコン取得成功")
                 if let imgData = data {
                     if let img = UIImage(data: imgData) {
                         completion(img)

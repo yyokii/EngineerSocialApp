@@ -193,6 +193,10 @@ class PostDataView: UIView {
     func animationDevThingsChart() {
         developThingsChart.animate(xAxisDuration: 1.4, easingOption: .easeOutBack)
     }
+    
+    func setScrollContentOffsetY(y: CGFloat){
+        self.scrollView.contentOffset.y = self.scrollView.contentOffset.y + y
+    }
 }
 
 extension PostDataView: UIScrollViewDelegate {

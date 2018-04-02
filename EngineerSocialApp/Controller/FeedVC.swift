@@ -64,7 +64,7 @@ class FeedVC: UIViewController {
             self?.getPostsFromFireBase()
         }) {
             [weak self] in
-            Util.presentMailView(vc: self!, subject: "お問い合わせ（不適切な投稿）", message: "不適切な投稿を通報します。\n " + "Key: " + postKey + "\nこのまま（もしくは開発者へのエールを添えて）ご送信ください:)。運営にて投稿内容を確認し、24時間以内に対応いたします。")
+            Util.presentMailView(vc: self!, subject: "お問い合わせ（不適切な投稿）", message: "不適切な投稿を通報します。\n " + "Key: " + postKey + "\nこのまま（もしくは開発者へのエールを添えて）ご送信ください！\n運営にて投稿内容を確認し、24時間以内に対応いたします。")
         }
     }
     
