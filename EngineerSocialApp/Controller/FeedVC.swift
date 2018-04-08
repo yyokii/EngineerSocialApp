@@ -21,6 +21,8 @@ class FeedVC: UIViewController {
     static var imageCache: NSCache<NSString, UIImage> = NSCache()
     var postTableView: PostTableView!
     var selectedPostUserId: String?
+    // ブロックしているユーザーのuid配列（firebaseから取得する）
+    var blockUidArray: [String]?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -39,8 +41,12 @@ class FeedVC: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        if postTableView != nil{
-            self.getPostsFromFireBase()
+        
+        FirebaseLogic.fetchBlockUserFirebase(vc: self) { [weak self] (blockUidArray) in
+            self?.blockUidArray = blockUidArray
+            if self?.postTableView != nil{
+                self?.getPostsFromFireBase()
+            }
         }
     }
     
@@ -68,7 +74,7 @@ class FeedVC: UIViewController {
         }
     }
     
-    /// データベースから投稿情報を取得
+    /// firebaseから投稿情報を取得
     func getPostsFromFireBase() {
         FirebaseLogic.fetchLatestPostsData { [weak self] (snapshot) in
             self?.posts = []
@@ -80,6 +86,15 @@ class FeedVC: UIViewController {
                 }
                 
                 if let postDict = snap.value as? Dictionary<String, AnyObject> {
+                    
+                    if self?.blockUidArray != nil && self?.blockUidArray?.count != 0{
+                        // ブロックしているユーザーがいる場合
+                        if (self?.blockUidArray?.contains(postDict[UID] as! String))! {
+                            // ブロックしているユーザーも投稿はpostsの配列に保存しない
+                            continue
+                        }
+                    }
+                    
                     let key = snap.key
                     let post = Post(postKey: key, postData: postDict)
                     self?.posts.insert(post, at: 0)
@@ -109,27 +124,13 @@ class FeedVC: UIViewController {
     
     @objc func refreshControlValueChanged(sender: UIRefreshControl) {
         
-        getPostsFromFireBase()
+        FirebaseLogic.fetchBlockUserFirebase(vc: self) { [weak self] (blockUidArray) in
+            self?.blockUidArray = blockUidArray
+            if self?.postTableView != nil{
+                self?.getPostsFromFireBase()
+            }
+        }
         sender.endRefreshing()
-//        // FIXME: getPost()メソッドの処理と最後以外同じなのでリファクタしたい
-//        DataService.ds.REF_POSTS.observeSingleEvent(of: .value , with: { (snapshot) in
-//            self.posts = []
-//            if let snapshot = snapshot.children.allObjects as? [FIRDataSnapshot] {
-//                for snap in snapshot {
-//
-//                    if let postDict = snap.value as? Dictionary<String, AnyObject> {
-//
-//                        let key = snap.key
-//                        let post = Post(postKey: key, postData: postDict)
-//                        self.posts.insert(post, at: 0)
-//
-//                    }
-//                }
-//                sender.endRefreshing()
-//                self.postTableView.posts = self.posts
-//                self.postTableView.reloadData()
-//            }
-//        })
     }
 }
 

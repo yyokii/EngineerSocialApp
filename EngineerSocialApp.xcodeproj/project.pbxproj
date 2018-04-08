@@ -315,8 +315,6 @@
 				B6F25D3C1FEEA4BB007A4A6A /* View */,
 				B6F25D3B1FEEA4B8007A4A6A /* Controller */,
 				B6F25CE11FEEA002007A4A6A /* AppDelegate.swift */,
-				B6F25CE81FEEA002007A4A6A /* Assets.xcassets */,
-				B6F25CEA1FEEA002007A4A6A /* LaunchScreen.storyboard */,
 				B6F25CED1FEEA002007A4A6A /* Info.plist */,
 				B6F25D0F1FEEA3E0007A4A6A /* GoogleService-Info.plist */,
 			);
@@ -373,6 +371,8 @@
 				B6F25D571FEEE36F007A4A6A /* Post.storyboard */,
 				B614A2B41FF28F1B001E1F80 /* PopOver.storyboard */,
 				B69E43A6203F1A2B007B2AAD /* Setting.storyboard */,
+				B6F25CEA1FEEA002007A4A6A /* LaunchScreen.storyboard */,
+				B6F25CE81FEEA002007A4A6A /* Assets.xcassets */,
 			);
 			path = View;
 			sourceTree = "<group>";

@@ -2,4 +2,102 @@
 <Bucket
    type = "0"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "EngineerSocialApp/Controller/SignInVC.swift"
+            timestampString = "544464593.370193"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "80"
+            endingLineNumber = "80"
+            landmarkName = "unknown"
+            landmarkType = "0">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 (Swift.Optional&lt;__ObjC.FIRUser&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in EngineerSocialApp.SignInVC.firebaseAuth(__ObjC.FIRAuthCredential) -&gt; ()"
+                  moduleName = "EngineerSocialApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/yyokii/Desktop/%E3%83%86%E3%82%99%E3%82%B9%E3%82%AF%E3%83%88%E3%83%83%E3%83%95%E3%82%9A%20-%20Yoki%E3%81%AEMacBook%20Pro/iOSProjects/EngineerSocialApp/EngineerSocialApp/Controller/SignInVC.swift"
+                  timestampString = "544464594.261374"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "80"
+                  endingLineNumber = "80"
+                  offsetFromSymbolStart = "993">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; () in closure #1 (Swift.Optional&lt;__ObjC.FIRUser&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in EngineerSocialApp.SignInVC.firebaseAuth(__ObjC.FIRAuthCredential) -&gt; ()"
+                  moduleName = "EngineerSocialApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/yyokii/Desktop/%E3%83%86%E3%82%99%E3%82%B9%E3%82%AF%E3%83%88%E3%83%83%E3%83%95%E3%82%9A%20-%20Yoki%E3%81%AEMacBook%20Pro/iOSProjects/EngineerSocialApp/EngineerSocialApp/Controller/SignInVC.swift"
+                  timestampString = "544464594.2646821"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "81"
+                  endingLineNumber = "81"
+                  offsetFromSymbolStart = "41">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "EngineerSocialApp/Controller/SignInVC.swift"
+            timestampString = "544464593.3793401"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "93"
+            endingLineNumber = "93"
+            landmarkName = "unknown"
+            landmarkType = "0">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #1 () -&gt; () in closure #1 (Swift.Optional&lt;__ObjC.FIRUser&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in EngineerSocialApp.SignInVC.firebaseAuth(__ObjC.FIRAuthCredential) -&gt; ()"
+                  moduleName = "EngineerSocialApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/yyokii/Desktop/%E3%83%86%E3%82%99%E3%82%B9%E3%82%AF%E3%83%88%E3%83%83%E3%83%95%E3%82%9A%20-%20Yoki%E3%81%AEMacBook%20Pro/iOSProjects/EngineerSocialApp/EngineerSocialApp/Controller/SignInVC.swift"
+                  timestampString = "544464594.270472"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "93"
+                  endingLineNumber = "93"
+                  offsetFromSymbolStart = "2417">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "closure #2 () -&gt; () in closure #1 (Swift.Optional&lt;__ObjC.FIRUser&gt;, Swift.Optional&lt;Swift.Error&gt;) -&gt; () in EngineerSocialApp.SignInVC.firebaseAuth(__ObjC.FIRAuthCredential) -&gt; ()"
+                  moduleName = "EngineerSocialApp"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/yyokii/Desktop/%E3%83%86%E3%82%99%E3%82%B9%E3%82%AF%E3%83%88%E3%83%83%E3%83%95%E3%82%9A%20-%20Yoki%E3%81%AEMacBook%20Pro/iOSProjects/EngineerSocialApp/EngineerSocialApp/Controller/SignInVC.swift"
+                  timestampString = "544464594.272472"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "94"
+                  endingLineNumber = "94"
+                  offsetFromSymbolStart = "20">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

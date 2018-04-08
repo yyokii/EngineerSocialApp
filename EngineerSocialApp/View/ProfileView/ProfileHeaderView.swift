@@ -79,6 +79,14 @@ class ProfilehHeaderView: UIView {
         profilehHeaderViewDelegate?.followButtonTapped()
     }
     
+    func applySettingBtn(){
+        settingBtn.imageView?.image = UIImage(named: "setting")
+    }
+    
+    func applyAlertBtn(){
+        settingBtn.imageView?.image = UIImage(named: "alert")
+    }
+    
     func applyFollowBtn(){
         followBtn.setTitle(" ➕ お気に入りに追加　", for: .normal)
         followBtn.isEnabled = true

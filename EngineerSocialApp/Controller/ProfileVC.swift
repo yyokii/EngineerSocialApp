@@ -80,8 +80,6 @@ class ProfileVC: UIViewController{
         setBaseTableView()
         // ユーザー情報を表示するヘッダーviewを設定
         setHeaderView()
-        // ヘッダーviewの設定（フォローボタンの状態）
-        initSettingBtn()
         // コンテンツの表示
         getMyPostData()
         setActionsData()
@@ -96,6 +94,7 @@ class ProfileVC: UIViewController{
             
             // FIXME: 違ってたら更新するみたいな感じがよくね　→ それやるならfirebaseのオブザーブ方法変えた方がいいかも
             FirebaseLogic.fetchUserName(uid: uid, completion: {[weak self] (name) in self?.headerView.userNameLabel.text = name})
+            FirebaseLogic.fetchUserProfile(uid: uid, completion: {[weak self] (profile) in self?.headerView.userDescription.text = profile})
             FirebaseLogic.fetchUserImage(uid: uid, completion: {[weak self] (img) in self?.headerView.userImageView.image = img})
             FirebaseLogic.fetchTwitterAccount(uid: uid) { [weak self] (twitterId) in
                 self?.headerView.twitter = twitterId
@@ -127,25 +126,6 @@ class ProfileVC: UIViewController{
 
         if profileType == ProfileType.myProfile {
             uid = KeychainWrapper.standard.string(forKey: KEY_UID)!
-        }
-    }
-    
-    /// 自分のプロフィールの際は設定ボタンを表示する
-    func initSettingBtn(){
-        if profileType == ProfileType.myProfile {
-            // 設定ボタンをフォローボタンを代わりに表示
-        } else if profileType == ProfileType.others {
-            // フォロー状態を取得してヘッダーのボタンに反映
-            FirebaseLogic.fetchFollowState(uid: uid, completion: { [weak self] (isFollowState) in
-                if isFollowState {
-                    // フォロー済みの場合
-                    self?.isFollowState = true
-                    self?.headerView.applyUnFollowBtn()
-                } else {
-                    // 未フォローの場合
-                    self?.headerView.applyFollowBtn()
-                }
-            })
         }
     }
     
@@ -235,10 +215,12 @@ class ProfileVC: UIViewController{
         headerView.profilehHeaderViewDelegate = self
         baseTableView.addSubview(headerView)
         
-        // 自分のプロフィール画面ではフォローボタン非表示
+        // 自分のプロフィール画面ではフォローボタン非表示、設定ボタン表示
         if profileType == ProfileType.myProfile{
+            headerView.applySettingBtn()
             headerView.followBtn.isHidden = true
         }else if profileType == ProfileType.others {
+            headerView.applyAlertBtn()
             headerView.followBtn.isHidden = false
             // フォロー状態を取得してヘッダーのボタンに反映
             FirebaseLogic.fetchFollowState(uid: uid, completion: { [weak self] (isFollowState) in
@@ -402,6 +384,7 @@ extension ProfileVC: UITableViewDataSource, UITableViewDelegate {
     }
 }
 
+// FIXME: 必要ないプロトコルを削除する
 extension ProfileVC: PostDataViewDelegate{
     func didScrollToBottom(y: CGFloat) {
     }
@@ -441,11 +424,20 @@ extension ProfileVC: ProfilehHeaderViewDelegate{
             
             self.present(settingVC, animated: true, completion: nil)
         }else if profileType == ProfileType.others {
-            // 他の人のプロフィール画面の場合は通報用のアクションシートを表示する
-            Alert.showUserReportView(vc: self, title: "不適切なユーザー？", message: "不適切なユーザーを通報することができます", firstTitle: "通報する⚠️", secondTitle: "キャンセル🙅‍♂️", firstAction: {
+            Alert.showPostReportView(vc: self, title: "不適切なユーザー？", message: "不適切なユーザーはブロックや通報しよう", firstTitle: "このユーザーをブロックする✨", secondTitle: "通報する⚠️", thirdTitle: "キャンセル🙅‍♂️", firstAction: {
+                // FIXME: if letするか、unownedで。ここに限らず
+                [weak self] in
+                Alert.presentTwoBtnAlert(vc: self!, title: "このユーザーをブロックします💔", message: "このユーザーが表示されなくなります", positiveTitle: "OK", negativeTitle: "キャンセル🙅‍♂️", positiveAction: {
+                    // firebaseのブロックユーザーに追加
+                    FirebaseLogic.setBlockUserFirebase(vc: self!, uid: (self?.uid)!, completion: {
+                        PopupView.sharedManager.show()
+                    })
+                })
+            }) {
                 [weak self] in
                 Util.presentMailView(vc: self!, subject: "お問い合わせ（不適切なユーザー）", message: "不適切な投稿をした次のユーザーを通報します。\n " + "ID: " + self!.uid + "\nこのまま（もしくは開発者へのエールを添えて）ご送信ください！\n運営にて投稿内容を確認し、24時間以内に対応いたします。")
-            })
+            }
+            
         }
     }
     

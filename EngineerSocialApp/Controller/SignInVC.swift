@@ -77,8 +77,6 @@ class SignInVC: UIViewController {
                 
                 print("OK: Successfully authenticated with Firebase")
                 if let user = user {
-                    print("ユーザーのid：" + user.uid)
-                    
                     FirebaseLogic.existUser(uid: user.uid, newUser: {
                         [weak self] in
                         // ユーザー名を保存
@@ -88,7 +86,7 @@ class SignInVC: UIViewController {
                         }
                         // 初回ログイン時に、獲得アクション数を0にしてdbに登録する
                         let getActions: Dictionary<String, AnyObject> = [SMILES: 0 as AnyObject, HEARTS: 0 as AnyObject, CRIES: 0 as AnyObject, CLAPS: 0 as AnyObject, OKS: 0 as AnyObject]
-                        let userData: Dictionary<String,Any> = ["provider": credential.provider, GET_ACTIONS: getActions, NAME: name]
+                        let userData: Dictionary<String,Any> = ["provider": credential.provider, GET_ACTIONS: getActions, NAME: name, PROFILE: "Time to Hack :)"]
                         
                         self?.uploadImage(user: user)
                         self?.completeSignIn(id: user.uid, userData: userData)

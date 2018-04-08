@@ -87,7 +87,6 @@ class PostVC: UIViewController, UIPopoverPresentationControllerDelegate, PopOver
         
         let firebasePost = DataService.ds.REF_POSTS.childByAutoId()
         firebasePost.setValue(post)
-        print("投稿完了！")
         
         setUserDevelopData(devLanguage: languageLabel.text!, develop: doingLabel.text!)
         setUserPost(myPostKey: firebasePost.key)

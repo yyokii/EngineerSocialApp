@@ -142,7 +142,7 @@ class FirebaseLogic {
             if error == nil {
                 applayUserPost(language: language, develop: develop, postKey: firebasePostRef.key, completion: completion)
             }else {
-                Alert.presentOneBtnAlert(vc: vc, title: "Error😇", message: "Sorry... Connection OK?", positiveTitle: "OKOK", positiveAction: {})
+                Alert.presentOneBtnAlert(vc: vc, title: "Error😇", message: "Sorry... Please Check Internet Connection.", positiveTitle: "OK", positiveAction: {})
             }
         }
     }
@@ -223,7 +223,7 @@ class FirebaseLogic {
                         }
                     }
                 } else {
-                    print("Error: 過去の投稿がないよー")
+                    print("エラー: 過去の投稿がないよー")
                 }
             }
         }
@@ -302,7 +302,7 @@ class FirebaseLogic {
         DataService.ds.REF_FOLLOW_FOLLOWER.updateChildValues(childUpdates) { (error, ref) in
             if let error = error {
                 print(error.localizedDescription)
-                Alert.presentOneBtnAlert(vc: vc, title: "Error😇", message: "Sorry... Connection OK?", positiveTitle: "OKOK", positiveAction: {})
+                Alert.presentOneBtnAlert(vc: vc, title: "Error😇", message: "Sorry... Please Check Internet Connection.", positiveTitle: "OK", positiveAction: {})
             }else {
                 completion()
             }
@@ -320,7 +320,7 @@ class FirebaseLogic {
         DataService.ds.REF_FOLLOW_FOLLOWER.updateChildValues(childUpdates) { (error, ref) in
             if let error = error {
                 print(error.localizedDescription)
-                Alert.presentOneBtnAlert(vc: vc, title: "Error😇", message: "Sorry... Connection OK?", positiveTitle: "OKOK", positiveAction: {})
+                Alert.presentOneBtnAlert(vc: vc, title: "Error😇", message: "Sorry... Please Check Internet Connection.", positiveTitle: "OK", positiveAction: {})
             }else {
                 completion()
             }
@@ -380,10 +380,51 @@ class FirebaseLogic {
         DataService.ds.REF_USERS.updateChildValues(childUpdates) { (error, ref) in
             if let error = error {
                 print(error.localizedDescription)
-                Alert.presentOneBtnAlert(vc: vc, title: "Error😇", message: "Sorry... Connection OK?", positiveTitle: "OKOK", positiveAction: {})
+                Alert.presentOneBtnAlert(vc: vc, title: "Error😇", message: "Sorry... Please Check Internet Connection.", positiveTitle: "OK", positiveAction: {})
             }else {
                 completion()
             }
+        }
+    }
+    
+    
+    /// ブロックするユーザーのuidをセットする
+    ///
+    /// - Parameters:
+    ///   - uid: ブロック対象
+    ///   - completion: firebase処理おわったら
+    static func setBlockUserFirebase(vc: UIViewController, uid: String, completion: @escaping (() -> Void)) {
+        
+        let blockUsersRef = DataService.ds.REF_USER_CURRENT.child(BLOCK_USERS)
+        blockUsersRef.child(uid).setValue(true) { (error, ref) in
+            if error == nil {
+                completion()
+            }else {
+                Alert.presentOneBtnAlert(vc: vc, title: "Error😇", message: "Sorry... Please Check Internet Connection.", positiveTitle: "OK", positiveAction: {})
+            }
+        }
+    }
+    
+    /// ブロックしているユーザーのuidを取得する
+    ///
+    /// - Parameters:
+    ///   - uid: ブロック対象
+    ///   - completion: firebase処理おわったら
+    static func fetchBlockUserFirebase(vc: UIViewController, completion: @escaping (([String]) -> Void)) {
+        
+        let blockUsersRef = DataService.ds.REF_USER_CURRENT.child(BLOCK_USERS)
+        blockUsersRef.observeSingleEvent(of: .value, with: { (snapshot) in
+            var blockUidArray = [String]()
+            if let dict = snapshot.value as? Dictionary<String, Bool> {
+                for uid in dict.keys {
+                    blockUidArray.append(uid)
+                }
+                completion(blockUidArray)
+            }else {
+                completion(blockUidArray)
+            }
+        }) { (error) in
+            print(error.localizedDescription)
         }
     }
 }
