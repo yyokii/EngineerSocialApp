@@ -217,10 +217,8 @@ class ProfileVC: UIViewController{
         
         // 自分のプロフィール画面ではフォローボタン非表示、設定ボタン表示
         if profileType == ProfileType.myProfile{
-            headerView.applySettingBtn()
             headerView.followBtn.isHidden = true
         }else if profileType == ProfileType.others {
-            headerView.applyAlertBtn()
             headerView.followBtn.isHidden = false
             // フォロー状態を取得してヘッダーのボタンに反映
             FirebaseLogic.fetchFollowState(uid: uid, completion: { [weak self] (isFollowState) in

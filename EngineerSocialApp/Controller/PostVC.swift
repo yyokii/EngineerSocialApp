@@ -43,12 +43,12 @@ class PostVC: UIViewController, UIPopoverPresentationControllerDelegate, PopOver
     // FIXME: 入力内容が不十分の場合は投稿ボタンにalphaをかけておく
     @IBAction func postTapped(_ sender: Any) {
         
-        guard let language = languageLabel.text, language != "" else {
+        guard let language = languageLabel.text, language != "", languageLabel.text != "SELECT" else {
             print("Error: 言語が設定されてませんよっ")
             return
         }
 
-        guard let doing = doingLabel.text, doing != "" else {
+        guard let doing = doingLabel.text, doing != "", doingLabel.text != "SELECT" else {
             print("Error: やることが設定されてませんよっ")
             return
         }
